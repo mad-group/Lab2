@@ -16,6 +16,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity
         list=(ListView)findViewById(R.id.group_list);
         list.setAdapter(new BaseAdapter() {
             String[] groups = {"First group", "Second group", "Third group", "Fourth group"};
+
             @Override
             public int getCount() {return groups.length;}
             @Override
