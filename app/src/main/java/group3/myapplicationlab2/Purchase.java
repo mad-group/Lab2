@@ -10,9 +10,10 @@ public class Purchase {
     Date date;
     String causal;
     Float amount;
-    int member_id;
+    int author_id;
     int partition_id; //the id of partion method
     List sharing_members;
+    int group;
 
     public Purchase(){
         this.date = new Date();

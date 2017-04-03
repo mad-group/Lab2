@@ -11,7 +11,7 @@ public class Group {
     String name;
     int id;
     List members; //composed by membersid, not "members object"
-    List notes;
+    List<Purchase> notes;
 
     public Group(String name, int id, List members){
         this.name = name;
