@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
                 groupName.setText(group.getName());
                 groupDescription.setText(group.getDescription());
                 //tvHome.setText(user.hometown);
+
                 // Return the completed view to render on screen
                 return convertView;
             }
@@ -93,7 +94,6 @@ public class MainActivity extends AppCompatActivity
         adapter.add(newGroup3);
         adapter.add(newGroup3);
         adapter.add(newGroup3);
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         */
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
