@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,65 +65,14 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Debug", String.valueOf(position));
-                Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
+
+                Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
+
+                //i.putExtra(ID_EXTRA, String.valueOf(id));
+                startActivity(i);
             }
         });
-
-        /*ListView myListView = (ListView)findViewById(R.id.group_list);
-
-        BaseAdapter baseAdapter = new BaseAdapter() {
-            String[] groups = { "First group", "Second group", "Third group", "Fourth group",
-                                "First group", "Second group", "Third group", "Fourth group",
-                                "First group", "Second group", "Third group", "Fourth group" };
-
-            @Override
-            public int getCount() {
-                return groups.length;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return groups.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                return null;
-            }
-        };
-
-        myListView.setAdapter(baseAdapter);
-        myListView.setOnItemClickListener(onListClick);*/
-
-        /*
-        list=(ListView)findViewById(R.id.group_list);
-        list.setAdapter(new BaseAdapter() {
-            String[] groups = {"First group", "Second group", "Third group", "Fourth group"};
-
-            @Override
-            public int getCount() {return groups.length;}
-            @Override
-            public Object getItem(int position) {return groups[position];}
-            @Override
-            public long getItemId(int position) {return 0;}
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                // There is nothing to convert --> I need to create extra view
-                if (convertView==null) {
-                    // Returns a view: inflate is used to populate a view
-                    convertView = getLayoutInflater().inflate(R.layout.group_item, parent, false);
-                }
-                TextView tv = (TextView)convertView.findViewById(R.id.group_item);
-                tv.setText(getItem(position).toString());
-                return convertView;
-            }
-        });
-        */
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
