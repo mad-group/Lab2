@@ -1,7 +1,10 @@
 package group3.myapplicationlab2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,12 +15,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +33,108 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        class GroupAdapter extends ArrayAdapter<Group> {
+
+            public GroupAdapter(Context context, ArrayList<Group> users) {
+                super(context, 0, users);
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Get the data item for this position
+                Group group = getItem(position);
+                // Check if an existing view is being reused, otherwise inflate the view
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.group_item, parent, false);
+                }
+                // Lookup view for data population
+                TextView groupName = (TextView) convertView.findViewById(R.id.group_item_name);
+                TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
+                //TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
+                // Populate the data into the template view using the data object
+                groupName.setText(group.getName());
+                groupDescription.setText(group.getDescription());
+                //tvHome.setText(user.hometown);
+                // Return the completed view to render on screen
+                return convertView;
+            }
+        }
+
+        ArrayList<Group> arrayOfGroups = new ArrayList<Group>();
+        GroupAdapter adapter = new GroupAdapter(this, arrayOfGroups);
+
+        ListView listView = (ListView) findViewById(R.id.group_list);
+        listView.setAdapter(adapter);
+
+        String[] nomi = {"Andrian", "Flavia", "Michele", "Gaetano"};
+
+        adapter.clear();
+        Group newGroup = new Group("Gruppo 1", 1, nomi, "Gruppo Bello");
+        Group newGroup2 = new Group("Gruppo 2", 2, nomi, "Gruppo Carino");
+        Group newGroup3 = new Group("Gruppo 3", 3, nomi, "Gruppo Brutto");
+
+        adapter.add(newGroup);
+        adapter.add(newGroup2);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+        adapter.add(newGroup3);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Debug", String.valueOf(position));
+                Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
+            }
+        });
+
+        /*ListView myListView = (ListView)findViewById(R.id.group_list);
+
+        BaseAdapter baseAdapter = new BaseAdapter() {
+            String[] groups = { "First group", "Second group", "Third group", "Fourth group",
+                                "First group", "Second group", "Third group", "Fourth group",
+                                "First group", "Second group", "Third group", "Fourth group" };
+
+            @Override
+            public int getCount() {
+                return groups.length;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return groups.get(position);
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                return null;
+            }
+        };
+
+        myListView.setAdapter(baseAdapter);
+        myListView.setOnItemClickListener(onListClick);*/
+
+        /*
         list=(ListView)findViewById(R.id.group_list);
         list.setAdapter(new BaseAdapter() {
             String[] groups = {"First group", "Second group", "Third group", "Fourth group"};
@@ -50,6 +157,9 @@ public class MainActivity extends AppCompatActivity
                 return convertView;
             }
         });
+        */
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
