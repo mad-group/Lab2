@@ -2,14 +2,13 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:id="@+id/prova"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:background="@drawable/backgr_exp"
     >
 
     <ImageView
@@ -17,7 +16,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0.5"
-        android:padding="10dp"
         android:src="@mipmap/ic_launcher" />
 
     <LinearLayout
@@ -56,7 +54,7 @@
             android:paddingTop="@dimen/expense_item_text_padding"
             android:paddingBottom="@dimen/expense_item_text_padding"
             android:layout_gravity="center_horizontal"
-            android:text="Amount "
+            android:text="Amount"
             android:textSize="20dp" />
 
         <TextView

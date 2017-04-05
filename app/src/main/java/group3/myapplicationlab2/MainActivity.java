@@ -1,6 +1,5 @@
 package group3.myapplicationlab2;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
 
-                //i.putExtra(ID_EXTRA, String.valueOf(id));
+                i.putExtra("groupNumber", position);
                 startActivity(i);
             }
         });
