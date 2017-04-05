@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity
         adapter.add(newGroup);
         adapter.add(newGroup2);
         adapter.add(newGroup3);
+
+        /*adapter.add(newGroup3);
         adapter.add(newGroup3);
         adapter.add(newGroup3);
         adapter.add(newGroup3);
@@ -57,8 +59,7 @@ public class MainActivity extends AppCompatActivity
         adapter.add(newGroup3);
         adapter.add(newGroup3);
         adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
+        adapter.add(newGroup3);*/
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
