@@ -21,7 +21,8 @@
         <activity
             android:name=".GroupActivityExpense"
             android:label="@string/title_activity_group_expense"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ExpenseInput"></activity>
     </application>
 
 </manifest>
