@@ -8,24 +8,29 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 public class Group {
-    String name;
-    int id;
-    List members; //composed by membersid, not "members object"
-    List<Purchase> notes;
+    private String name;
+    private String description;
+    private int id;
+    private String[] members; //composed by membersid, not "members object"
+    private List<Purchase> notes;
 
-    public Group(String name, int id, List members){
+    public Group(String name, int id, String[] members, String description){
         this.name = name;
         this.id =  id;
         this.members = members;
-
+        this.description = description;
     }
 
+    public String getName(){
+        return this.name;
+    }
 
+    public String getDescription(){
+        return this.description;
+    }
 
-
-
-
-
-
+    public String[] getMembers(){
+        return this.members;
+    }
 
 }
