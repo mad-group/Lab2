@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
 
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
-
                 i.putExtra("groupNumber", position);
                 startActivity(i);
             }

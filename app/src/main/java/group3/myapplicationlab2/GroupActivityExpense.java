@@ -32,11 +32,20 @@ public class GroupActivityExpense extends AppCompatActivity {
         final int passedVar = getIntent().getIntExtra("groupNumber", 0);
         Log.d("Debug", String.valueOf(passedVar));
 
-        String[] spese = {"Expense 1", "Expense 2", "Expense 3"};
+        //String[] spese = {"Expense 1", "Expense 2", "Expense 3"};
+        ArrayList<Purchase> spese = new ArrayList<Purchase>();
+        final ExpenseAdapter expenseAdapter = new ExpenseAdapter(this, spese);
 
-        arrayList = new ArrayList<>(Arrays.asList(spese));
-        adapter = new ArrayAdapter<String>(this, R.layout.expense_item, arrayList){
-            @Override
+        ListView listView = (ListView) findViewById(R.id.expense_list);
+        listView.setAdapter(expenseAdapter);
+        expenseAdapter.clear();
+        Purchase newPurchase = new Purchase("Gaetano", 50, "Compleanno Michele");
+        //Unica spesa aggiunta alle spese:
+        expenseAdapter.add(newPurchase);
+
+        //arrayList = new ArrayList<>(Arrays.asList(spese));
+        //      adapter = new ArrayAdapter<String>(this, R.layout.expense_item, arrayList){
+/*            @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // There is nothing to convert --> I need to create extra view
                 if (convertView==null) {
@@ -56,12 +65,12 @@ public class GroupActivityExpense extends AppCompatActivity {
                 date.setText("Date random");
 
                 return convertView;
-            }
-        };
+            }*/
+        //};
 
-        final ListView list;
+/*        final ListView list;
         list = (ListView)findViewById(R.id.expense_list);
-        list.setAdapter(adapter);
+        list.setAdapter(adapter);*/
 
         /*
         final ListView list;
@@ -107,20 +116,22 @@ public class GroupActivityExpense extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String newItem = "New Expense";
-                arrayList.add(newItem);
-                adapter.notifyDataSetChanged();
+                // QUI SI DEVE ISTANZIARE L'OGGETTO newInsert CON I PARAMETRI PRESI DALL'INPUT UTENTE
 
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+                Purchase newInsert = new Purchase("Ciccio", 12, "Motivo sconosciuto");
+                expenseAdapter.add(newInsert);
+                expenseAdapter.notifyDataSetChanged();
+
+                //String newItem = "New Expense";
+                //arrayList.add(newItem);
+                //adapter.notifyDataSetChanged();
             }
         });
-
     }
 
     @Override
