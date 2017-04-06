@@ -21,6 +21,11 @@
         <activity
             android:name=".GroupActivityExpense"
             android:label="@string/title_activity_group_expense"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ExpenseInput" />
+        <activity
+            android:name=".GroupStats"
+            android:label="@string/title_activity_group_stats"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

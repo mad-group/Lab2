@@ -1,14 +1,18 @@
 package group3.myapplicationlab2;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,6 +27,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private ArrayList<String> arrayList;
     private ArrayAdapter<String> adapter;
+    ExpenseAdapter expenseAdapter; //l'ho dovuto mettere globale
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +37,21 @@ public class GroupActivityExpense extends AppCompatActivity {
         final int passedVar = getIntent().getIntExtra("groupNumber", 0);
         Log.d("Debug", String.valueOf(passedVar));
 
-        String[] spese = {"Expense 1", "Expense 2", "Expense 3"};
+        //String[] spese = {"Expense 1", "Expense 2", "Expense 3"};
+        ArrayList<Purchase> spese = new ArrayList<Purchase>();
+        //final ExpenseAdapter expenseAdapter = new ExpenseAdapter(this, spese);
+        expenseAdapter = new ExpenseAdapter(this, spese);
 
-        arrayList = new ArrayList<>(Arrays.asList(spese));
-        adapter = new ArrayAdapter<String>(this, R.layout.expense_item, arrayList){
-            @Override
+        ListView listView = (ListView) findViewById(R.id.expense_list);
+        listView.setAdapter(expenseAdapter);
+        expenseAdapter.clear();
+        Purchase newPurchase = new Purchase("Gaetano", 50, "Compleanno Michele");
+        //Unica spesa aggiunta alle spese:
+        expenseAdapter.add(newPurchase);
+
+        //arrayList = new ArrayList<>(Arrays.asList(spese));
+        //      adapter = new ArrayAdapter<String>(this, R.layout.expense_item, arrayList){
+/*            @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // There is nothing to convert --> I need to create extra view
                 if (convertView==null) {
@@ -56,12 +71,12 @@ public class GroupActivityExpense extends AppCompatActivity {
                 date.setText("Date random");
 
                 return convertView;
-            }
-        };
+            }*/
+        //};
 
-        final ListView list;
+/*        final ListView list;
         list = (ListView)findViewById(R.id.expense_list);
-        list.setAdapter(adapter);
+        list.setAdapter(adapter);*/
 
         /*
         final ListView list;
@@ -104,23 +119,31 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         });*/
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String newItem = "New Expense";
-                arrayList.add(newItem);
-                adapter.notifyDataSetChanged();
+                // QUI SI DEVE ISTANZIARE L'OGGETTO newInsert CON I PARAMETRI PRESI DALL'INPUT UTENTE
 
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+/*
+                Purchase newInsert = new Purchase("Ciccio", 12, "Motivo sconosciuto");
+                expenseAdapter.add(newInsert);
+                expenseAdapter.notifyDataSetChanged();
+*/
+
+                Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
+                startActivityForResult(i,1);
+
+
+                //String newItem = "New Expense";
+                //arrayList.add(newItem);
+                //adapter.notifyDataSetChanged();
             }
         });
-
     }
 
     @Override
@@ -130,4 +153,44 @@ public class GroupActivityExpense extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.group_Stats) {
+            Log.d("Debug", "Stats clicked");
+
+            Intent i =new Intent(GroupActivityExpense.this, GroupStats.class);
+
+            startActivity(i);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+           if(resultCode == RESULT_OK) {
+
+                String author = data.getStringExtra("author");
+                String expense = data.getStringExtra("expense");
+                String amount = data.getStringExtra("amount");
+                String date = data.getStringExtra("date");
+                Purchase newInsert = new Purchase(author, Float.parseFloat(amount),expense);
+                //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
+                expenseAdapter.add(newInsert);
+                expenseAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 }
+
+

@@ -14,23 +14,27 @@ public class Purchase {
     Date date; /*represented in number of second elapsed from 1.1.1970*/
     String causal;
     Float total_amount;
-    Float author_amount;
+    String author_amount;
     int author_id;
     int partition_id; //the id of partion methods
     SparseArray<Float> participants; //array having <int key, Float value> where int k is default
     int group_id;
     int purchase_id;
 
-    public Purchase(int group_id,
-                    int author_id){
+/*    public Purchase(int group_id, int author_id){
         this.group_id = group_id;
 
+    }*/
+    public Purchase(String author_amount, float total_amount, String causal) {
+        this.author_amount = author_amount;
+        this.total_amount = total_amount;
+        this.causal = causal;
     }
 
     /*return an hashmap which is formatted as
     * <purhcase ID | [(u1, amount1),(u2, amount2)]>
     * */
-    public HashMap<Integer, SparseArray<Float>> debtisAndCreditsPerPurchase(Purchase p){
+/*    public HashMap<Integer, SparseArray<Float>> debtisAndCreditsPerPurchase(Purchase p){
         HashMap <Integer, SparseArray<Float>> out = new HashMap<>();
         int key = p.getPurchase_id();
         SparseArray<Float> creditsAndDebits = new SparseArray<>();
@@ -38,7 +42,7 @@ public class Purchase {
         //create first element
         creditsAndDebits.put(p.author_id, p.author_amount);
 
-        /* Scan all participants list. Multiply -1 the values, and puts in the out list */
+        *//* Scan all participants list. Multiply -1 the values, and puts in the out list *//*
         for (int i = 0; i<p.participants.size(); i++){
             int user_key = p.participants.keyAt(i);
             float temp_amount = p.participants.get(key, (float)0);
@@ -47,15 +51,15 @@ public class Purchase {
             }
         }
 
-        /*Insertion int out hashmap of all the credits and debits situation for a given purchase*/
+        *//*Insertion int out hashmap of all the credits and debits situation for a given purchase*//*
         out.put(key, creditsAndDebits);
 
         return out;
-    }
+    }*/
 
-    public float getAuthorAmount(){
-        return this.author_amount;
-    }
+    public String getAuthorAmount(){return this.author_amount;}
+    public float getTotalAmount() {return this.total_amount;}
+    public String getCausal() {return this.causal;}
 
     public int getAuthorId(){
         return this.author_id;
