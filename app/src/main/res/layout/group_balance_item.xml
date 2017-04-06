@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/group_balance_item">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:paddingLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/group_member_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Marco"
+            android:gravity="right|center"
+            android:textSize="30sp"
+            android:paddingLeft="10dp" />
+
+        <TextView
+            android:id="@+id/expense_amount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="+ 21.75€"
+            android:textSize="30sp"
+            android:gravity="right|center"
+            android:paddingRight="20dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
