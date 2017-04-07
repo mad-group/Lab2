@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">MyApplicationLab2</string>
+    <string name="app_name">Money Tracker</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_expense_input">Insert Expense</string>
     <string name="title_activity_inside_group">InsideGroup</string>
-    <string name="title_activity_group_expense">GroupActivityExpense</string>
-    <string name="title_activity_group_stats">GroupStats</string>
+    <string name="title_activity_group_expense">Expenses</string>
+    <string name="title_activity_group_stats">Statistics</string>
 </resources>
