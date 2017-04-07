@@ -6,14 +6,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:paddingLeft="10dp"/>
+            android:paddingRight="20dp"
+            android:src="@mipmap/person_icon"
+            />
 
         <TextView
             android:id="@+id/group_member_name"

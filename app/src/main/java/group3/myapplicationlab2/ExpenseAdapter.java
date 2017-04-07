@@ -31,7 +31,7 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
 
         // Qui dobbiamo prendere gli inserimenti dell'utente dalla nuova activity.
         expAuthor.setText(purchase.getAuthorAmount());
-        expAmount.setText(String.valueOf(purchase.getTotalAmount()));
+        expAmount.setText(String.valueOf(purchase.getTotalAmount()) + " \u20ac");
         expense.setText(purchase.getCausal());
 
 
