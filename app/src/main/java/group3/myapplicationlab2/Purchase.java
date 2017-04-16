@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.util.Pair;
 import android.util.SparseArray;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -11,7 +14,7 @@ import java.util.*;
  */
 
 public class Purchase {
-    Date date; /*represented in number of second elapsed from 1.1.1970*/
+    Date date;
     String causal;
     Float total_amount;
     String author_amount;
@@ -25,10 +28,11 @@ public class Purchase {
         this.group_id = group_id;
 
     }*/
-    public Purchase(String author_amount, float total_amount, String causal) {
+    public Purchase(String author_amount, float total_amount, String causal, String date) {
         this.author_amount = author_amount;
         this.total_amount = total_amount;
         this.causal = causal;
+        setDate(date);
     }
 
     /*return an hashmap which is formatted as
@@ -60,13 +64,23 @@ public class Purchase {
     public String getAuthorAmount(){return this.author_amount;}
     public float getTotalAmount() {return this.total_amount;}
     public String getCausal() {return this.causal;}
+    public String getDate() {
+        DateFormat df = new SimpleDateFormat("dd MMM yyy");
+        return df.format(this.date);
+    }
 
     public int getAuthorId(){
         return this.author_id;
     }
-    public Date setDate(Date date){
-        this.date = date;
-        return this.date;
+    public void setDate(String dateInString){
+        DateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        try{
+            Date d = formatter.parse(dateInString);
+            this.date = d;
+        }
+        catch(ParseException e){
+            e.printStackTrace();
+        }
     }
 
     public String setCausal(String causal){
@@ -80,7 +94,6 @@ public class Purchase {
     public int getPurchase_id(){
         return this.purchase_id;
     }
-
 
 
 

@@ -45,7 +45,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
         expenseAdapter.clear();
-        Purchase newPurchase = new Purchase("Gaetano", 50, "Compleanno Michele");
+        Purchase newPurchase = new Purchase("Gaetano", 50, "Compleanno Michele", "20 aug 2016");
         //Unica spesa aggiunta alle spese:
         expenseAdapter.add(newPurchase);
 
@@ -127,14 +127,6 @@ public class GroupActivityExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // QUI SI DEVE ISTANZIARE L'OGGETTO newInsert CON I PARAMETRI PRESI DALL'INPUT UTENTE
-
-/*
-                Purchase newInsert = new Purchase("Ciccio", 12, "Motivo sconosciuto");
-                expenseAdapter.add(newInsert);
-                expenseAdapter.notifyDataSetChanged();
-*/
-
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 startActivityForResult(i,1);
 
@@ -183,7 +175,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 String expense = data.getStringExtra("expense");
                 String amount = data.getStringExtra("amount");
                 String date = data.getStringExtra("date");
-                Purchase newInsert = new Purchase(author, Float.parseFloat(amount),expense);
+                Purchase newInsert = new Purchase(author, Float.parseFloat(amount),expense, date);
                 //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
                 expenseAdapter.add(newInsert);
                 expenseAdapter.notifyDataSetChanged();
