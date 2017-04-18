@@ -49,7 +49,7 @@ public class ExpenseInput extends AppCompatActivity {
         month = myCalendar.get(Calendar.MONTH);
         day = myCalendar.get(Calendar.DAY_OF_MONTH);
 
-        //showDate(year, month, day);
+        showDate(year, month, day);
 
     }
 
@@ -65,28 +65,28 @@ public class ExpenseInput extends AppCompatActivity {
         String amount = amountField.getText().toString();
         String date = dateField.getText().toString();
 
-        context = v.getContext();
-        Intent i = new Intent();
-        i.putExtra("author", author);
-        i.putExtra("expense", expense);
-        i.putExtra("amount",amount);
-        i.putExtra("date", date);
-        setResult(RESULT_OK, i);
 
         boolean allOk = true;
         if(author == null || author.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Set who does the expense.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.miss_author, Toast.LENGTH_SHORT).show();
             allOk = false;
         }
         if(expense == null || expense.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Set what has been bought.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.miss_amount, Toast.LENGTH_SHORT).show();
             allOk = false;
         }
         if(amount == null || amount.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Set the expense amount.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.miss_expense, Toast.LENGTH_SHORT).show();
             allOk = false;
         }
         if (allOk == true){
+            context = v.getContext();
+            Intent i = new Intent();
+            i.putExtra("author", author);
+            i.putExtra("expense", expense);
+            i.putExtra("amount",amount);
+            i.putExtra("date", date);
+            setResult(RESULT_OK, i);
             finish();
         }
 
