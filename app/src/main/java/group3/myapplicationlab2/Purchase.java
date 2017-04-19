@@ -64,6 +64,7 @@ public class Purchase {
     public String getAuthorAmount(){return this.author_amount;}
     public float getTotalAmount() {return this.total_amount;}
     public String getCausal() {return this.causal;}
+
     public String getDate() {
         DateFormat df = new SimpleDateFormat("dd MMM yyy");
         return df.format(this.date);
@@ -72,8 +73,9 @@ public class Purchase {
     public int getAuthorId(){
         return this.author_id;
     }
+
     public void setDate(String dateInString){
-        DateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        DateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
         try{
             Date d = formatter.parse(dateInString);
             this.date = d;

@@ -5,7 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="group3.myapplicationlab2.ExpenseInput">
-
+    <RelativeLayout
+        android:id="@+id/edit_box_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
     <EditText
         android:id="@+id/ie_et_author"
         android:layout_width="wrap_content"
@@ -51,19 +58,26 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/ie_et_amount"
         android:layout_alignEnd="@+id/ie_et_amount" />
-
-
-    <ImageButton
-        android:id="@+id/ie_ib_camera"
-        android:layout_width="wrap_content"
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_menu_camera"
-        android:layout_marginLeft="59dp"
-        android:layout_marginStart="59dp"
-        android:layout_alignBottom="@+id/button3"
-        android:layout_toRightOf="@+id/ie_tv_date"
-        android:layout_toEndOf="@+id/ie_tv_date" />
+        android:layout_alignTop="@id/edit_box_layout"
+        android:layout_toRightOf="@id/edit_box_layout"
+        android:layout_marginRight="10dp"
+        android:id="@+id/relativeLayout">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_menu_gallery"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:id="@+id/ie_iv_from_camera"
+            />
+
+    </RelativeLayout>
 
 
     <Button
@@ -72,10 +86,21 @@
         android:layout_height="50dp"
         android:text="Save"
         android:onClick="saveExpense"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/ie_tv_date"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="22dp"
-        android:layout_marginStart="22dp" />
+        android:layout_below="@+id/edit_box_layout"
+        android:layout_alignLeft="@+id/edit_box_layout"
+        android:layout_alignStart="@+id/edit_box_layout"
+        android:layout_marginLeft="62dp"
+        android:layout_marginStart="62dp" />
+
+    <ImageButton
+        android:id="@+id/ie_ib_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_menu_camera"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_alignRight="@+id/relativeLayout"
+        android:layout_alignEnd="@+id/relativeLayout"
+        android:onClick="takeImage"/>
 </RelativeLayout>

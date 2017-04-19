@@ -20,8 +20,12 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class GroupActivityExpense extends AppCompatActivity {
 
@@ -45,7 +49,8 @@ public class GroupActivityExpense extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
         expenseAdapter.clear();
-        Purchase newPurchase = new Purchase("Gaetano", 50, "Compleanno Michele", "20 aug 2016");
+        String indate = "20 aug 2016";
+        Purchase newPurchase = new Purchase("Gaetano", 50, "Compleanno Michele", "20 Aug 1991");
         //Unica spesa aggiunta alle spese:
         expenseAdapter.add(newPurchase);
 
