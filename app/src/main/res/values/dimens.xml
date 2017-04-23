@@ -10,4 +10,5 @@
     <dimen name="activity_right_margin">10dp</dimen>
     <dimen name="activity_top_margin">10dp</dimen>
     <dimen name="expense_item_text_padding">3dp</dimen>
+    <dimen name="logo_w_h">100dp</dimen>
 </resources>
