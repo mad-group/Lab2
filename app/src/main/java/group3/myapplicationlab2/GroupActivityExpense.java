@@ -19,19 +19,25 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class GroupActivityExpense extends AppCompatActivity {
 
     private ArrayList<String> arrayList;
     private ArrayAdapter<String> adapter;
-    ExpenseAdapter expenseAdapter; //l'ho dovuto mettere globale
+    ExpenseAdapter expenseAdapter;
+    Locale l = Locale.ENGLISH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +55,22 @@ public class GroupActivityExpense extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
         expenseAdapter.clear();
-        String indate = "20 aug 2016";
-        Purchase newPurchase = new Purchase("Gaetano", 50, "Compleanno Michele", "20 Aug 1991");
+
+        Calendar c = new GregorianCalendar();
+        c.set(Calendar.DAY_OF_MONTH,20);
+        c.set(Calendar.MONTH, Calendar.AUGUST);
+        c.set(Calendar.YEAR, 2016);
+        Date d = c.getTime();
+
+        //Toast.makeText(getApplicationContext(), String.valueOf(d.getTime()), Toast.LENGTH_SHORT).show();
+
+/*        DateFormat df = new SimpleDateFormat("dd MMM yyyy",new Locale(Locale.getDefault().getDisplayLanguage()));
+        String indate = df.format(d);*/
+
+        Purchase newPurchase = new Purchase(Locale.ENGLISH + " " + Locale.ITALIAN,
+                50,
+                Locale.getDefault().getDisplayLanguage(),
+                c.getTimeInMillis());
         //Unica spesa aggiunta alle spese:
         expenseAdapter.add(newPurchase);
 
@@ -175,15 +195,19 @@ public class GroupActivityExpense extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
            if(resultCode == RESULT_OK) {
-
+                long month = (new Double(2.678e+9)).longValue();
                 String author = data.getStringExtra("author");
                 String expense = data.getStringExtra("expense");
                 String amount = data.getStringExtra("amount");
-                String date = data.getStringExtra("date");
+                Long date = data.getLongExtra("date", System.currentTimeMillis());
                 Purchase newInsert = new Purchase(author, Float.parseFloat(amount),expense, date);
-                //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
-                expenseAdapter.add(newInsert);
-                expenseAdapter.notifyDataSetChanged();
+                //Toast.makeText(getApplicationContext(), newInsert.date_debug, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), date, Toast.LENGTH_LONG).show();
+
+
+               //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
+               expenseAdapter.add(newInsert);
+               expenseAdapter.notifyDataSetChanged();
             }
         }
     }

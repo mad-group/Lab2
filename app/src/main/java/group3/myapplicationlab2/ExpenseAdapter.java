@@ -34,7 +34,7 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         expAuthor.setText(purchase.getAuthorAmount());
         expAmount.setText(String.valueOf(purchase.getTotalAmount()) + " \u20ac");
         expense.setText(purchase.getCausal());
-        expDate.setText(purchase.getDate().toString());
+        expDate.setText(purchase.getDate());
 
 
         return convertView;
