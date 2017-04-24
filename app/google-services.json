@@ -15,21 +15,17 @@
       },
       "oauth_client": [
         {
-          "client_id": "161751593373-u0j1dboj4l9995mff2h3u1oq94n9uov3.apps.googleusercontent.com",
+          "client_id": "161751593373-3ggo24hh05e2shaq531eg4vi6mg6dk9g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "group3.myapplicationlab2",
             "certificate_hash": "c2ec63eebfc31c3d926645d12d1c8bb626dfdc7a"
           }
-        },
-        {
-          "client_id": "161751593373-auud14c3f1ab62kguqtcnsu3ga284gqh.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDCyaVJMCdkDDpIuPab4Sym1c4cpEb3WKA"
+          "current_key": "AIzaSyBX5v50U3BamPdSiA1GsGlO3ZCK7LA_9qw"
         }
       ],
       "services": {
@@ -38,12 +34,7 @@
         },
         "appinvite_service": {
           "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "161751593373-auud14c3f1ab62kguqtcnsu3ga284gqh.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
