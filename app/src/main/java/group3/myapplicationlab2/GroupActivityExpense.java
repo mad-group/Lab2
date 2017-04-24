@@ -3,6 +3,9 @@ package group3.myapplicationlab2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,10 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,6 +76,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 50,
                 Locale.getDefault().getDisplayLanguage(),
                 c.getTimeInMillis());
+        newPurchase.setPathImage(null);
         //Unica spesa aggiunta alle spese:
         expenseAdapter.add(newPurchase);
 
@@ -195,13 +201,19 @@ public class GroupActivityExpense extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
            if(resultCode == RESULT_OK) {
-                long month = (new Double(2.678e+9)).longValue();
                 String author = data.getStringExtra("author");
                 String expense = data.getStringExtra("expense");
                 String amount = data.getStringExtra("amount");
                 Long date = data.getLongExtra("date", System.currentTimeMillis());
                 Purchase newInsert = new Purchase(author, Float.parseFloat(amount),expense, date);
-                //Toast.makeText(getApplicationContext(), newInsert.date_debug, Toast.LENGTH_SHORT).show();
+                if (data.getStringExtra("filepath") == "nopath"){
+                    newInsert.setPathImage(null);
+                }
+                else{
+                    newInsert.setPathImage(data.getStringExtra("filepath"));
+                }
+
+                //Toast.makeText(getApplicationContext(), newInsert.getPathImage().toString(), Toast.LENGTH_SHORT).show();
                 //Toast.makeText(getApplicationContext(), date, Toast.LENGTH_LONG).show();
 
 

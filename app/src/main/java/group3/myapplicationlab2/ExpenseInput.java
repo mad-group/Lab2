@@ -47,6 +47,7 @@ import java.util.*;
 
 public class ExpenseInput extends AppCompatActivity {
     Context context;
+    Uri path_image = null;
     Calendar myCalendar = Calendar.getInstance();
     private int year, month, day;
     private EditText dateField;
@@ -114,6 +115,10 @@ public class ExpenseInput extends AppCompatActivity {
             i.putExtra("expense", expense);
             i.putExtra("amount",amount);
             i.putExtra("date", myd.getTime());
+            if (this.path_image == null)
+                i.putExtra("filepath", "nopath");
+            else
+                i.putExtra("filepath", this.path_image.getPath());
             setResult(RESULT_OK, i);
             TextView tv = (TextView) findViewById(R.id.debug_tv1);
             finish();
@@ -163,8 +168,7 @@ public class ExpenseInput extends AppCompatActivity {
 
     /** Create a File for saving an image or video */
     private static File getOutputMediaFile(int type) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
+        /*pointer to the dir "money tarcker". if it does not exits, it creates*/
         boolean res=true;
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "MoneyTracker");
         if (mediaStorageDir.exists() == false){
@@ -173,20 +177,9 @@ public class ExpenseInput extends AppCompatActivity {
         if (res == false){
             return null;
         }
-/*        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
 
-        // Create the storage directory if it does not exist
-        if (mediaStorageDir.exists()==false) {
-            if (mediaStorageDir.mkdirs()==false) {
-                Log.d("MoneyTracker", "failed to create directory");
-                return null;
-            }
-        }*/
-
-        // Create a media file name
+        /*adds a tumestamp and a type to the new file*/
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
@@ -202,20 +195,26 @@ public class ExpenseInput extends AppCompatActivity {
     ;
 
     public void takeImage(View v){
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
+        //check if device has avaiable phocamera
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
             Toast.makeText(getApplicationContext(), R.string.has_not_camera, Toast.LENGTH_LONG).show();
             return;
         }
 
+        /*if it hase, start the new intent, which refers to "MediaStore.ACTION_IMAGE_CAPUTRE"*/
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getPackageManager())!=null){
             File photoFile = null;
-            photoFile = getOutputMediaFile(1);
-            //Toast.makeText(getApplicationContext(), photoFile.toString(), Toast.LENGTH_LONG).show();
+            photoFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            //Toast.makeText(getApplicationContext(), Uri.fromFile(photoFile).toString(), Toast.LENGTH_LONG).show();
 
             //continue only if the file is correctly created
             if (photoFile!=null){
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile).toString());
+                /*save the photo in the path WITHOUT TO STRING*/
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                TextView tv = (TextView) findViewById(R.id.debug_tv1);
+                this.path_image =  Uri.fromFile(photoFile);
+                //tv.setText( this.path_image.toString());
                 startActivityForResult(cameraIntent,REQUEST_IMAGE_CAPTURE);
             }
         }
@@ -224,34 +223,15 @@ public class ExpenseInput extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            File f = new File(getOutputMediaFile(MEDIA_TYPE_IMAGE).toString());
-            Bundle extras = data.getExtras();
-            Bitmap mImageBitmap = (Bitmap)extras.get("data");
-            mImageView.setImageBitmap(mImageBitmap);
-
-/*            if (f.exists() == true)
-                Toast.makeText(getApplicationContext(), "file exists", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(getApplicationContext(), "porcaaddio", Toast.LENGTH_LONG).show();
-            Toast.makeText(getApplicationContext(), getOutputMediaFileUri(1).toString(), Toast.LENGTH_LONG).show();*/
-
             TextView tv = (TextView) findViewById(R.id.debug_tv1);
-            tv.setText(getOutputMediaFileUri(1).toString());
-/*            try {
-*//*                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
-                Uri.parse("file:///storage/emulated/0/MoneyTracker/IMG_20170421_182956.jpg"));*//*
-                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
-                        getOutputMediaFileUri(MEDIA_TYPE_IMAGE));
-                //mImageBitmap = BitmapFactory.decodeFile();
-                mImageView.setImageBitmap(mImageBitmap);
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "problemi", Toast.LENGTH_LONG).show();
+            tv.setText(this.path_image.toString());
 
-            }*/
-
-
-/*            mImageBitmap = BitmapFactory.decodeFile(path);
-            mImageView.setImageBitmap(mImageBitmap);*/
+            File imgFile = new File(this.path_image.getPath());
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                ImageView myImage = (ImageView) findViewById(R.id.ie_iv_from_camera);
+                myImage.setImageBitmap(myBitmap);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package group3.myapplicationlab2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import java.util.*;
  */
 
 public class Purchase {
+    private String path_image = "nopath";
     private Date date;
     private Long date_millis;
     private String causal;
@@ -104,6 +106,10 @@ public class Purchase {
     public int getPurchase_id(){
         return this.purchase_id;
     }
+
+    public String getPathImage(){return this.path_image;}
+    public void setPathImage(String path){this.path_image = path;}
+
 
 
 
