@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "161751593373",
+    "firebase_url": "https://money-tracker-c7631.firebaseio.com",
+    "project_id": "money-tracker-c7631",
+    "storage_bucket": "money-tracker-c7631.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161751593373:android:579a06296918d5d8",
+        "android_client_info": {
+          "package_name": "group3.myapplicationlab2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161751593373-3ggo24hh05e2shaq531eg4vi6mg6dk9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "group3.myapplicationlab2",
+            "certificate_hash": "c2ec63eebfc31c3d926645d12d1c8bb626dfdc7a"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5v50U3BamPdSiA1GsGlO3ZCK7LA_9qw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

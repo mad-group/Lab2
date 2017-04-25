@@ -2,6 +2,7 @@ package group3.myapplicationlab2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,12 +15,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FirebaseAuth auth;
 
     private ListView list;
     @Override
@@ -83,8 +91,13 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        TextView user_email = (TextView)header.findViewById(R.id.user_email);
+        user_email.setText(user.getEmail());
     }
 
     @Override
@@ -137,6 +150,14 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.logout) {
+
+
+            auth = FirebaseAuth.getInstance();
+            auth.signOut();
+
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -149,4 +170,17 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    // this listener will be called when there is change in firebase user session
+    /*FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user == null) {
+                // user auth state is changed - user is null
+                // launch login activity
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+        }
+    };*/
 }
