@@ -1,8 +1,10 @@
 package group3.myapplicationlab2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Pair;
 import android.util.SparseArray;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,25 +16,28 @@ import java.util.*;
  */
 
 public class Purchase {
-    Date date;
-    String causal;
-    Float total_amount;
-    String author_amount;
-    int author_id;
-    int partition_id; //the id of partion methods
-    SparseArray<Float> participants; //array having <int key, Float value> where int k is default
-    int group_id;
-    int purchase_id;
+    private String path_image = "nopath";
+    private Date date;
+    private Long date_millis;
+    private String causal;
+    private Float total_amount;
+    private String author_amount;
+    private int author_id;
+    private int partition_id; //the id of partion methods
+    private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
+    private int group_id;
+    private int purchase_id;
 
-/*    public Purchase(int group_id, int author_id){
-        this.group_id = group_id;
+    /*    public Purchase(int group_id, int author_id){
+            this.group_id = group_id;
 
-    }*/
-    public Purchase(String author_amount, float total_amount, String causal, String date) {
+        }*/
+    public Purchase(String author_amount, float total_amount, String causal, Long date) {
         this.author_amount = author_amount;
         this.total_amount = total_amount;
         this.causal = causal;
-        setDate(date);
+        //setDate(date);
+        this.date_millis = date;
     }
 
     /*return an hashmap which is formatted as
@@ -64,24 +69,31 @@ public class Purchase {
     public String getAuthorAmount(){return this.author_amount;}
     public float getTotalAmount() {return this.total_amount;}
     public String getCausal() {return this.causal;}
+
     public String getDate() {
-        DateFormat df = new SimpleDateFormat("dd MMM yyy");
-        return df.format(this.date);
+        if (this.date_millis != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+            Date d = new Date();
+            d.setTime(this.date_millis);
+            //return "belli";
+            return sdf.format(d);
+        }
+        else{
+            return "DATE NOT AVAIABLE";
+        }
     }
 
     public int getAuthorId(){
         return this.author_id;
     }
-    public void setDate(String dateInString){
-        DateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
-        try{
-            Date d = formatter.parse(dateInString);
-            this.date = d;
+
+    private void setDate(Long dateInMillis){
+        if (date_millis != 0)
+            this.date_millis = dateInMillis;
+        else
+            this.date_millis = null;
+        return;
         }
-        catch(ParseException e){
-            e.printStackTrace();
-        }
-    }
 
     public String setCausal(String causal){
         if (causal.length() < 3)
@@ -94,6 +106,10 @@ public class Purchase {
     public int getPurchase_id(){
         return this.purchase_id;
     }
+
+    public String getPathImage(){return this.path_image;}
+    public void setPathImage(String path){this.path_image = path;}
+
 
 
 

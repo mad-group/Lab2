@@ -19,6 +19,7 @@
     <string name="miss_expense">Set what has been bought.</string>
     <string name="miss_amount">Set the expense amount.</string>
     <string name="when">When?</string>
+    <string name="has_not_camera">Your device has not camara avaiable.</string>
 
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>

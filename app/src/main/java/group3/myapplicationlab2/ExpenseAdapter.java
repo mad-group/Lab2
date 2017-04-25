@@ -2,11 +2,18 @@ package group3.myapplicationlab2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
 import java.util.*;
 import java.util.ArrayList;
 
@@ -29,12 +36,26 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         TextView expense = (TextView) convertView.findViewById(R.id.expense_id);
         TextView expAmount = (TextView) convertView.findViewById(R.id.expense_amount);
         TextView expDate = (TextView) convertView.findViewById(R.id.expense_date);
+        ImageView expView = (ImageView) convertView.findViewById(R.id.imageView2);
 
         // Qui dobbiamo prendere gli inserimenti dell'utente dalla nuova activity.
         expAuthor.setText(purchase.getAuthorAmount());
         expAmount.setText(String.valueOf(purchase.getTotalAmount()) + " \u20ac");
         expense.setText(purchase.getCausal());
-        expDate.setText(purchase.getDate().toString());
+        expDate.setText(purchase.getDate());
+
+        if (purchase.getPathImage()!=null && purchase.getPathImage()!= "nopath") {
+            File imgFile = new File(purchase.getPathImage());
+            if(imgFile.exists()) {
+                /*il Problema  è questa istruzione. in Expense Input funzionava.
+                 * i path sono corretti
+                  * file esistono
+                  * chiedo a chi di dovere appena riesco
+                  * */
+/*                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                expView.setImageBitmap(myBitmap);*/
+            }
+        }
 
 
         return convertView;
