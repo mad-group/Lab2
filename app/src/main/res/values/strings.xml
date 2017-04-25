@@ -63,5 +63,11 @@
         completions."
     </string>
 
+    <string name="enter_email">TEnter an email address!</string>
+    <string name="enter_valid_email">Enter a valid email address!</string>
+    <string name="enter_password">Enter password!</string>
+
+
+
 
 </resources>

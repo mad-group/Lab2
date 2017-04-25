@@ -74,12 +74,17 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() ) {
+                    Toast.makeText(getApplicationContext(), R.string.enter_valid_email, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_password, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
