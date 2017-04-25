@@ -11,15 +11,19 @@ public class Group {
     private String name;
     private String description;
     private int id;
-    private String[] members; //composed by membersid, not "members object"
-    private List<Purchase> notes;
+    private List<String> members;
+    //private List<Purchase> notes;
 
-    public Group(String name, int id, String[] members, String description){
+    public Group() {
+      /*Blank default constructor essential for Firebase*/
+    }
+
+    /*public Group(String name, int id,  List<String> members, String description){
         this.name = name;
         this.id =  id;
         this.members = members;
         this.description = description;
-    }
+    }*/
 
     public String getName(){
         return this.name;
@@ -29,8 +33,30 @@ public class Group {
         return this.description;
     }
 
-    public String[] getMembers(){
+    public List<String> getMembers(){
         return this.members;
     }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public void setMembers(List<String> members){
+        this.members = members;
+    }
+
+
 
 }
