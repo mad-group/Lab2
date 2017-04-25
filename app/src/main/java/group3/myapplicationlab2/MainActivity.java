@@ -3,6 +3,7 @@ package group3.myapplicationlab2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -117,7 +118,20 @@ public class MainActivity extends AppCompatActivity
         TextView user_email = (TextView)header.findViewById(R.id.user_email);
         user_email.setText(user.getEmail());
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_group);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Log.d("Debug", "QUI");
+                //Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
+                //startActivityForResult(i,1);
+
+                //String newItem = "New Expense";
+                //arrayList.add(newItem);
+                //adapter.notifyDataSetChanged();
+            }
+        });
 
     }
 

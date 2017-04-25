@@ -161,7 +161,6 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 startActivityForResult(i,1);
 
-
                 //String newItem = "New Expense";
                 //arrayList.add(newItem);
                 //adapter.notifyDataSetChanged();
