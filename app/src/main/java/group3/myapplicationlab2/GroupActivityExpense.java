@@ -67,6 +67,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         c.set(Calendar.YEAR, 2016);
         Date d = c.getTime();
 
+
         //Toast.makeText(getApplicationContext(), String.valueOf(d.getTime()), Toast.LENGTH_SHORT).show();
 
 /*        DateFormat df = new SimpleDateFormat("dd MMM yyyy",new Locale(Locale.getDefault().getDisplayLanguage()));

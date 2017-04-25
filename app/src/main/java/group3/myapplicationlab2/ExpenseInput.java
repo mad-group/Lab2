@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,21 +47,18 @@ import java.util.GregorianCalendar;
 import java.util.*;
 
 public class ExpenseInput extends AppCompatActivity {
+    private static final int PICK_IMAGE_ID = 234;
     Context context;
-    Uri path_image = null;
     Calendar myCalendar = Calendar.getInstance();
     private int year, month, day;
     private EditText dateField;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Bitmap mImageBitmap;
     private ImageView mImageView;
-    static int test = 0;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
+    private File imageOutFile = null;
+    int MY_PERMISSIONS_REQUEST_READ_AND_WRITE_EXTERNAL_STORAGE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expense_input);
 
         //print current date as default value in Date editText
         dateField = (EditText) findViewById(R.id.ie_tv_date);
@@ -115,10 +113,10 @@ public class ExpenseInput extends AppCompatActivity {
             i.putExtra("expense", expense);
             i.putExtra("amount",amount);
             i.putExtra("date", myd.getTime());
-            if (this.path_image == null)
+            if (this.imageOutFile == null)
                 i.putExtra("filepath", "nopath");
             else
-                i.putExtra("filepath", this.path_image.getPath());
+                i.putExtra("filepath", this.imageOutFile.getPath());
             setResult(RESULT_OK, i);
             TextView tv = (TextView) findViewById(R.id.debug_tv1);
             finish();
@@ -162,76 +160,42 @@ public class ExpenseInput extends AppCompatActivity {
         dateField.setText(day + " " + m + " " + year);
     }
 
-    private static Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type) {
-        /*pointer to the dir "money tarcker". if it does not exits, it creates*/
-        boolean res=true;
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "MoneyTracker");
-        if (mediaStorageDir.exists() == false){
-            res=mediaStorageDir.mkdirs();
-        }
-        if (res == false){
-            return null;
-        }
-
-        /*adds a tumestamp and a type to the new file*/
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-        return mediaFile;
-    }
-    ;
 
     public void takeImage(View v){
-        //check if device has avaiable phocamera
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-            Toast.makeText(getApplicationContext(), R.string.has_not_camera, Toast.LENGTH_LONG).show();
-            return;
-        }
 
-        /*if it hase, start the new intent, which refers to "MediaStore.ACTION_IMAGE_CAPUTRE"*/
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager())!=null){
-            File photoFile = null;
-            photoFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            //Toast.makeText(getApplicationContext(), Uri.fromFile(photoFile).toString(), Toast.LENGTH_LONG).show();
 
-            //continue only if the file is correctly created
-            if (photoFile!=null){
-                /*save the photo in the path WITHOUT TO STRING*/
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                TextView tv = (TextView) findViewById(R.id.debug_tv1);
-                this.path_image =  Uri.fromFile(photoFile);
-                //tv.setText( this.path_image.toString());
-                startActivityForResult(cameraIntent,REQUEST_IMAGE_CAPTURE);
-            }
-        }
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            TextView tv = (TextView) findViewById(R.id.debug_tv1);
-            tv.setText(this.path_image.toString());
-
-            File imgFile = new File(this.path_image.getPath());
-            if(imgFile.exists()){
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        switch (requestCode) {
+            case PICK_IMAGE_ID:
+                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 ImageView myImage = (ImageView) findViewById(R.id.ie_iv_from_camera);
-                myImage.setImageBitmap(myBitmap);
-            }
+                myImage.setImageBitmap(bitmap);
+
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "MoneyTracker");
+                mediaStorageDir.mkdirs();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                        "IMG_" + timeStamp + ".jpg");
+                try {
+                    FileOutputStream out = new FileOutputStream(mediaFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                this.imageOutFile = mediaFile;
+                break;
+
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+
         }
     }
 

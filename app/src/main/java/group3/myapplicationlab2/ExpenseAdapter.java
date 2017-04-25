@@ -47,13 +47,11 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         if (purchase.getPathImage()!=null && purchase.getPathImage()!= "nopath") {
             File imgFile = new File(purchase.getPathImage());
             if(imgFile.exists()) {
-                /*il Problema  è questa istruzione. in Expense Input funzionava.
-                 * i path sono corretti
-                  * file esistono
-                  * chiedo a chi di dovere appena riesco
-                  * */
-/*                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                expView.setImageBitmap(myBitmap);*/
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                expView.setImageBitmap(myBitmap);
+                expAuthor.setText(imgFile.getAbsolutePath());
+            }
+            else{
             }
         }
 
