@@ -20,7 +20,7 @@
             android:title="Settings" />
         <item
             android:id="@+id/logout"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@mipmap/ic_logout"
             android:title="Logout" />
     </group>
 
