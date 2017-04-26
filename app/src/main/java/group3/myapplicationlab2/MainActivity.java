@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         auth.addAuthStateListener(authListener);
-
         setContentView(R.layout.activity_main);
 
 

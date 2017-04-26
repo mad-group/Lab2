@@ -1,6 +1,9 @@
 package group3.myapplicationlab2;
 
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 /**
@@ -12,10 +15,11 @@ public class Group {
     private String description;
     private int id;
     private List<String> members;
+    private FirebaseDatabase db;
     //private List<Purchase> notes;
 
     public Group() {
-      /*Blank default constructor essential for Firebase*/
+        //this.db = db;
     }
 
     /*public Group(String name, int id,  List<String> members, String description){
