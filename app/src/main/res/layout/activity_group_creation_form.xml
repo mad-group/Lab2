@@ -30,8 +30,24 @@
             android:layout_height="match_parent"
             android:hint="@string/group_description"
             android:inputType="textCapSentences|textAutoCorrect"
-            android:paddingTop="30dp"/>
-        <RadioGroup
+            android:layout_marginBottom="20dp"
+            android:paddingTop="20dp"/>
+
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/radiogroup_title"/>
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:prompt="@string/splitting_criterion_prompt"
+            android:entries="@array/splitting_criteria"
+            android:layout_marginBottom="20dp">
+        </Spinner>
+
+        <!--<RadioGroup
             android:paddingTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -54,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/per_percentage"/>
-        </RadioGroup>
+        </RadioGroup> -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,9 +78,9 @@
             android:orientation="horizontal">
             <EditText
                 android:id="@+id/new_participant"
-                android:paddingTop="20dp"
-                android:padding="5dp"
-                android:layout_width="wrap_content"
+                android:paddingTop="0dp"
+                android:padding="10dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.7"
                 android:inputType="textCapSentences|textAutoCorrect"
@@ -76,16 +92,15 @@
                 android:text="@string/add_participant"
                 />
         </LinearLayout>
-        
+
         <ListView
             android:id="@+id/list_part"
-            android:paddingTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="100dp"></ListView>
+            android:layout_height="170dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/new_group_btn"
-            android:layout_margin="10dp"
             android:layout_gravity="bottom|end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

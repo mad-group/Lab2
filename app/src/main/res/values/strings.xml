@@ -76,5 +76,11 @@
     <string name="insert_member">Insert a new member</string>
     <string name="add_participant">Add</string>
 
+    <string name="splitting_criterion_prompt">Choose a splitting criterion</string>
+    <string-array name="splitting_criteria">
+        <item>Equal parts</item>
+        <item>Per quotes</item>
+        <item>Per percentage</item>
+    </string-array>
 
 </resources>
