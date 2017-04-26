@@ -47,11 +47,20 @@ public class GroupCreationForm extends AppCompatActivity {
         membersAdapter = new ArrayAdapter<String>(this, R.layout.new_member_item, R.id.new_member, Mylist);
         lw.setAdapter(membersAdapter);
         btnNewPart.setOnClickListener(new View.OnClickListener() {
+            //TODO: fare controlli sull'inserimento dell'utente!
             @Override
             public void onClick(View v) {
                 String newP = newParticipant.getText().toString();
-                members.add(newP);
-                membersAdapter.add(newP);
+                if (!newP.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) {
+                    String err = getResources().getString(R.string.invalid_mail_address);
+                    newParticipant.setError(err);
+                }
+                else {
+                    members.add(newP);
+                    membersAdapter.add(newP);
+                    newParticipant.setText("");
+                }
+
                 /*membersList.add(newP);
                 membersAdapter.notifyDataSetChanged();*/
                 Log.d("Debug", newP);

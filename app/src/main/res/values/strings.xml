@@ -83,4 +83,6 @@
         <item>Per percentage</item>
     </string-array>
 
+    <string name="invalid_mail_address">Invalid Email Address</string>
+
 </resources>
