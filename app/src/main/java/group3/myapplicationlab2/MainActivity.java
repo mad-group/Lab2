@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 adapter.clear();
                 for (DataSnapshot groupsnapshot : dataSnapshot.getChildren()) {
-                    //Getting the data from snapshot
+                    //Getting the data from database snapshot
                     Group group = groupsnapshot.getValue(Group.class);
                     adapter.add(group);
                 }
@@ -133,8 +133,6 @@ public class MainActivity extends AppCompatActivity
         Mylist.add("Michele");
 
         Group newGroup = new Group("Gruppo 2", 1, Mylist, "Gruppo Bello");*/
-
-
 
         //Group newGroup = new Group("Gruppo 1", 1, nomi, "Gruppo Bello");
         //Group newGroup2 = new Group("Gruppo 2", 2, nomi, "Gruppo Carino");
@@ -173,7 +171,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -182,7 +179,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -197,9 +193,10 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 Log.d("Debug", "QUI");
-
+                Intent i = new Intent(MainActivity.this, GroupCreationForm.class);
+                startActivity(i);
                 // Write a message to the database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                /*FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("Groups");
 
                 //myRef.setValue("Hello, World!");
@@ -225,7 +222,7 @@ public class MainActivity extends AppCompatActivity
                 //myRef.child("gruppo2").setValue(newGroup);
 
                 myRef.push().setValue(newGroup);
-
+*/
                 //Storing values to firebase
                 //mDatabase.child("Groups").setValue(newGroup);
 

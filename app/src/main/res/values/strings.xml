@@ -67,7 +67,12 @@
     <string name="enter_valid_email">Enter a valid email address!</string>
     <string name="enter_password">Enter password!</string>
 
-
+    <string name="group_name">Group name</string>
+    <string name="group_description">Group description</string>
+    <string name="radiogroup_title">Choose a default splitting criterion</string>
+    <string name="equal_parts">Equal parts</string>
+    <string name="per_quotes">Per quotes</string>
+    <string name="per_percentage">Per percentage</string>
 
 
 </resources>
