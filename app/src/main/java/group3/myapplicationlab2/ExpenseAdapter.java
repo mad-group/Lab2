@@ -49,12 +49,10 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
             if(imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 expView.setImageBitmap(myBitmap);
-                expAuthor.setText(imgFile.getAbsolutePath());
             }
             else{
             }
         }
-
 
         return convertView;
     }

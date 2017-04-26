@@ -56,6 +56,7 @@ public class ExpenseInput extends AppCompatActivity {
     private File imageOutFile = null;
     int MY_PERMISSIONS_REQUEST_READ_AND_WRITE_EXTERNAL_STORAGE;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +70,6 @@ public class ExpenseInput extends AppCompatActivity {
 
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
-
     }
 
     public void saveExpense(View v) {
@@ -160,10 +160,7 @@ public class ExpenseInput extends AppCompatActivity {
         dateField.setText(day + " " + m + " " + year);
     }
 
-
     public void takeImage(View v){
-
-
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
     }
