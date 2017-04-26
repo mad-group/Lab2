@@ -73,6 +73,8 @@
     <string name="equal_parts">Equal parts</string>
     <string name="per_quotes">Per quotes</string>
     <string name="per_percentage">Per percentage</string>
+    <string name="insert_member">Insert a new member</string>
+    <string name="add_participant">Add</string>
 
 
 </resources>
