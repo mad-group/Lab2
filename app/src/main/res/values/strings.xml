@@ -66,8 +66,7 @@
     <string name="enter_email">TEnter an email address!</string>
     <string name="enter_valid_email">Enter a valid email address!</string>
     <string name="enter_password">Enter password!</string>
-
-
+    <string name="pick_image_intent_text">Select Source</string>
 
 
 </resources>
