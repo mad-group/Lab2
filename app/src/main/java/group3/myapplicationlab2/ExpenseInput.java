@@ -47,25 +47,19 @@ import java.util.GregorianCalendar;
 import java.util.*;
 
 public class ExpenseInput extends AppCompatActivity {
+    private static final int PICK_IMAGE_ID = 234;
     Context context;
-    Uri path_image = null;
     Calendar myCalendar = Calendar.getInstance();
     private int year, month, day;
     private EditText dateField;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Bitmap mImageBitmap;
     private ImageView mImageView;
-    static int test = 0;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-
-    private static final int PICK_IMAGE_ID = 234;
     private File imageOutFile = null;
+    int MY_PERMISSIONS_REQUEST_READ_AND_WRITE_EXTERNAL_STORAGE;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expense_input);
 
         //print current date as default value in Date editText
         dateField = (EditText) findViewById(R.id.ie_tv_date);
@@ -123,7 +117,6 @@ public class ExpenseInput extends AppCompatActivity {
                 i.putExtra("filepath", "nopath");
             else
                 i.putExtra("filepath", this.imageOutFile.getPath());
-            setResult(RESULT_OK, i);
             setResult(RESULT_OK, i);
             TextView tv = (TextView) findViewById(R.id.debug_tv1);
             finish();

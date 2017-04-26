@@ -61,22 +61,24 @@
         android:layout_alignRight="@+id/ie_et_amount"
         android:layout_alignEnd="@+id/ie_et_amount" />
 
-
-
 </RelativeLayout>
-
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@id/edit_box_layout"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_alignParentRight="true">
     <Button
         android:id="@+id/button3"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="Save"
+        android:layout_centerHorizontal="true"
         android:onClick="saveExpense"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="21dp"
-        android:layout_marginStart="21dp"
+        android:textAlignment="center"
         android:layout_below="@+id/ie_ib_camera"
-        android:layout_toRightOf="@+id/edit_box_layout"
-        android:layout_toEndOf="@+id/edit_box_layout" />
+        />
 
     <ImageButton
         android:id="@+id/ie_ib_camera"
@@ -84,12 +86,10 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_menu_camera"
         android:onClick="takeImage"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_alignTop="@+id/edit_box_layout"
-        android:layout_toRightOf="@+id/edit_box_layout"
-        android:layout_toEndOf="@+id/edit_box_layout"
-        android:layout_marginTop="29dp" />
+        android:layout_centerHorizontal="true"
+
+        />
+</RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -105,11 +105,10 @@
             android:id="@+id/ie_iv_from_camera"
             />
     </RelativeLayout>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/debug_tv1"
         android:text="debug1"
         android:layout_below="@id/relativeLayout"/>
-</RelativeLayout>
+    </RelativeLayout>
