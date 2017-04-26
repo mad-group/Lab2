@@ -41,15 +41,17 @@ public class GroupCreationForm extends AppCompatActivity {
 
         // Insert new participants
         ListView lw = (ListView)findViewById(R.id.list_part);
-        String[] participants = {};
-        membersList = new ArrayList<>(Arrays.asList(participants));
-        membersAdapter = new ArrayAdapter<String>(this, R.layout.new_member_item, R.id.new_member, participants);
+        //String[] participants = {};
+        List<String> Mylist = new ArrayList<String>();
+        //membersList = new ArrayList<>(Arrays.asList(participants));
+        membersAdapter = new ArrayAdapter<String>(this, R.layout.new_member_item, R.id.new_member, Mylist);
         lw.setAdapter(membersAdapter);
         btnNewPart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newP = newParticipant.getText().toString();
                 members.add(newP);
+                membersAdapter.add(newP);
                 /*membersList.add(newP);
                 membersAdapter.notifyDataSetChanged();*/
                 Log.d("Debug", newP);
