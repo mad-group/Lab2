@@ -55,9 +55,9 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     List<String> users = new ArrayList<String>();
 
     List<String> myList_notregistered = new ArrayList<String>();
-    private String groupNameTmp = "";
-    private String groupIdTmp = "";
-    private String groupPinTmp = "";
+    private String groupNameTmp = null;
+    private String groupIdTmp = null;
+    private String groupPinTmp = null;
 
 
     @Override
@@ -176,7 +176,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             this.groupPinTmp = newGroup.getPin();
             this.groupNameTmp = newGroup.getName();
             this.groupIdTmp = newGroup.getId();
-            Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -195,7 +195,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private void onInviteClicked(String groupName, String groupPin, String groupId) {
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
-                //.setEmailHtmlContent(String.format(getString(R.string.email_text),groupName, groupId, groupPin))
+                .setEmailHtmlContent("email here")
                 .setEmailSubject(groupName + getString(R.string.email_subject))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
@@ -230,9 +230,11 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
     public void sendInvitation(View v){
 
-        //Toast.makeText(getApplicationContext(), this.groupIdTmp, Toast.LENGTH_SHORT).show();
-        if (!this.groupNameTmp.isEmpty() && !this.groupPinTmp.isEmpty() && !this.groupIdTmp.isEmpty() )
+        if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
+            //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
             onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
+        else
+            Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();
 
 
 /*        //members is a list of mail
