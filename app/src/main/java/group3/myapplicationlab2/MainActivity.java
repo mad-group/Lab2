@@ -270,5 +270,4 @@ public class MainActivity extends AppCompatActivity
         //Intent i = new Intent(view.getContext(), ExpensesReports.class);
         //startActivity(i);
     }
-
 }

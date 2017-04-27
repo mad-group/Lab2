@@ -1,8 +1,10 @@
 package group3.myapplicationlab2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -213,18 +215,47 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         if (prova)
 
             //for ()
+            myList_notregistered.clear();
             for (String i : members){
 
                 if (!(users.contains(i))){
-
                     myList_notregistered.add(i);
                 }
                 else{
                     continue;
-
                 }
             }
             Log.d("Deb", myList_notregistered.get(0));
+
+            if (myList_notregistered.size()>0){
+
+
+                ArrayList<String> arrayOfGEmail = new ArrayList<String>(myList_notregistered);
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayOfGEmail);
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Do you want to invite these users?")
+                        .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                onInviteClicked("Il signore", "PUTTANA LA MADONNA" );
+                                adapter.clear();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                                adapter.clear();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
 
             //db isnert of new group
             //myRef.push().setValue(newGroup);
