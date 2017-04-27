@@ -112,9 +112,9 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
                 Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
-/*                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
+                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
                 .setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
-                .setCallToActionText(getString(R.string.invitation_cta))*/
+                .setCallToActionText(getString(R.string.invitation_cta))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }
@@ -133,6 +133,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             } else {
                 // Sending failed or it was canceled, show failure message to the user
                 // [START_EXCLUDE]
+                Toast.makeText(getApplicationContext(), "failed send", Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }
         }
