@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:hint="Group ID"
+                android:hint="@string/group_id"
                 android:inputType="text"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white" />
@@ -46,7 +46,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:hint="Group password"
+                android:hint="@string/group_password"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white" />
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:background="@color/colorAccent"
-            android:text="Join"
+            android:text="@string/join"
             android:textColor="@android:color/black"/>
 
         <ProgressBar

@@ -102,5 +102,8 @@
     <string name="invitation_email">   testo mail</string>
     <string name="no_group_creation_and_inviting">First to invite, create a group.</string>
     <string name="group_created">Group created</string>
+    <string name="group_id">Group ID</string>
+    <string name="group_password">Group password</string>
+    <string name="join">Join</string>
 
 </resources>
