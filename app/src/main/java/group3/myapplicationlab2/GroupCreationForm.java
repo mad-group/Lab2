@@ -94,6 +94,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     }/*[END onCreate]*/
 
     public void prepareUser(View view) {
+        // Called when ADD button is pressed
         String newP = newParticipant.getText().toString();
         if (!newP.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+") || newP.isEmpty()) {
             String err = getResources().getString(R.string.invalid_mail_address);
@@ -105,7 +106,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             newParticipant.setText("");
         }
     }
-
 
     private void onInviteClicked(String groupName, String token) {
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
@@ -144,7 +144,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         //showMessage(getString(R.string.google_play_services_error));
         Toast.makeText(getApplicationContext(), "failed conn", Toast.LENGTH_SHORT).show();
-
     }
 
     /*
@@ -152,16 +151,19 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     * */
     public void sendInvitation(View v){
         final Group newGroup = new Group();
+        boolean prova = true;
         if (groupName.getText().toString().isEmpty()){
             String err = getResources().getString(R.string.insert_group_name);
             groupName.setError(err);
+            prova = false;
         }else {
             newGroup.setName(groupName.getText().toString());
         }
 
         if (groupDescription.getText().toString().isEmpty()){
             String err = getResources().getString(R.string.insert_group_descr);
-            groupName.setError(err);
+            groupDescription.setError(err);
+            prova = false;
         }else {
             newGroup.setDescription(groupDescription.getText().toString());
         }
@@ -169,20 +171,19 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         //members is a list of mail
         if (members.size()<1){
             String err = getResources().getString(R.string.no_user_insert);
-            groupName.setError(err);
+            newParticipant.setError(err);
+            prova = false;
         }else{
             newGroup.setMembers(members);
             //Toast.makeText(getApplicationContext(), "invitation here", Toast.LENGTH_SHORT).show();
         }
         for(int i =0; i< members.size(); i++)
-            Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_LONG).show();
 
-        //db isnert of new group
-        //myRef.push().setValue(newGroup);
-        onInviteClicked("PORCO DIO", "PUTTANA LA MADONNA" );
+        if (prova)
+            //db isnert of new group
+            //myRef.push().setValue(newGroup);
+            onInviteClicked("Il signore", "PUTTANA LA MADONNA" );
     }
-
-
-
 
 }

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth auth;
-    private DatabaseReference mDatabase;
+    //private DatabaseReference mDatabase;
 
     private ListView list;
 
@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity
         };
         auth.addAuthStateListener(authListener);
         setContentView(R.layout.activity_main);
-
-
 
         //mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         //FirebaseDatabase database = FirebaseDatabase.getInstance();
         //DatabaseReference myRef = database.getReference("Groups");
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("Groups");
+        /*mDatabase = FirebaseDatabase.getInstance().getReference("Groups");
 
 
         ValueEventListener postListener = new ValueEventListener() {
@@ -123,40 +121,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        mDatabase.addValueEventListener(postListener);
-
-
-        /*List<String> Mylist = new ArrayList<String>();
-        Mylist.add("Flavia");
-        Mylist.add("Andrian");
-        Mylist.add("Michele");
-
-        Group newGroup = new Group("Gruppo 2", 1, Mylist, "Gruppo Bello");*/
-
-        //Group newGroup = new Group("Gruppo 1", 1, nomi, "Gruppo Bello");
-        //Group newGroup2 = new Group("Gruppo 2", 2, nomi, "Gruppo Carino");
-        //Group newGroup3 = new Group("Gruppo 3", 3, nomi, "Gruppo Brutto");
-
-        //adapter.add(newGroup);
-        //adapter.add(newGroup2);
-        //adapter.add(newGroup3);
-
-        /*adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);*/
+        mDatabase.addValueEventListener(postListener);*/
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
