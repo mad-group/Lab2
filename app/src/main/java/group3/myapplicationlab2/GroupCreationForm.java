@@ -179,6 +179,12 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
         }
 
+        if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
+            //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
+            onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
+        else
+            Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();
+
 
        /* String newP = newParticipant.getText().toString();
         if (!newP.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+") || newP.isEmpty()) {
@@ -195,6 +201,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private void onInviteClicked(String groupName, String groupPin, String groupId) {
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
+                //TODO generare mail in maniara decente
                 .setEmailHtmlContent("email here")
                 .setEmailSubject(groupName + getString(R.string.email_subject))
                 .build();
@@ -230,11 +237,11 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
     public void sendInvitation(View v){
 
-        if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
+       /* if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
             //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
             onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
         else
-            Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();*/
 
 
 /*        //members is a list of mail

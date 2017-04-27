@@ -111,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="170dp" />
 -->
-        <android.support.design.widget.FloatingActionButton
+<!--        <android.support.design.widget.FloatingActionButton
             android:id="@+id/new_group_btn"
             android:layout_gravity="bottom|end"
             android:paddingBottom="5dp"
@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_user"
             android:onClick="sendInvitation"
-            />
+            />-->
 
     </android.support.v7.widget.LinearLayoutCompat>
 
