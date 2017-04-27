@@ -22,6 +22,7 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +55,9 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     List<String> users = new ArrayList<String>();
 
     List<String> myList_notregistered = new ArrayList<String>();
+    private String groupNameTmp = "";
+    private String groupIdTmp = "";
+    private String groupPinTmp = "";
 
 
     @Override
@@ -159,13 +163,20 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
         //db insert of new group
         if (prova) {
-            String id =  myRef.push().getKey();
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+
+            List<String> l = new ArrayList<String>();
+            l.add(auth.getCurrentUser().getEmail());
+            newGroup.setMembers(l);
+
+            String id = myRef.push().getKey();
+            myRef.push().setValue(newGroup);
+
             newGroup.setId(id);
-            myRef.setValue(newGroup);
-
+            this.groupPinTmp = newGroup.getPin();
+            this.groupNameTmp = newGroup.getName();
+            this.groupIdTmp = newGroup.getId();
             Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
-
-            //onInviteClicked(newGroup.getName(), newGroup.getId());
         }
 
 
@@ -181,14 +192,11 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         }*/
     }
 
-    private void onInviteClicked(String groupName, String token) {
+    private void onInviteClicked(String groupName, String groupPin, String groupId) {
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
-                .setEmailHtmlContent("<html>You are invited to join to a Money Tracker <b>"+groupName+"</b> group.</br>"+
-                        "Please log or sing in (with this email) to fully operate with your friends!</br>"+
-                        "Use this to join token: <b>" + token +"</b>.</br></br>"+
-                         "MT crew</html>")
-                .setEmailSubject(groupName + " MoneyTracker group Invitation")
+                //.setEmailHtmlContent(String.format(getString(R.string.email_text),groupName, groupId, groupPin))
+                .setEmailSubject(groupName + getString(R.string.email_subject))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }
@@ -207,7 +215,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             }else {
                 // Sending failed or it was canceled, show failure message to the user
                 // [START_EXCLUDE]
-                Toast.makeText(getApplicationContext(), "failed send", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.invitation_failed, Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }
         }
@@ -220,12 +228,11 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Toast.makeText(getApplicationContext(), "failed conn", Toast.LENGTH_SHORT).show();
     }
 
-    /*
-    at fab pressing, doing this cotnrols and if all right creates the groups
-    * */
     public void sendInvitation(View v){
 
-
+        //Toast.makeText(getApplicationContext(), this.groupIdTmp, Toast.LENGTH_SHORT).show();
+        if (!this.groupNameTmp.isEmpty() && !this.groupPinTmp.isEmpty() && !this.groupIdTmp.isEmpty() )
+            onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
 
 
 /*        //members is a list of mail
@@ -289,4 +296,5 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
 
     }
+
 }
