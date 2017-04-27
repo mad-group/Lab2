@@ -47,7 +47,7 @@ public class GroupCreationForm extends AppCompatActivity {
         membersAdapter = new ArrayAdapter<String>(this, R.layout.new_member_item, R.id.new_member, Mylist);
         lw.setAdapter(membersAdapter);
         btnNewPart.setOnClickListener(new View.OnClickListener() {
-            //TODO: fare controlli sull'inserimento dell'utente!
+
             @Override
             public void onClick(View v) {
                 String newP = newParticipant.getText().toString();
@@ -67,6 +67,7 @@ public class GroupCreationForm extends AppCompatActivity {
             }
         });
 
+        //TODO: fare controlli sull'inserimento dell'utente prima di inviare la richiesta al DB
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.new_group_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
