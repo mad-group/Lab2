@@ -1,8 +1,10 @@
 package group3.myapplicationlab2;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -55,6 +57,8 @@ public class JoinGroupActivity extends AppCompatActivity {
                 ValueEventListener GroupListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.exists()){
                             //Getting the data from database snapshot
                             Group group = dataSnapshot.getValue(Group.class);
 
@@ -65,14 +69,13 @@ public class JoinGroupActivity extends AppCompatActivity {
                                 members.add(auth.getCurrentUser().getEmail());
                                 //Log.d("Debug", members.get(1));
                                 mDatabase.child("members").setValue(members);
+                                finish();
                             }
-                            else{
-                                Toast.makeText(getApplicationContext(), "GroupID or Password are incorrect!", Toast.LENGTH_SHORT).show();
-                            }
-
-                            finish();
-                            //adapter.add(group);
-
+                        }
+                        else{
+                            Toast.makeText(JoinGroupActivity.this, "Incorrect GroupID or Password", Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override
