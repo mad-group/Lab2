@@ -71,7 +71,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         // Check for App Invite invitations and launch deep-link activity if possible.
         // Requires that an Activity is registered in AndroidManifest.xml to handle
         // deep-link URLs.
-        boolean autoLaunchDeepLink = true;
+        boolean autoLaunchDeepLink = false;
         AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink)
                 .setResultCallback(
                         new ResultCallback<AppInviteInvitationResult>() {
@@ -107,14 +107,14 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     }
 
 
-    private void onInviteClicked() {
-        Toast.makeText(getApplicationContext(), getString(R.string.invitation_message), Toast.LENGTH_SHORT).show();
-
-                Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+    private void onInviteClicked(String groupName, String token) {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
-                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
-                .setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
-                .setCallToActionText(getString(R.string.invitation_cta))
+                .setEmailHtmlContent("<html>You are invited to join to a Money Tracker <b>"+groupName+"</b> group.</br>"+
+                        "Please log or sing in (with this email) to fully operate with your friends!</br>"+
+                        "Use this to join token: <b>" + token +"</b>.</br></br>"+
+                         "MT crew</html>")
+                .setEmailSubject(groupName + " MoneyTracker group Invitation")
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }
@@ -179,7 +179,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
         //db isnert of new group
         //myRef.push().setValue(newGroup);
-        onInviteClicked();
+        onInviteClicked("PORCO DIO", "PUTTANA LA MADONNA" );
     }
 
 
