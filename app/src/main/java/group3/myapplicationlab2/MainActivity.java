@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth auth;
-    //private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase;
 
     private ListView list;
 
@@ -98,11 +98,10 @@ public class MainActivity extends AppCompatActivity
 
         adapter.clear();
 
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference myRef = database.getReference("Groups");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Groups");
 
-        /*mDatabase = FirebaseDatabase.getInstance().getReference("Groups");
-
+        mDatabase = FirebaseDatabase.getInstance().getReference("Groups");
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -111,7 +110,15 @@ public class MainActivity extends AppCompatActivity
                 for (DataSnapshot groupsnapshot : dataSnapshot.getChildren()) {
                     //Getting the data from database snapshot
                     Group group = groupsnapshot.getValue(Group.class);
-                    adapter.add(group);
+
+                    List<String> members = group.getMembers();
+
+                    if (members.contains(auth.getCurrentUser().getUid()) ||
+                            members.contains(auth.getCurrentUser().getEmail())){
+                        adapter.add(group);
+                    }
+
+                    //adapter.add(group);
                 }
             }
 
@@ -121,7 +128,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        mDatabase.addValueEventListener(postListener);*/
+        mDatabase.addValueEventListener(postListener);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
