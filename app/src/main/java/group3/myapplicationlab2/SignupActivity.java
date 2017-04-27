@@ -33,7 +33,6 @@ public class SignupActivity extends AppCompatActivity {
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
-        mdatabase = FirebaseDatabase.getInstance().getReference("Users");
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
@@ -98,6 +97,7 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
+                                    mdatabase = FirebaseDatabase.getInstance().getReference("Users");
                                     String user_id = auth.getCurrentUser().getUid();
                                     DatabaseReference current_user =  mdatabase.child(user_id);
                                     current_user.child("email").setValue(auth.getCurrentUser().getEmail());

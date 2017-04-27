@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Groups");
 
-        ValueEventListener postListener = new ValueEventListener() {
+        ValueEventListener GroupListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 adapter.clear();
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        mDatabase.addValueEventListener(postListener);
+        mDatabase.addValueEventListener(GroupListener);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

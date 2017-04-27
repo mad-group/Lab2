@@ -20,8 +20,11 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,13 +38,21 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private EditText groupName, groupDescription, newParticipant;
     private Button btnNewPart;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+
     private final DatabaseReference myRef = mDatabase.getReference("Groups");
+    private final DatabaseReference myRefUsers = mDatabase.getReference("Users");
+
     private final List<String> members = new ArrayList<String>();
     private List<String> Mylist = new ArrayList<String>();
     private ListView lw;
     private final int REQUEST_INVITE = 0;
 
     private GoogleApiClient mGoogleApiClient;
+
+    List<String> users = new ArrayList<String>();
+
+    List<String> myList_notregistered = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +102,25 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                                 }
                             }
                         });
+
+        ValueEventListener UsersListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot groupsnapshot : dataSnapshot.getChildren()) {
+                    //Getting the data from database snapshot
+                    User user = groupsnapshot.getValue(User.class);
+                    users.add(user.getEmail());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        myRefUsers.addValueEventListener(UsersListener);
+
     }/*[END onCreate]*/
 
     public void prepareUser(View view) {
@@ -130,7 +160,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                 for (String id : ids) {
                     Log.d(TAG, "onActivityResult: sent invitation " + id);
                 }
-            } else {
+            }else {
                 // Sending failed or it was canceled, show failure message to the user
                 // [START_EXCLUDE]
                 Toast.makeText(getApplicationContext(), "failed send", Toast.LENGTH_SHORT).show();
@@ -159,7 +189,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         }else {
             newGroup.setName(groupName.getText().toString());
         }
-
         if (groupDescription.getText().toString().isEmpty()){
             String err = getResources().getString(R.string.insert_group_descr);
             groupDescription.setError(err);
@@ -177,13 +206,28 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             newGroup.setMembers(members);
             //Toast.makeText(getApplicationContext(), "invitation here", Toast.LENGTH_SHORT).show();
         }
-        for(int i =0; i< members.size(); i++)
-            Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_LONG).show();
+
+        //for(int i =0; i< members.size(); i++)
+        //    Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_LONG).show();
 
         if (prova)
+
+            //for ()
+            for (String i : members){
+
+                if (!(users.contains(i))){
+
+                    myList_notregistered.add(i);
+                }
+                else{
+                    continue;
+
+                }
+            }
+            Log.d("Deb", myList_notregistered.get(0));
+
             //db isnert of new group
             //myRef.push().setValue(newGroup);
-            onInviteClicked("Il signore", "PUTTANA LA MADONNA" );
+            //onInviteClicked("Il signore", "PUTTANA LA MADONNA" );
     }
-
 }
