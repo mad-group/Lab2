@@ -88,4 +88,10 @@
     <string name="insert_group_name">Insert group name</string>
     <string name="insert_group_descr">There are any description</string>
 
+    <string name="invitation_title">Chose your friends to invite!</string>
+    <string name="invitation_message">Please sign in the system with this mail address. After you can join in a group!</string>
+    <string name="invitation_deep_link">https://www.google.it</string>
+    <string name="invitation_custom_image">http://pix.iemoji.com/images/emoji/apple/ios-9/256/grinning-face-with-smiling-eyes.png</string>
+    <string name="invitation_cta">test cta</string>
+
 </resources>

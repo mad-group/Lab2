@@ -1,5 +1,7 @@
 package group3.myapplicationlab2;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.appinvite.AppInviteInvitationResult;
+import com.google.android.gms.appinvite.AppInviteReferral;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,8 +27,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GroupCreationForm extends AppCompatActivity {
+public class GroupCreationForm extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
+    private static final String TAG = GroupCreationForm.class.getSimpleName();
     private ArrayList<String> membersList;
     private ArrayAdapter<String> membersAdapter;
     private EditText groupName, groupDescription, newParticipant;
@@ -29,7 +39,9 @@ public class GroupCreationForm extends AppCompatActivity {
     private final List<String> members = new ArrayList<String>();
     private List<String> Mylist = new ArrayList<String>();
     private ListView lw;
+    private final int REQUEST_INVITE = 0;
 
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,41 +61,36 @@ public class GroupCreationForm extends AppCompatActivity {
         //membersList = new ArrayList<>(Arrays.asList(participants));
         membersAdapter = new ArrayAdapter<String>(this, R.layout.new_member_item, R.id.new_member, Mylist);
         lw.setAdapter(membersAdapter);
-/*        btnNewPart.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                String newP = newParticipant.getText().toString();
-                if (!newP.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) {
-                    String err = getResources().getString(R.string.invalid_mail_address);
-                    newParticipant.setError(err);
-                }
-                else {
-                    members.add(newP);
-                    membersAdapter.add(newP);
-                    newParticipant.setText("");
-                }
+        // Create an auto-managed GoogleApiClient with access to App Invites.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(AppInvite.API)
+                .enableAutoManage(this, this)
+                .build();
 
-                membersList.add(newP);
-                membersAdapter.notifyDataSetChanged();
-                Log.d("Debug", newP);
-            }
-        });
-        //TODO: fare controlli sull'inserimento dell'utente prima di inviare la richiesta al DB
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.new_group_btn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //List<String> members = new ArrayList<>();
-                //members.add(newParticipant.getText().toString());
+        // Check for App Invite invitations and launch deep-link activity if possible.
+        // Requires that an Activity is registered in AndroidManifest.xml to handle
+        // deep-link URLs.
+        boolean autoLaunchDeepLink = true;
+        AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink)
+                .setResultCallback(
+                        new ResultCallback<AppInviteInvitationResult>() {
+                            @Override
+                            public void onResult(AppInviteInvitationResult result) {
+                                Log.d(TAG, "getInvitation:onResult:" + result.getStatus());
+                                if (result.getStatus().isSuccess()) {
+                                    // Extract information from the intent
+                                    Intent intent = result.getInvitationIntent();
+                                    String deepLink = AppInviteReferral.getDeepLink(intent);
+                                    String invitationId = AppInviteReferral.getInvitationId(intent);
 
-                final Group newGroup = new Group();
-                newGroup.setDescription(groupDescription.getText().toString());
-                newGroup.setName(groupName.getText().toString());
-                newGroup.setMembers(members);
-                myRef.push().setValue(newGroup);
-            }
-        });*/
+                                    // Because autoLaunchDeepLink = true we don't have to do anything
+                                    // here, but we could set that to false and manually choose
+                                    // an Activity to launch to handle the deep link here.
+                                    // ...
+                                }
+                            }
+                        });
     }/*[END onCreate]*/
 
     public void prepareUser(View view) {
@@ -99,6 +106,49 @@ public class GroupCreationForm extends AppCompatActivity {
         }
     }
 
+
+    private void onInviteClicked() {
+        Toast.makeText(getApplicationContext(), getString(R.string.invitation_message), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                .setMessage(getString(R.string.invitation_message))
+/*                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
+                .setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
+                .setCallToActionText(getString(R.string.invitation_cta))*/
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+
+        if (requestCode == REQUEST_INVITE) {
+            if (resultCode == RESULT_OK) {
+                // Get the invitation IDs of all sent messages
+                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+                for (String id : ids) {
+                    Log.d(TAG, "onActivityResult: sent invitation " + id);
+                }
+            } else {
+                // Sending failed or it was canceled, show failure message to the user
+                // [START_EXCLUDE]
+                // [END_EXCLUDE]
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        //showMessage(getString(R.string.google_play_services_error));
+        Toast.makeText(getApplicationContext(), "failed conn", Toast.LENGTH_SHORT).show();
+
+    }
+
+    /*
+    at fab pressing, doing this cotnrols and if all right creates the groups
+    * */
     public void sendInvitation(View v){
         final Group newGroup = new Group();
         if (groupName.getText().toString().isEmpty()){
@@ -115,17 +165,21 @@ public class GroupCreationForm extends AppCompatActivity {
             newGroup.setDescription(groupDescription.getText().toString());
         }
 
+        //members is a list of mail
         if (members.size()<1){
             String err = getResources().getString(R.string.no_user_insert);
             groupName.setError(err);
         }else{
             newGroup.setMembers(members);
-            Toast.makeText(getApplicationContext(), "invitation here", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(getApplicationContext(), "invitation here", Toast.LENGTH_SHORT).show();
         }
-        myRef.push().setValue(newGroup);
-    }
+        for(int i =0; i< members.size(); i++)
+            Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_SHORT).show();
 
+        //db isnert of new group
+        //myRef.push().setValue(newGroup);
+        onInviteClicked();
+    }
 
 
 
