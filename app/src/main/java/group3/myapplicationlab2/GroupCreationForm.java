@@ -37,7 +37,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private static final String TAG = GroupCreationForm.class.getSimpleName();
     private ArrayList<String> membersList;
     private ArrayAdapter<String> membersAdapter;
-    private EditText groupName, groupDescription, newParticipant;
+    private EditText groupName, groupDescription, newParticipant, groupPin;
     private Button btnNewPart;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
@@ -64,16 +64,19 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         // User input
         groupName = (EditText)findViewById(R.id.new_group);
         groupDescription = (EditText)findViewById(R.id.group_description);
-        newParticipant = (EditText)findViewById(R.id.new_participant);
-        btnNewPart = (Button)findViewById(R.id.new_part_btn);
+        groupPin = (EditText) findViewById(R.id.group_pin);
 
-        // Insert new participants
+        //newParticipant = (EditText)findViewById(R.id.new_participant);
+        //btnNewPart = (Button)findViewById(R.id.new_part_btn);
+
+
+/*        // Insert new participants
         lw = (ListView)findViewById(R.id.list_part);
-        //String[] participants = {};
-        //List<String> Mylist = new ArrayList<String>();
-        //membersList = new ArrayList<>(Arrays.asList(participants));
+        String[] participants = {};
+        List<String> Mylist = new ArrayList<String>();
+        membersList = new ArrayList<>(Arrays.asList(participants));
         membersAdapter = new ArrayAdapter<String>(this, R.layout.new_member_item, R.id.new_member, Mylist);
-        lw.setAdapter(membersAdapter);
+        lw.setAdapter(membersAdapter);*/
 
         // Create an auto-managed GoogleApiClient with access to App Invites.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -127,7 +130,46 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
     public void prepareUser(View view) {
         // Called when ADD button is pressed
-        String newP = newParticipant.getText().toString();
+        final Group newGroup = new Group();
+        boolean prova = true;
+        if (groupName.getText().toString().isEmpty()){
+            String err = getResources().getString(R.string.insert_group_name);
+            groupName.setError(err);
+            prova = false;
+        }else {
+            newGroup.setName(groupName.getText().toString());
+        }
+
+        if (groupDescription.getText().toString().isEmpty()){
+            String err = getResources().getString(R.string.insert_group_descr);
+            groupDescription.setError(err);
+            prova = false;
+        }else {
+            newGroup.setDescription(groupDescription.getText().toString());
+        }
+
+        if (groupPin.getText().toString().isEmpty() || groupPin.getText().toString().length() < 6){
+            String err = getResources().getString(R.string.wrong_group_pin);
+            groupPin.setError(err);
+            prova = false;
+        }
+        else {
+            newGroup.setPin(groupPin.getText().toString());
+        }
+
+        //db insert of new group
+        if (prova) {
+            String id =  myRef.push().getKey();
+            newGroup.setId(id);
+            myRef.setValue(newGroup);
+
+            Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
+
+            //onInviteClicked(newGroup.getName(), newGroup.getId());
+        }
+
+
+       /* String newP = newParticipant.getText().toString();
         if (!newP.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+") || newP.isEmpty()) {
             String err = getResources().getString(R.string.invalid_mail_address);
             newParticipant.setError(err);
@@ -136,7 +178,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             members.add(newP);
             membersAdapter.add(newP);
             newParticipant.setText("");
-        }
+        }*/
     }
 
     private void onInviteClicked(String groupName, String token) {
@@ -182,24 +224,11 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     at fab pressing, doing this cotnrols and if all right creates the groups
     * */
     public void sendInvitation(View v){
-        final Group newGroup = new Group();
-        boolean prova = true;
-        if (groupName.getText().toString().isEmpty()){
-            String err = getResources().getString(R.string.insert_group_name);
-            groupName.setError(err);
-            prova = false;
-        }else {
-            newGroup.setName(groupName.getText().toString());
-        }
-        if (groupDescription.getText().toString().isEmpty()){
-            String err = getResources().getString(R.string.insert_group_descr);
-            groupDescription.setError(err);
-            prova = false;
-        }else {
-            newGroup.setDescription(groupDescription.getText().toString());
-        }
 
-        //members is a list of mail
+
+
+
+/*        //members is a list of mail
         if (members.size()<1){
             String err = getResources().getString(R.string.no_user_insert);
             newParticipant.setError(err);
@@ -207,12 +236,12 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         }else{
             newGroup.setMembers(members);
             //Toast.makeText(getApplicationContext(), "invitation here", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
         //for(int i =0; i< members.size(); i++)
         //    Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_LONG).show();
 
-        if (prova)
+       /* if (prova)
 
             //for ()
             myList_notregistered.clear();
@@ -255,10 +284,9 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
+            }*/
 
-            //db isnert of new group
-            //myRef.push().setValue(newGroup);
-            //onInviteClicked("Il signore", "PUTTANA LA MADONNA" );
+
+
     }
 }
