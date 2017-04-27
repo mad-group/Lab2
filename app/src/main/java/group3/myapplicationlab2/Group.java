@@ -13,9 +13,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Group {
     private String name;
     private String description;
-    private int id;
+    private String id;
     private List<String> members;
     private FirebaseDatabase db;
+    private String pin;
     //private List<Purchase> notes;
 
     public Group() {
@@ -32,35 +33,33 @@ public class Group {
     public String getName(){
         return this.name;
     }
+    public void setName(String name){
+        this.name = name;
+    }
+
 
     public String getDescription(){
         return this.description;
+    }
+    public void setDescription(String description){
+        this.description = description;
     }
 
     public List<String> getMembers(){
         return this.members;
     }
-
-    public int getId(){
-        return this.id;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setDescription(String description){
-        this.description = description;
-    }
-
-    public void setId(int id){
-        this.id = id;
-    }
-
     public void setMembers(List<String> members){
         this.members = members;
     }
 
+    public String getId(){
+        return this.id;
+    }
+    public void setId(String id){this.id = id;}
 
+    public String getPin(){
+        return this.pin;
+    }
+    public void setPin(String pin) {this.pin = pin;}
 
 }

@@ -74,7 +74,7 @@
     <string name="per_quotes">Per quotes</string>
     <string name="per_percentage">Per percentage</string>
     <string name="insert_member">Insert a new member</string>
-    <string name="add_participant">Add</string>
+    <string name="add_participant">Create Group</string>
 
     <string name="splitting_criterion_prompt">Choose a splitting criterion</string>
     <string-array name="splitting_criteria">
@@ -94,5 +94,7 @@
     <string name="invitation_custom_image">http://pix.iemoji.com/images/emoji/apple/ios-9/256/grinning-face-with-smiling-eyes.png</string>
     <string name="invitation_cta">test cta</string>
     <string name="invitation_email_subject">You\'are invited in a group</string>
+    <string name="group_pin">Group pin</string>
+    <string name="wrong_group_pin">PIN group has to have at least 6 charachters</string>
 
 </resources>
