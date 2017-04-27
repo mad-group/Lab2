@@ -2,26 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/new_group"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="New group" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Settings" />
-        <item
-            android:id="@+id/logout"
-            android:icon="@mipmap/ic_logout"
-            android:title="Logout" />
+            <item
+                android:id="@+id/join_group"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Join Group" />
+            <!--<item
+                android:id="@+id/nav_gallery"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Gallery" />
+            <item
+                android:id="@+id/nav_slideshow"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Slideshow" />
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Settings" />-->
+            <item
+                android:id="@+id/logout"
+                android:icon="@mipmap/ic_logout"
+                android:title="Logout" />
     </group>
 
     <item android:title="Comunicate">

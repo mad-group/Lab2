@@ -236,7 +236,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -246,17 +245,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.new_group) {
-            // Handles the new group form
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.join_group) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+            Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.logout) {
             auth.signOut();

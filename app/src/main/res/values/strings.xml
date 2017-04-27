@@ -94,5 +94,6 @@
     <string name="invitation_custom_image">http://pix.iemoji.com/images/emoji/apple/ios-9/256/grinning-face-with-smiling-eyes.png</string>
     <string name="invitation_cta">test cta</string>
     <string name="invitation_email_subject">You\'are invited in a group</string>
+    <string name="title_activity_join_group">JoinGroupActivity</string>
 
 </resources>
