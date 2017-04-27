@@ -84,5 +84,8 @@
     </string-array>
 
     <string name="invalid_mail_address">Invalid Email Address</string>
+    <string name="no_user_insert">There is not any user to invite</string>
+    <string name="insert_group_name">Insert group name</string>
+    <string name="insert_group_descr">There are any description</string>
 
 </resources>

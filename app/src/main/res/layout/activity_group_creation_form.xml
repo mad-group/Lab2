@@ -83,13 +83,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:inputType="textCapSentences|textAutoCorrect"
+                android:inputType="textEmailAddress"
                 android:hint="@string/insert_member"/>
             <Button
                 android:id="@+id/new_part_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_participant"
+                android:onClick="prepareUser"
                 />
         </LinearLayout>
 
@@ -105,7 +106,9 @@
             android:paddingBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_send"/>
+            android:src="@drawable/ic_menu_send"
+            android:onClick="sendInvitation"
+            />
 
     </android.support.v7.widget.LinearLayoutCompat>
 
