@@ -64,12 +64,18 @@ public class JoinGroupActivity extends AppCompatActivity {
 
                             if (groupPassword.getText().toString().equals(group.getPin())){
                                 List<String> members = group.getMembers();
-
                                 auth = FirebaseAuth.getInstance();
-                                members.add(auth.getCurrentUser().getEmail());
-                                //Log.d("Debug", members.get(1));
-                                mDatabase.child("members").setValue(members);
+
+                                if (!members.contains(auth.getCurrentUser().getEmail())){
+                                    members.add(auth.getCurrentUser().getEmail());
+                                    //Log.d("Debug", members.get(1));
+                                    mDatabase.child("members").setValue(members);
+                                }
                                 finish();
+                            }
+                            else{
+                                Toast.makeText(JoinGroupActivity.this, "Incorrect GroupID or Password", Toast.LENGTH_LONG).show();
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                         else{
