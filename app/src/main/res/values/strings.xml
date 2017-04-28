@@ -111,8 +111,8 @@
          If you want to join it, please fill the join group form with the following ID and password.
          Otherwise, ignore this email.
          <br/>
-         GroupID: %2$s <br/>
-         Password: %3$s</p>]]>
+         GroupID: [%2$s] <br/>
+         Password: [%3$s] </p>]]>
 </string>
     <string name="no_group_creation_and_inviting">First to invite, create a group.</string>
     <string name="group_created">Group created</string>
