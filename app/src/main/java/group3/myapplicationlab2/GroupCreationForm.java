@@ -71,6 +71,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         groupDescription = (EditText)findViewById(R.id.group_description);
         groupPin = (EditText) findViewById(R.id.group_pin);
 
+
         //newParticipant = (EditText)findViewById(R.id.new_participant);
         //btnNewPart = (Button)findViewById(R.id.new_part_btn);
 
@@ -203,7 +204,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
                 //TODO generare mail in maniara decente
-                .setEmailHtmlContent(String.valueOf(Html.fromHtml(getString(R.string.invitation_email))))
+                .setEmailHtmlContent(getString(R.string.invitation_email, groupIdTmp, groupPinTmp))
                 .setEmailSubject(groupName+" "+ getString(R.string.email_subject))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
