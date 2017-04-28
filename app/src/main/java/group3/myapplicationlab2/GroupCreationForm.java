@@ -172,7 +172,9 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             newGroup.setMembers(l);
 
             String id = myRef.push().getKey();
-            myRef.push().setValue(newGroup);
+            Log.d("PRIMO", id);
+            //myRef.push().setValue(newGroup);
+            myRef.child(id).setValue(newGroup);
 
             newGroup.setId(id);
             this.groupPinTmp = newGroup.getPin();
