@@ -9,6 +9,7 @@
     <string name="title_activity_inside_group">InsideGroup</string>
     <string name="title_activity_group_expense">Expenses</string>
     <string name="title_activity_group_stats">Statistics</string>
+    <string name="title_activity_group_creation">Group creation</string>
 
     <string name="who">Who?</string>
     <string name="what">What?</string>
