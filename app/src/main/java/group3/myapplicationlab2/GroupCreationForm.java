@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -202,7 +203,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
                 //TODO generare mail in maniara decente
-                .setEmailHtmlContent(getString(R.string.invitation_email))
+                .setEmailHtmlContent(String.valueOf(Html.fromHtml(getString(R.string.invitation_email))))
                 .setEmailSubject(groupName+" "+ getString(R.string.email_subject))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
