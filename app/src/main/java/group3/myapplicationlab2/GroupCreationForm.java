@@ -59,6 +59,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private String groupNameTmp = null;
     private String groupIdTmp = null;
     private String groupPinTmp = null;
+    private String currentUser = null;
 
 
     @Override
@@ -170,6 +171,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             List<String> l = new ArrayList<String>();
             l.add(auth.getCurrentUser().getEmail());
             newGroup.setMembers(l);
+            this.currentUser = auth.getCurrentUser().getEmail();
 
             String id = myRef.push().getKey();
             Log.d("PRIMO", id);
@@ -206,7 +208,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
                 //TODO generare mail in maniara decente
-                .setEmailHtmlContent(getString(R.string.invitation_email, groupIdTmp, groupPinTmp))
+                .setEmailHtmlContent(getString(R.string.invitation_email, currentUser, groupIdTmp, groupPinTmp))
                 .setEmailSubject(groupName+" "+ getString(R.string.email_subject))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);

@@ -10,6 +10,11 @@
     <string name="title_activity_group_expense">Expenses</string>
     <string name="title_activity_group_stats">Statistics</string>
     <string name="title_activity_group_creation">Group creation</string>
+    <string name="title_activity_signup">Sign in</string>
+    <string name="title_activity_profile">Firebase</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="title_activity_join_group">Join a group</string>
 
     <string name="who">Who?</string>
     <string name="what">What?</string>
@@ -31,15 +36,14 @@
     <string name="send_password_reset_email">Send Password reset email</string>
     <string name="remove_user">Remove user</string>
     <string name="new_pass">New Password</string>
-    <string name="title_activity_profile">Firebase</string>
-    <string name="title_activity_login">Sign in</string>
+
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Not a member? Get registered now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
-    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_reset_password">Reset Password</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
@@ -50,7 +54,7 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
-    <string name="title_activity_signup">Sign in</string>
+
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -95,18 +99,20 @@
     <string name="invitation_custom_image">http://pix.iemoji.com/images/emoji/apple/ios-9/256/grinning-face-with-smiling-eyes.png</string>
     <string name="invitation_cta">test cta</string>
     <string name="invitation_email_subject">You\'are invited in a group</string>
-    <string name="title_activity_join_group">JoinGroupActivity</string>
+
     <string name="group_pin">Group pin</string>
     <string name="wrong_group_pin">PIN group has to have at least 6 charachters</string>
     <string name="email_subject"> Money Tracker joining group invitation</string>
     <string name="invitation_failed">Invitation failed</string>
     <string name="invitation_email">
         <![CDATA[<p>Dear user,<br/>
-         you received an invitation to join a Money Tracker group form.
+         you received an invitation to join a Money Tracker group form %1$s.
          <br/>
+         If you want to join it, please fill the join group form with the following ID and password.
+         Otherwise, ignore this email.
          <br/>
-         GroupID: %1$s <br/>
-         Password: %2$s</p>]]>
+         GroupID: %2$s <br/>
+         Password: %3$s</p>]]>
 </string>
     <string name="no_group_creation_and_inviting">First to invite, create a group.</string>
     <string name="group_created">Group created</string>
