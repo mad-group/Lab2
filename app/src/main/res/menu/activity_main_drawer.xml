@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
             <item
                 android:id="@+id/join_group"
-                android:icon="@drawable/ic_menu_camera"
+                android:icon="@drawable/ic_add_user"
                 android:title="Join Group" />
             <!--<item
                 android:id="@+id/nav_gallery"
@@ -17,22 +17,22 @@
             <item
                 android:id="@+id/nav_manage"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Settings" />-->
+                android:title="Settings" />
             <item
                 android:id="@+id/logout"
                 android:icon="@mipmap/ic_logout"
-                android:title="Logout" />
+                android:title="Logout" />-->
     </group>
 
     <item android:title="Comunicate">
         <menu>
-            <item
+            <!--<item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Contact us" />
+                android:title="Contact us" />-->
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:id="@+id/logout"
+                android:icon="@mipmap/ic_logout"
                 android:title="Disconnect account" />
         </menu>
     </item>
