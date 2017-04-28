@@ -21,16 +21,23 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-
+import java.util.List;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth auth;
+    private DatabaseReference mDatabase;
 
     private ListView list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,42 +58,77 @@ public class MainActivity extends AppCompatActivity
             }
         };
         auth.addAuthStateListener(authListener);
-
         setContentView(R.layout.activity_main);
 
+        //mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //mDatabase.child("Groups");
+
+        //Value event listener for realtime data update
+        /*mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Log.d("Debug", postSnapshot.getValue(""));
+                    //Getting the data from snapshot
+                    //Group group = postSnapshot.getValue(Group.class);
+
+                    //Log.d("Debug", group.getName());
+                    //Adding it to a string
+                    //String string = "Name: "+person.getName()+"\nAddress: "+person.getAddress()+"\n\n";
+
+                    //Displaying it on textview
+                    //textViewPersons.setText(string);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });*/
+
         ArrayList<Group> arrayOfGroups = new ArrayList<Group>();
-        GroupAdapter adapter = new GroupAdapter(this, arrayOfGroups);
+        final GroupAdapter adapter = new GroupAdapter(this, arrayOfGroups);
 
         ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
 
-        String[] nomi = {"Andrian", "Flavia", "Michele", "Gaetano"};
+        //String[] nomi = {"Andrian", "Flavia", "Michele", "Gaetano"};
 
         adapter.clear();
-        Group newGroup = new Group("Gruppo 1", 1, nomi, "Gruppo Bello");
-        Group newGroup2 = new Group("Gruppo 2", 2, nomi, "Gruppo Carino");
-        Group newGroup3 = new Group("Gruppo 3", 3, nomi, "Gruppo Brutto");
 
-        adapter.add(newGroup);
-        adapter.add(newGroup2);
-        adapter.add(newGroup3);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Groups");
 
-        /*adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);
-        adapter.add(newGroup3);*/
+        mDatabase = FirebaseDatabase.getInstance().getReference("Groups");
+
+        ValueEventListener GroupListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                adapter.clear();
+                for (DataSnapshot groupsnapshot : dataSnapshot.getChildren()) {
+                    //Getting the data from database snapshot
+                    Group group = groupsnapshot.getValue(Group.class);
+
+                    List<String> members = group.getMembers();
+
+                    if (members.contains(auth.getCurrentUser().getUid()) ||
+                            members.contains(auth.getCurrentUser().getEmail())){
+                        adapter.add(group);
+                    }
+
+                    //adapter.add(group);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mDatabase.addValueEventListener(GroupListener);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -100,7 +142,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -109,7 +150,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -124,6 +164,39 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 Log.d("Debug", "QUI");
+                Intent i = new Intent(MainActivity.this, GroupCreationForm.class);
+                startActivity(i);
+                // Write a message to the database
+                /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("Groups");
+
+                //myRef.setValue("Hello, World!");
+
+
+                //Creating firebase
+                //mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                //Getting values to store
+                //String[] nomi = {"Andrian", "Flavia", "Michele", "Gaetano"};
+                List<String> Mylist = new ArrayList<String>();
+                Mylist.add("Flavia");
+                Mylist.add("Andrian");
+                Mylist.add("Michele");
+                Mylist.add("Gaetano");
+
+                Group newGroup = new Group();
+
+                newGroup.setDescription("Descrizione Seria");
+                newGroup.setId(2);
+                newGroup.setMembers(Mylist);
+                newGroup.setName("Gruppo 2");
+                //myRef.child("gruppo2").setValue(newGroup);
+
+                myRef.push().setValue(newGroup);
+*/
+                //Storing values to firebase
+                //mDatabase.child("Groups").setValue(newGroup);
+
                 //Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 //startActivityForResult(i,1);
 
@@ -163,7 +236,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -173,17 +245,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.new_group) {
-            // Handles the new group form
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.join_group) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+            Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.logout) {
             auth.signOut();
@@ -197,5 +262,4 @@ public class MainActivity extends AppCompatActivity
         //Intent i = new Intent(view.getContext(), ExpensesReports.class);
         //startActivity(i);
     }
-
 }
