@@ -106,7 +106,7 @@
     <string name="invitation_failed">Invitation failed</string>
     <string name="invitation_email">
         <![CDATA[<p>Dear user,<br/>
-         you received an invitation to join a Money Tracker group form %1$s.
+         you received an invitation to join a Money Tracker group from %1$s.
          <br/>
          If you want to join it, please fill the join group form with the following ID and password.
          Otherwise, ignore this email.
