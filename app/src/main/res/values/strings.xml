@@ -72,6 +72,7 @@
     <string name="enter_valid_email">Enter a valid email address!</string>
     <string name="enter_password">Enter password!</string>
 
+
     <string name="group_name">Group name</string>
     <string name="group_description">Group description</string>
     <string name="radiogroup_title">Choose a default splitting criterion</string>
@@ -99,6 +100,7 @@
     <string name="invitation_custom_image">http://pix.iemoji.com/images/emoji/apple/ios-9/256/grinning-face-with-smiling-eyes.png</string>
     <string name="invitation_cta">test cta</string>
     <string name="invitation_email_subject">You\'are invited in a group</string>
+    <string name="pick_image_intent_text">Select Source</string>
 
     <string name="group_pin">Group pin</string>
     <string name="wrong_group_pin">PIN group has to have at least 6 charachters</string>
