@@ -220,6 +220,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
                 for (String id : ids) {
                     Log.d(TAG, "onActivityResult: sent invitation " + id);
+                    finish();
                 }
             }else {
                 // Sending failed or it was canceled, show failure message to the user
