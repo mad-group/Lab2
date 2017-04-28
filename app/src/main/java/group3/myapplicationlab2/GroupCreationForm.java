@@ -202,8 +202,8 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
                 //TODO generare mail in maniara decente
-                .setEmailHtmlContent("email here")
-                .setEmailSubject(groupName + getString(R.string.email_subject))
+                .setEmailHtmlContent("la mail parte?")
+                .setEmailSubject(groupName+" "+ getString(R.string.email_subject))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }
