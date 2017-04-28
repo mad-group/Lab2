@@ -99,7 +99,8 @@
     <string name="wrong_group_pin">PIN group has to have at least 6 charachters</string>
     <string name="email_subject"> Money Tracker joining group invitation</string>
     <string name="invitation_failed">Invitation failed</string>
-    <string name="invitation_email">   testo mail</string>
+    <string name="invitation_email"><p>Dear user, you received an invitation to join a Money Tracker group form TIZIO</p>
+</string>
     <string name="no_group_creation_and_inviting">First to invite, create a group.</string>
     <string name="group_created">Group created</string>
     <string name="group_id">Group ID</string>
