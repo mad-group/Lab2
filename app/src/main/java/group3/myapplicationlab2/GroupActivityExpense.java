@@ -67,7 +67,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         c.set(Calendar.YEAR, 2016);
         Date d = c.getTime();
 
-
         //Toast.makeText(getApplicationContext(), String.valueOf(d.getTime()), Toast.LENGTH_SHORT).show();
 
 /*        DateFormat df = new SimpleDateFormat("dd MMM yyyy",new Locale(Locale.getDefault().getDisplayLanguage()));
@@ -200,7 +199,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-           if(resultCode == RESULT_OK) {
+            if(resultCode == RESULT_OK) {
                 String author = data.getStringExtra("author");
                 String expense = data.getStringExtra("expense");
                 String amount = data.getStringExtra("amount");
@@ -217,9 +216,9 @@ public class GroupActivityExpense extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), date, Toast.LENGTH_LONG).show();
 
 
-               //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
-               expenseAdapter.add(newInsert);
-               expenseAdapter.notifyDataSetChanged();
+                //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
+                expenseAdapter.add(newInsert);
+                expenseAdapter.notifyDataSetChanged();
             }
         }
     }
