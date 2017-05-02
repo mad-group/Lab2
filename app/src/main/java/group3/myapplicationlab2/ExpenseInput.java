@@ -15,6 +15,8 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ContentFrameLayout;
@@ -47,6 +49,7 @@ import java.util.GregorianCalendar;
 import java.util.*;
 
 public class ExpenseInput extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     Context context;
     Uri path_image = null;
     Calendar myCalendar = Calendar.getInstance();
@@ -168,8 +171,19 @@ public class ExpenseInput extends AppCompatActivity {
     }
 
     public void takeImage(View v){
-        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+        else {
+            Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+        }
+
     }
 
     @Override
@@ -202,6 +216,27 @@ public class ExpenseInput extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+                    startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+                } else {
+                    // Permission Denied
+                    Toast.makeText(ExpenseInput.this, R.string.camera_permission_denied, Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
 
 }
 

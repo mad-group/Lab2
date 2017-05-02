@@ -120,5 +120,6 @@
     <string name="group_id">Group ID</string>
     <string name="group_password">Group password</string>
     <string name="join">Join</string>
+    <string name="camera_permission_denied">Impossible use camera: permission denied</string>
 
 </resources>
