@@ -61,24 +61,24 @@ public class GroupActivityExpense extends AppCompatActivity {
         listView.setAdapter(expenseAdapter);
         expenseAdapter.clear();
 
-        Calendar c = new GregorianCalendar();
+/*        Calendar c = new GregorianCalendar();
         c.set(Calendar.DAY_OF_MONTH,20);
         c.set(Calendar.MONTH, Calendar.AUGUST);
         c.set(Calendar.YEAR, 2016);
-        Date d = c.getTime();
+        Date d = c.getTime();*/
 
         //Toast.makeText(getApplicationContext(), String.valueOf(d.getTime()), Toast.LENGTH_SHORT).show();
 
 /*        DateFormat df = new SimpleDateFormat("dd MMM yyyy",new Locale(Locale.getDefault().getDisplayLanguage()));
         String indate = df.format(d);*/
 
-        Purchase newPurchase = new Purchase(Locale.ENGLISH + " " + Locale.ITALIAN,
+/*        Purchase newPurchase = new Purchase(Locale.ENGLISH + " " + Locale.ITALIAN,
                 50,
                 Locale.getDefault().getDisplayLanguage(),
                 c.getTimeInMillis());
         newPurchase.setPathImage(null);
         //Unica spesa aggiunta alle spese:
-        expenseAdapter.add(newPurchase);
+        expenseAdapter.add(newPurchase);*/
 
         //arrayList = new ArrayList<>(Arrays.asList(spese));
         //      adapter = new ArrayAdapter<String>(this, R.layout.expense_item, arrayList){
@@ -159,6 +159,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
+                i.putExtra("group_id", getIntent().getStringExtra("group_id"));
+                Log.d("Debug", "GAE gid value "+getIntent().getStringExtra("group_id"));
                 startActivityForResult(i,1);
 
                 //String newItem = "New Expense";

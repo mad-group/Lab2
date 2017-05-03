@@ -15,9 +15,9 @@ public class Group {
     private String description;
     private String id;
     private List<String> members;
+    private List<String> purchases;
     private FirebaseDatabase db;
     private String pin;
-    //private List<Purchase> notes;
 
     public Group() {
         //this.db = db;
@@ -61,5 +61,12 @@ public class Group {
         return this.pin;
     }
     public void setPin(String pin) {this.pin = pin;}
+
+    public List<String> getPurchases(){
+        return this.purchases;
+    }
+    public void setPurchases(List<String> purchases){
+        this.purchases = purchases;
+    }
 
 }

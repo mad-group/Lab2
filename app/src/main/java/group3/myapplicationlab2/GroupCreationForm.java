@@ -169,6 +169,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             FirebaseAuth auth = FirebaseAuth.getInstance();
 
             List<String> l = new ArrayList<String>();
+            List<String> lp = new ArrayList<String>();
             l.add(auth.getCurrentUser().getEmail());
             newGroup.setMembers(l);
             this.currentUser = auth.getCurrentUser().getEmail();
@@ -190,18 +191,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
         else
             Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();
-
-
-       /* String newP = newParticipant.getText().toString();
-        if (!newP.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+") || newP.isEmpty()) {
-            String err = getResources().getString(R.string.invalid_mail_address);
-            newParticipant.setError(err);
-        }
-        else {
-            members.add(newP);
-            membersAdapter.add(newP);
-            newParticipant.setText("");
-        }*/
     }
 
     private void onInviteClicked(String groupName, String groupPin, String groupId) {

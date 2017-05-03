@@ -17,16 +17,15 @@ import java.util.*;
 
 public class Purchase {
     private String path_image = "nopath";
-    private Date date;
     private Long date_millis;
     private String causal;
     private Float total_amount;
     private String author_amount;
-    private int author_id;
-    private int partition_id; //the id of partion methods
-    private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
-    private int group_id;
-    private int purchase_id;
+    private String author_id;
+    //private int partition_id; //the id of partion methods
+    //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
+    private String group_id;
+    private String purchase_id;
 
     /*    public Purchase(int group_id, int author_id){
             this.group_id = group_id;
@@ -83,7 +82,7 @@ public class Purchase {
         }
     }
 
-    public int getAuthorId(){
+    public String getAuthorId(){
         return this.author_id;
     }
 
@@ -103,12 +102,15 @@ public class Purchase {
         return causal;
     }
 
-    public int getPurchase_id(){
+    public String getPurchase_id(){
         return this.purchase_id;
     }
 
     public String getPathImage(){return this.path_image;}
     public void setPathImage(String path){this.path_image = path;}
+
+    public void setGroup_id(String group_id){this.group_id = group_id;}
+    public String getGroup_id(String group_id){return this.group_id;}
 
 
 

@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
 
     private ListView list;
+    private ArrayList<String> groups_ids = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 adapter.clear();
+                int index = 0;
                 for (DataSnapshot groupsnapshot : dataSnapshot.getChildren()) {
                     //Getting the data from database snapshot
                     Group group = groupsnapshot.getValue(Group.class);
@@ -115,7 +117,10 @@ public class MainActivity extends AppCompatActivity
 
                     if (members.contains(auth.getCurrentUser().getUid()) ||
                             members.contains(auth.getCurrentUser().getEmail())){
+                        groups_ids.add(index,groupsnapshot.getKey());
+                        index +=1;
                         adapter.add(group);
+
                     }
 
                     //adapter.add(group);
@@ -135,9 +140,8 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Debug", String.valueOf(position));
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
-
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
-                i.putExtra("groupNumber", position);
+                i.putExtra("group_id", groups_ids.get(position));
                 startActivity(i);
             }
         });

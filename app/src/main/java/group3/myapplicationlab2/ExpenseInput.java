@@ -32,6 +32,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOError;
@@ -64,6 +67,9 @@ public class ExpenseInput extends AppCompatActivity {
 
     private static final int PICK_IMAGE_ID = 234;
     private File imageOutFile = null;
+
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private final DatabaseReference myRef = mDatabase.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,8 +133,21 @@ public class ExpenseInput extends AppCompatActivity {
             else
                 i.putExtra("filepath", this.imageOutFile.getPath());
             setResult(RESULT_OK, i);
-            setResult(RESULT_OK, i);
-            TextView tv = (TextView) findViewById(R.id.debug_tv1);
+
+            String group_id = getIntent().getStringExtra("group_id");
+
+            //Purchase insert
+            Purchase p = new Purchase(author, Float.parseFloat(amount),expense, myd.getTime());
+            p.setGroup_id(group_id);
+            p.setPathImage("path");
+
+            myRef.child("Purchases").push().setValue(p);
+
+
+
+
+
+
             finish();
 
         }
