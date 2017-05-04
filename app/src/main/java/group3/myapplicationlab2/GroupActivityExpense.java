@@ -25,6 +25,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,14 +50,19 @@ public class GroupActivityExpense extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     ExpenseAdapter expenseAdapter;
     Locale l = Locale.ENGLISH;
+    private String gid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
+        gid = getIntent().getStringExtra("group_id");
+        final DatabaseReference mPurchaseReference =
+                FirebaseDatabase.getInstance().getReference("Groups")
+                        .child(gid)
+                        .child("Purchases");
 
-        final int passedVar = getIntent().getIntExtra("groupNumber", 0);
-        Log.d("Debug", String.valueOf(passedVar));
 
         //String[] spese = {"Expense 1", "Expense 2", "Expense 3"};
         ArrayList<Purchase> spese = new ArrayList<Purchase>();
@@ -59,7 +71,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
-        expenseAdapter.clear();
+
 
 /*        Calendar c = new GregorianCalendar();
         c.set(Calendar.DAY_OF_MONTH,20);
@@ -160,14 +172,32 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 i.putExtra("group_id", getIntent().getStringExtra("group_id"));
-                Log.d("Debug", "GAE gid value "+getIntent().getStringExtra("group_id"));
                 startActivityForResult(i,1);
-
-                //String newItem = "New Expense";
-                //arrayList.add(newItem);
-                //adapter.notifyDataSetChanged();
             }
         });
+
+        //listener on purchases
+        final ValueEventListener purchaseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                expenseAdapter.clear();
+                for (DataSnapshot purSnapshot : dataSnapshot.getChildren()) {
+                    //Getting the data from database snapshot
+                    Purchase p = purSnapshot.getValue(Purchase.class);
+                    expenseAdapter.add(p);
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("Debug", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        mPurchaseReference.addValueEventListener(purchaseListener);
     }
 
     @Override
@@ -202,10 +232,16 @@ public class GroupActivityExpense extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
-                String author = data.getStringExtra("author");
+/*                String author = data.getStringExtra("author");
                 String expense = data.getStringExtra("expense");
                 String amount = data.getStringExtra("amount");
-                Long date = data.getLongExtra("date", System.currentTimeMillis());
+                Long date = data.getLongExtra("date", System.currentTimeMillis());*//*
+
+
+                String author = "a";
+                String expense = "b";
+                String amount = "12";
+                Long date = Long.getLong("0");
                 Purchase newInsert = new Purchase(author, Float.parseFloat(amount),expense, date);
                 if (data.getStringExtra("filepath") == "nopath"){
                     newInsert.setPathImage(null);
@@ -221,6 +257,9 @@ public class GroupActivityExpense extends AppCompatActivity {
                 //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
                 expenseAdapter.add(newInsert);
                 expenseAdapter.notifyDataSetChanged();
+
+*/
+
             }
         }
     }

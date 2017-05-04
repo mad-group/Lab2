@@ -39,7 +39,7 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         ImageView expView = (ImageView) convertView.findViewById(R.id.imageView2);
 
         // Qui dobbiamo prendere gli inserimenti dell'utente dalla nuova activity.
-        expAuthor.setText(purchase.getAuthorAmount());
+        expAuthor.setText(purchase.getAuthorName());
         expAmount.setText(String.valueOf(purchase.getTotalAmount()) + " \u20ac");
         expense.setText(purchase.getCausal());
         expDate.setText(purchase.getDate());

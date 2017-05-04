@@ -109,15 +109,14 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 adapter.clear();
                 int index = 0;
-                for (DataSnapshot groupsnapshot : dataSnapshot.getChildren()) {
+                for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
                     //Getting the data from database snapshot
-                    Group group = groupsnapshot.getValue(Group.class);
-
+                    Group group = groupSnapshot.getValue(Group.class);
                     List<String> members = group.getMembers();
 
                     if (members.contains(auth.getCurrentUser().getUid()) ||
                             members.contains(auth.getCurrentUser().getEmail())){
-                        groups_ids.add(index,groupsnapshot.getKey());
+                        groups_ids.add(index,groupSnapshot.getKey());
                         index +=1;
                         adapter.add(group);
 

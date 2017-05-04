@@ -20,26 +20,73 @@ public class Purchase {
     private Long date_millis;
     private String causal;
     private Float total_amount;
-    private String author_amount;
-    private String author_id;
+    private String author_name;
+    private String group_id;
+    private String date;
+    //private String author_id;
     //private int partition_id; //the id of partion methods
     //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
-    private String group_id;
-    private String purchase_id;
+    //private String purchase_id;
 
-    /*    public Purchase(int group_id, int author_id){
-            this.group_id = group_id;
-
-        }*/
-    public Purchase(String author_amount, float total_amount, String causal, Long date) {
-        this.author_amount = author_amount;
-        this.total_amount = total_amount;
-        this.causal = causal;
-        //setDate(date);
-        this.date_millis = date;
+    public Purchase(){
     }
 
-    /*return an hashmap which is formatted as
+/*
+    public Purchase(String author_name, float total_amount, String causal, Long date) {
+        this.author_name = author_name;
+        this.total_amount = total_amount;
+        this.causal = causal;
+        this.date_millis = date;
+    }
+*/
+
+    public String getAuthorName(){return this.author_name;}
+    public void setAuthorName(String an){this.author_name = an;}
+
+    public float getTotalAmount() {return this.total_amount;}
+    public void setTotalAmount(float ta){this.total_amount = ta;}
+
+    public String getCausal() {return this.causal;}
+    public String setCausal(String causal){
+        if (causal.length() < 3)
+            return null;
+        else
+            this.causal = causal;
+        return causal;
+    }
+
+    public Long getDateMillis() {
+        return this.date_millis;
+    }
+    public String getDate(){
+        return this.date;
+    }
+
+    private void setDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        Date d = new Date();
+        d.setTime(this.date_millis);
+        this.date =  sdf.format(d);
+    }
+    public void setDateMillis(Long dateInMillis){
+        this.date_millis = dateInMillis;
+        setDate();
+    }
+
+    public String getPathImage(){return this.path_image;}
+    public void setPathImage(String path){this.path_image = path;}
+
+    public void setGroup_id(String group_id){this.group_id = group_id;}
+    public String getGroup_id(){return this.group_id;}
+
+
+
+
+/*
+    public String getAuthorId(){return this.author_id;}
+    public String getPurchase_id(){return this.purchase_id;}
+*/
+/*return an hashmap which is formatted as
     * <purhcase ID | [(u1, amount1),(u2, amount2)]>
     * */
 /*    public HashMap<Integer, SparseArray<Float>> debtisAndCreditsPerPurchase(Purchase p){
@@ -64,55 +111,5 @@ public class Purchase {
 
         return out;
     }*/
-
-    public String getAuthorAmount(){return this.author_amount;}
-    public float getTotalAmount() {return this.total_amount;}
-    public String getCausal() {return this.causal;}
-
-    public String getDate() {
-        if (this.date_millis != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-            Date d = new Date();
-            d.setTime(this.date_millis);
-            //return "belli";
-            return sdf.format(d);
-        }
-        else{
-            return "DATE NOT AVAIABLE";
-        }
-    }
-
-    public String getAuthorId(){
-        return this.author_id;
-    }
-
-    private void setDate(Long dateInMillis){
-        if (date_millis != 0)
-            this.date_millis = dateInMillis;
-        else
-            this.date_millis = null;
-        return;
-        }
-
-    public String setCausal(String causal){
-        if (causal.length() < 3)
-            return null;
-        else
-            this.causal = causal;
-        return causal;
-    }
-
-    public String getPurchase_id(){
-        return this.purchase_id;
-    }
-
-    public String getPathImage(){return this.path_image;}
-    public void setPathImage(String path){this.path_image = path;}
-
-    public void setGroup_id(String group_id){this.group_id = group_id;}
-    public String getGroup_id(String group_id){return this.group_id;}
-
-
-
 
 }

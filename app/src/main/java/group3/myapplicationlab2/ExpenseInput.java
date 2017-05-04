@@ -32,8 +32,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,8 +70,9 @@ public class ExpenseInput extends AppCompatActivity {
     private static final int PICK_IMAGE_ID = 234;
     private File imageOutFile = null;
 
-    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private final DatabaseReference myRef = mDatabase.getReference();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("Groups");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,8 @@ public class ExpenseInput extends AppCompatActivity {
 
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
+
+
     }
 
     public void saveExpense(View v) {
@@ -122,34 +127,33 @@ public class ExpenseInput extends AppCompatActivity {
         }
 
         if (allOk == true){
+            String group_id = getIntent().getStringExtra("group_id");
+            //Purchase p = new Purchase(author, Float.parseFloat(amount),expense, myd.getTime());
+            Purchase p = new Purchase();
+            p.setAuthorName(author);
+            Log.d("Debug", p.getAuthorName());
+            p.setTotalAmount(Float.parseFloat(amount));
+            p.setCausal(expense);
+            p.setDateMillis(myd.getTime());
+            p.setGroup_id(group_id);
+
+            if (this.imageOutFile == null)
+                p.setPathImage("nopath");
+            else
+                p.setPathImage(this.imageOutFile.getPath());
+
+            String pid = myRef.push().getKey();
+            myRef.child(group_id).child("Purchases").child(pid).setValue(p);
             context = v.getContext();
             Intent i = new Intent();
-            i.putExtra("author", author);
+/*            i.putExtra("author", author);
             i.putExtra("expense", expense);
             i.putExtra("amount",amount);
-            i.putExtra("date", myd.getTime());
-            if (this.imageOutFile == null)
-                i.putExtra("filepath", "nopath");
-            else
-                i.putExtra("filepath", this.imageOutFile.getPath());
+            i.putExtra("date", myd.getTime());*/
+           // i.putExtra("filepath", p.getPathImage());
+          //  i.putExtra("pid",pid);
             setResult(RESULT_OK, i);
-
-            String group_id = getIntent().getStringExtra("group_id");
-
-            //Purchase insert
-            Purchase p = new Purchase(author, Float.parseFloat(amount),expense, myd.getTime());
-            p.setGroup_id(group_id);
-            p.setPathImage("path");
-
-            myRef.child("Purchases").push().setValue(p);
-
-
-
-
-
-
             finish();
-
         }
 
 
@@ -255,7 +259,21 @@ public class ExpenseInput extends AppCompatActivity {
         }
     }
 
+/*    ValueEventListener postListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            // Get Post object and use the values to update the UI
+            Post post = dataSnapshot.getValue(Post.class);
+            // ...
+        }
 
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            // Getting Post failed, log a message
+            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            // ...
+        }
+    };*/
 
 }
 

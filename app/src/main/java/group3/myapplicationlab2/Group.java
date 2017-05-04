@@ -37,7 +37,6 @@ public class Group {
         this.name = name;
     }
 
-
     public String getDescription(){
         return this.description;
     }
