@@ -122,13 +122,25 @@ public class MainActivity extends AppCompatActivity
 
                     if (members.contains(auth.getCurrentUser().getUid()) ||
                             members.contains(auth.getCurrentUser().getEmail())){
+                        /*
+                        * Save the records:
+                        * <timestamp, groups> (to visualzie)
+                        * <timestamp, firebase groupID>, to allow put in the Expense input intent the GID
+                        * arraylist of ts, to order
+                        * */
                         hm_groups.put(group.getLastModifyTimeStamp(), group);
                         hm_keys.put(group.getLastModifyTimeStamp(), groupSnapshot.getKey());
                         ts.add(group.getLastModifyTimeStamp());
                     }
                 }
+                //ordering in reverse order
                 Collections.sort(ts);
                 Collections.reverse(ts);
+                /*
+                * For all the timestamps, i take the keys (the ts) and i put it in a collection which map
+                * listview position - group id
+                * put in the adpater the group
+                * */
                 for (Long k : ts){
                     groups_ids.add(index,hm_keys.get(k));
                     Log.d("debug", k.toString());
@@ -137,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-            
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
