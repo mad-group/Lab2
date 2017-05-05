@@ -47,13 +47,7 @@ public class Purchase {
     public void setTotalAmount(float ta){this.total_amount = ta;}
 
     public String getCausal() {return this.causal;}
-    public String setCausal(String causal){
-        if (causal.length() < 3)
-            return null;
-        else
-            this.causal = causal;
-        return causal;
-    }
+    public void setCausal(String causal){this.causal = causal;}
 
     public Long getDateMillis() {
         return this.date_millis;

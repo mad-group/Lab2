@@ -21,12 +21,17 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -89,26 +94,27 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
-        ArrayList<Group> arrayOfGroups = new ArrayList<Group>();
+        final ArrayList<Group> arrayOfGroups = new ArrayList<Group>();
         final GroupAdapter adapter = new GroupAdapter(this, arrayOfGroups);
 
         ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
 
-        //String[] nomi = {"Andrian", "Flavia", "Michele", "Gaetano"};
 
         adapter.clear();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Groups");
-
-        mDatabase = FirebaseDatabase.getInstance().getReference("Groups");
+        mDatabase = database.getReference("Groups");
 
         ValueEventListener GroupListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("debug", "***********");
                 adapter.clear();
                 int index = 0;
+                HashMap<Long, Group> hm_groups = new HashMap<>();
+                HashMap <Long, String> hm_keys = new HashMap<>();
+                ArrayList<Long> ts = new ArrayList<>();
                 for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
                     //Getting the data from database snapshot
                     Group group = groupSnapshot.getValue(Group.class);
@@ -116,16 +122,22 @@ public class MainActivity extends AppCompatActivity
 
                     if (members.contains(auth.getCurrentUser().getUid()) ||
                             members.contains(auth.getCurrentUser().getEmail())){
-                        groups_ids.add(index,groupSnapshot.getKey());
-                        index +=1;
-                        adapter.add(group);
-
+                        hm_groups.put(group.getLastModifyTimeStamp(), group);
+                        hm_keys.put(group.getLastModifyTimeStamp(), groupSnapshot.getKey());
+                        ts.add(group.getLastModifyTimeStamp());
                     }
-
-                    //adapter.add(group);
                 }
-            }
+                Collections.sort(ts);
+                Collections.reverse(ts);
+                for (Long k : ts){
+                    groups_ids.add(index,hm_keys.get(k));
+                    Log.d("debug", k.toString());
+                    index +=1;
+                    adapter.add(hm_groups.get(k));
+                }
 
+            }
+            
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message

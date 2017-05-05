@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
@@ -63,34 +64,11 @@ public class GroupActivityExpense extends AppCompatActivity {
                         .child(gid)
                         .child("Purchases");
 
-
-        //String[] spese = {"Expense 1", "Expense 2", "Expense 3"};
         ArrayList<Purchase> spese = new ArrayList<Purchase>();
-        //final ExpenseAdapter expenseAdapter = new ExpenseAdapter(this, spese);
         expenseAdapter = new ExpenseAdapter(this, spese);
 
         ListView listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
-
-
-/*        Calendar c = new GregorianCalendar();
-        c.set(Calendar.DAY_OF_MONTH,20);
-        c.set(Calendar.MONTH, Calendar.AUGUST);
-        c.set(Calendar.YEAR, 2016);
-        Date d = c.getTime();*/
-
-        //Toast.makeText(getApplicationContext(), String.valueOf(d.getTime()), Toast.LENGTH_SHORT).show();
-
-/*        DateFormat df = new SimpleDateFormat("dd MMM yyyy",new Locale(Locale.getDefault().getDisplayLanguage()));
-        String indate = df.format(d);*/
-
-/*        Purchase newPurchase = new Purchase(Locale.ENGLISH + " " + Locale.ITALIAN,
-                50,
-                Locale.getDefault().getDisplayLanguage(),
-                c.getTimeInMillis());
-        newPurchase.setPathImage(null);
-        //Unica spesa aggiunta alle spese:
-        expenseAdapter.add(newPurchase);*/
 
         //arrayList = new ArrayList<>(Arrays.asList(spese));
         //      adapter = new ArrayAdapter<String>(this, R.layout.expense_item, arrayList){
@@ -182,11 +160,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 expenseAdapter.clear();
                 for (DataSnapshot purSnapshot : dataSnapshot.getChildren()) {
-                    //Getting the data from database snapshot
                     Purchase p = purSnapshot.getValue(Purchase.class);
                     expenseAdapter.add(p);
-
-
                 }
             }
 
@@ -232,38 +207,13 @@ public class GroupActivityExpense extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
-/*                String author = data.getStringExtra("author");
-                String expense = data.getStringExtra("expense");
-                String amount = data.getStringExtra("amount");
-                Long date = data.getLongExtra("date", System.currentTimeMillis());*//*
 
-
-                String author = "a";
-                String expense = "b";
-                String amount = "12";
-                Long date = Long.getLong("0");
-                Purchase newInsert = new Purchase(author, Float.parseFloat(amount),expense, date);
-                if (data.getStringExtra("filepath") == "nopath"){
-                    newInsert.setPathImage(null);
-                }
-                else{
-                    newInsert.setPathImage(data.getStringExtra("filepath"));
-                }
-
-                //Toast.makeText(getApplicationContext(), newInsert.getPathImage().toString(), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(), date, Toast.LENGTH_LONG).show();
-
-
-                //Purchase newInsert = new Purchase("aaaa", 12,"bbbb");
-                expenseAdapter.add(newInsert);
-                expenseAdapter.notifyDataSetChanged();
-
-*/
+                Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
 
             }
         }
     }
 
-}
+}//[END CLASS]
 
 

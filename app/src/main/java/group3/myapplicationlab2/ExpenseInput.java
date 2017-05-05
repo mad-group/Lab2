@@ -126,7 +126,7 @@ public class ExpenseInput extends AppCompatActivity {
             allOk = false;
         }
 
-        if (allOk == true){
+        if (allOk){
             String group_id = getIntent().getStringExtra("group_id");
             //Purchase p = new Purchase(author, Float.parseFloat(amount),expense, myd.getTime());
             Purchase p = new Purchase();
@@ -144,6 +144,7 @@ public class ExpenseInput extends AppCompatActivity {
 
             String pid = myRef.push().getKey();
             myRef.child(group_id).child("Purchases").child(pid).setValue(p);
+            myRef.child(group_id).child("lastModifyTimeStamp").setValue(System.currentTimeMillis());
             context = v.getContext();
             Intent i = new Intent();
 /*            i.putExtra("author", author);
@@ -258,22 +259,6 @@ public class ExpenseInput extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
-/*    ValueEventListener postListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            // Get Post object and use the values to update the UI
-            Post post = dataSnapshot.getValue(Post.class);
-            // ...
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            // Getting Post failed, log a message
-            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-            // ...
-        }
-    };*/
 
 }
 

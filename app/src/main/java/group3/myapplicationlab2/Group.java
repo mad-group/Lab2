@@ -4,6 +4,7 @@ package group3.myapplicationlab2;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.security.Timestamp;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 /**
@@ -18,6 +19,7 @@ public class Group {
     private List<String> purchases;
     private FirebaseDatabase db;
     private String pin;
+    private long lastModifyTimeStamp;
 
     public Group() {
         //this.db = db;
@@ -68,4 +70,8 @@ public class Group {
         this.purchases = purchases;
     }
 
+    public Long getLastModifyTimeStamp(){return this.lastModifyTimeStamp;}
+/*    public void setLastModifyTimeStamp(long lmts) {
+        this.lastModifyTimeStamp = System.currentTimeMillis();
+    }*/
 }
