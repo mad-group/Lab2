@@ -143,11 +143,9 @@ public class MainActivity extends AppCompatActivity
                 * */
                 for (Long k : ts){
                     groups_ids.add(index,hm_keys.get(k));
-                    Log.d("debug", k.toString());
                     index +=1;
                     adapter.add(hm_groups.get(k));
                 }
-
             }
 
             @Override

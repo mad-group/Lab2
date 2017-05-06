@@ -29,10 +29,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -70,8 +72,11 @@ public class ExpenseInput extends AppCompatActivity {
     private static final int PICK_IMAGE_ID = 234;
     private File imageOutFile = null;
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Groups");
+    private String group_id;
+    private List<String> members;
+
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("Groups");
 
 
     @Override
@@ -89,10 +94,25 @@ public class ExpenseInput extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
 
+        group_id = getIntent().getStringExtra("group_id");
+        DatabaseReference userRef = myRef.child(group_id).child("members");
+        userRef.addValueEventListener(userListener);
 
+
+
+    }//[END onCreate()]
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        Log.d("Debug", "dim onStart " + Integer.toString(members.size()));
+        drawUsersExpense(members);
     }
 
     public void saveExpense(View v) {
+        Log.d("Debug", "dim se " + Integer.toString(members.size()));
+
         final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
         final EditText amountField = (EditText) findViewById(R.id.ie_et_amount);
@@ -101,7 +121,6 @@ public class ExpenseInput extends AppCompatActivity {
         String expense = expenseField.getText().toString();
         String amount = amountField.getText().toString();
         String date = dateField.getText().toString();
-
 
         Date myd = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
@@ -127,7 +146,7 @@ public class ExpenseInput extends AppCompatActivity {
         }
 
         if (allOk){
-            String group_id = getIntent().getStringExtra("group_id");
+            //String group_id = getIntent().getStringExtra("group_id");
             //Purchase p = new Purchase(author, Float.parseFloat(amount),expense, myd.getTime());
             Purchase p = new Purchase();
             p.setAuthorName(author);
@@ -258,6 +277,31 @@ public class ExpenseInput extends AppCompatActivity {
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    //Retrieving the list members
+    ValueEventListener userListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            List<String> m = new ArrayList<>();
+            for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                String u = userSnapshot.getValue(String.class);
+                m.add(u);
+            }
+            m.
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            // Getting Post failed, log a message
+            Log.w("Error", "loadPost:onCancelled", databaseError.toException());
+        }
+    };
+
+
+
+    private void drawUsersExpense(List<String> members){
+        Log.d("Debug", "dim DUE " + members.size());
     }
 
 }
