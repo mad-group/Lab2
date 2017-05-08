@@ -4,6 +4,7 @@ package group3.myapplicationlab2;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.security.Timestamp;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -11,12 +12,12 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by mc on 03/04/17.
  */
 
-public class Group {
+public class Group implements Serializable {
     private String name;
     private String description;
     private String id;
     private List<String> members;
-    private List<String> purchases;
+    private List<Purchase> purchases;
     private FirebaseDatabase db;
     private String pin;
     private long lastModifyTimeStamp;
@@ -63,10 +64,10 @@ public class Group {
     }
     public void setPin(String pin) {this.pin = pin;}
 
-    public List<String> getPurchases(){
+    public List<Purchase> getPurchases(){
         return this.purchases;
     }
-    public void setPurchases(List<String> purchases){
+    public void setPurchases(List<Purchase> purchases){
         this.purchases = purchases;
     }
 
