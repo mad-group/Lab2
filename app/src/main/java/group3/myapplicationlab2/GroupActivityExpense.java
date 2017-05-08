@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -43,7 +44,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 public class GroupActivityExpense extends AppCompatActivity {
 
@@ -53,92 +58,71 @@ public class GroupActivityExpense extends AppCompatActivity {
     Locale l = Locale.ENGLISH;
     private String gid;
 
+    private FirebaseAuth auth;
+    private DatabaseReference mGroupReference;
+
+    private String QUI = "GroupActivity";
+    Group this_group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
         gid = getIntent().getStringExtra("group_id");
-        final DatabaseReference mPurchaseReference =
-                FirebaseDatabase.getInstance().getReference("Groups")
-                        .child(gid)
-                        .child("Purchases");
 
-        ArrayList<Purchase> spese = new ArrayList<Purchase>();
-        expenseAdapter = new ExpenseAdapter(this, spese);
 
-        ListView listView = (ListView) findViewById(R.id.expense_list);
-        listView.setAdapter(expenseAdapter);
+        final DatabaseReference mGroupReference =  FirebaseDatabase.getInstance()
+                                                .getReference("Groups")
+                                                .child(gid);
 
-        //arrayList = new ArrayList<>(Arrays.asList(spese));
-        //      adapter = new ArrayAdapter<String>(this, R.layout.expense_item, arrayList){
-/*            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                // There is nothing to convert --> I need to create extra view
-                if (convertView==null) {
-                    // Returns a view: inflate is used to populate a view
-                    convertView = getLayoutInflater().inflate(R.layout.expense_item, parent, false);
+        final ValueEventListener GroupListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Map<String, Object> objectMap = (HashMap<String, Object>)
+                        dataSnapshot.getValue();
+
+                Group group = new Group();
+
+                group.setName(objectMap.get("name").toString());
+                group.setDescription(objectMap.get("description").toString());
+                group.setPin(objectMap.get("pin").toString());
+
+                List<Purchase> purchases = new ArrayList<Purchase>();
+                Map <String, Object> objPurchases = (HashMap<String, Object>) objectMap.get("purchases");
+                for (Object ob: objPurchases.values()){
+                    Map <String, Object> purchase = (Map<String, Object>)ob;
+
+                    Purchase p = new Purchase();
+
+                    p.setAuthorName(purchase.get("authorName").toString());
+                    p.setCausal(purchase.get("causal").toString());
+                    p.setDateMillis((long)purchase.get("dateMillis"));
+                    p.setGroup_id(purchase.get("group_id").toString());
+                    p.setPathImage(purchase.get("pathImage").toString());
+                    p.setTotalAmount((double)purchase.get("totalAmount"));
+
+                    purchases.add(p);
                 }
-                TextView tv = (TextView)convertView.findViewById(R.id.expense_id);
-                tv.setText(getItem(position).toString());
 
-                TextView author = (TextView) convertView.findViewById(R.id.expense_author);
-                author.setText("Author " + (position+1) + " of group " + (passedVar + 1));
+                group.setPurchases(purchases);
+                expenseAdapter.addAll(group.getPurchases());
 
-                TextView amount = (TextView) convertView.findViewById(R.id.expense_amount);
-                amount.setText("Amount random");
-
-                TextView date = (TextView) convertView.findViewById(R.id.expense_date);
-                date.setText("Date random");
-
-                return convertView;
-            }*/
-        //};
-
-/*        final ListView list;
-        list = (ListView)findViewById(R.id.expense_list);
-        list.setAdapter(adapter);*/
-
-        /*
-        final ListView list;
-        list = (ListView)findViewById(R.id.expense_list);
-
-        list.setAdapter(new BaseAdapter() {
-
-            String[] spese = {"Expense 1", "Expense 2", "Expense 3"};
-
-            @Override
-            public int getCount() {return spese.length;}
-
-            @Override
-            public Object getItem(int position) {return spese[position];}
-
-            @Override
-            public long getItemId(int position) {return 0;}
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                // There is nothing to convert --> I need to create extra view
-                if (convertView==null) {
-                    // Returns a view: inflate is used to populate a view
-                    convertView = getLayoutInflater().inflate(R.layout.expense_item, parent, false);
-                }
-                TextView tv = (TextView)convertView.findViewById(R.id.expense_id);
-                tv.setText(getItem(position).toString());
-
-                TextView author = (TextView) convertView.findViewById(R.id.expense_author);
-                author.setText("Author " + (position+1) + " of group " + (passedVar + 1));
-
-                TextView amount = (TextView) convertView.findViewById(R.id.expense_amount);
-                amount.setText("Amount random");
-
-                TextView date = (TextView) convertView.findViewById(R.id.expense_date);
-                date.setText("Date random");
-
-                return convertView;
             }
 
-        });*/
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        };
+
+        mGroupReference.addListenerForSingleValueEvent(GroupListener);
+
+        ArrayList<Purchase> spese = new ArrayList<Purchase>();
+        expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese);
+        ListView listView = (ListView) findViewById(R.id.expense_list);
+        listView.setAdapter(expenseAdapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
         setSupportActionBar(toolbar);
@@ -148,31 +132,26 @@ public class GroupActivityExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                List<Purchase> spese = new ArrayList<Purchase>();
+
+                /*Purchase spesa1 = new Purchase();
+                spesa1.setAuthorName("Mario");
+                double prova = 5.0;
+                spesa1.setTotalAmount(prova);
+                spesa1.setCausal("motivo vero");
+                long data = 1494155754227L;
+                spesa1.setDateMillis(data);
+                spesa1.setGroup_id("fwefafdgt");
+
+                spese.add(spesa1);
+                mGroupReference.child("purchases").push().setValue(spesa1);*/
+
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 i.putExtra("group_id", getIntent().getStringExtra("group_id"));
                 startActivityForResult(i,1);
             }
         });
 
-        //listener on purchases
-        final ValueEventListener purchaseListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                expenseAdapter.clear();
-                for (DataSnapshot purSnapshot : dataSnapshot.getChildren()) {
-                    Purchase p = purSnapshot.getValue(Purchase.class);
-                    expenseAdapter.add(p);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("Debug", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-        mPurchaseReference.addValueEventListener(purchaseListener);
     }
 
     @Override

@@ -1,5 +1,8 @@
 package group3.myapplicationlab2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by mc on 26/04/17.
  */
@@ -7,32 +10,8 @@ package group3.myapplicationlab2;
 public class User {
     //private String ID;
     private String email;
-    //private String password;
-
-    public User (){
-
-    }
-
-    /*public User (String email, String password){
-        this.email = email;
-        this.password = password;
-    }*/
-
-    //public void setPassword(String password){
-    //    /*check the case of internal spaces/blank/invalid chars */
-    //    if (password.trim().length() >= 6)
-    //        this.password = password.trim();
-    //    return;
-    //}
-
-    //public String getPassword(){return password;}
-
-    /*public void setEmail(String email){
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() ) {
-            this.email = email;
-            return;
-        }
-    }*/
+    private String uid;
+    private List<GroupPreview> groups;
 
     public void setEmail(String email){
         this.email = email;
@@ -40,7 +19,22 @@ public class User {
 
     public String getEmail(){return email;}
 
-    //public void setID(String ID){this.ID = ID;}
-    //public String getId(){return this.ID;}
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public List<GroupPreview> getGroups(){
+        return this.groups;
+    }
+
+    public void setGroups(List<GroupPreview> groups){
+        this.groups = groups;
+    }
+
+
 
 }
