@@ -288,7 +288,6 @@ public class ExpenseInput extends AppCompatActivity {
                 String u = userSnapshot.getValue(String.class);
                 m.add(u);
             }
-            m.
         }
 
         @Override
