@@ -45,6 +45,13 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<String> groups_ids = new ArrayList<>();
 
     private User user;
+    private DatabaseReference user_info;
+    private GroupPreviewAdapter adapter;
+
+    private List<GroupPreview> currentGroupPreview;
+
+    private final int CREATE_GROUP = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
-        final GroupPreviewAdapter adapter = new GroupPreviewAdapter(this, groupPreviews);
+        adapter = new GroupPreviewAdapter(this, groupPreviews);
         ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
 
@@ -77,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         //mDatabase.child("Groups");
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-        DatabaseReference user_info = mDatabase.child(auth.getCurrentUser().getUid());
+        user_info = mDatabase.child(auth.getCurrentUser().getUid());
 
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -223,47 +230,35 @@ public class MainActivity extends AppCompatActivity
 
                 Log.d("Debug", "QUI");
                 Intent i = new Intent(MainActivity.this, GroupCreationForm.class);
-                startActivity(i);
-                // Write a message to the database
-                /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Groups");
-
-                //myRef.setValue("Hello, World!");
-
-
-                //Creating firebase
-                //mDatabase = FirebaseDatabase.getInstance().getReference();
-
-                //Getting values to store
-                //String[] nomi = {"Andrian", "Flavia", "Michele", "Gaetano"};
-                List<String> Mylist = new ArrayList<String>();
-                Mylist.add("Flavia");
-                Mylist.add("Andrian");
-                Mylist.add("Michele");
-                Mylist.add("Gaetano");
-
-                Group newGroup = new Group();
-
-                newGroup.setDescription("Descrizione Seria");
-                newGroup.setId(2);
-                newGroup.setMembers(Mylist);
-                newGroup.setName("Gruppo 2");
-                //myRef.child("gruppo2").setValue(newGroup);
-
-                myRef.push().setValue(newGroup);
-*/
-                //Storing values to firebase
-                //mDatabase.child("Groups").setValue(newGroup);
-
-                //Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
-                //startActivityForResult(i,1);
-
-                //String newItem = "New Expense";
-                //arrayList.add(newItem);
-                //adapter.notifyDataSetChanged();
+                startActivityForResult(i, CREATE_GROUP);
             }
         });
 
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CREATE_GROUP) {
+            if(resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
+
+                GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
+                adapter.add(groupPreview);
+
+                if (user.getGroups() != null){
+                    currentGroupPreview = user.getGroups();
+                }
+                else{
+                    currentGroupPreview = new ArrayList<GroupPreview>();
+                }
+
+                currentGroupPreview.add(groupPreview);
+                user_info.child("groups").setValue(currentGroupPreview);
+
+                user.setGroups(currentGroupPreview);
+
+            }
+        }
     }
 
     @Override

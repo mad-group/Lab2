@@ -1,10 +1,12 @@
 package group3.myapplicationlab2;
 
+import java.io.Serializable;
+
 /**
  * Created by anr.putina on 08/05/17.
  */
 
-public class GroupPreview {
+public class GroupPreview implements Serializable {
 
     private String name;
     private String id;

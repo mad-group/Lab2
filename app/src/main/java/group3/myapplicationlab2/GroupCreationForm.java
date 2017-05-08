@@ -63,6 +63,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private String groupPinTmp = null;
     private String currentUser = null;
 
+    private Group newGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +140,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
     public void prepareUser(View view) {
         // Called when ADD button is pressed
-        final Group newGroup = new Group();
+        newGroup = new Group();
         boolean prova = true;
         if (groupName.getText().toString().isEmpty()){
             String err = getResources().getString(R.string.insert_group_name);
@@ -187,12 +188,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             this.groupIdTmp = newGroup.getId();
             Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
 
-            /*user = FirebaseDatabase.getInstance().getReference("Users");
-            String user_id = auth.getCurrentUser().getUid();
-            DatabaseReference current_user =  user.child(user_id);*/
-
-            //current_user.child("groups").setValue();
-
         }
 
         if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
@@ -219,10 +214,20 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             if (resultCode == RESULT_OK) {
                 // Get the invitation IDs of all sent messages
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+
                 for (String id : ids) {
                     Log.d(TAG, "onActivityResult: sent invitation " + id);
-                    finish();
                 }
+
+                GroupPreview groupPreview = new GroupPreview();
+                groupPreview.setName(newGroup.getName());
+                groupPreview.setId(newGroup.getId());
+                groupPreview.setDescription(newGroup.getDescription());
+
+                Intent i = new Intent();
+                i.putExtra("new_groupPreview", groupPreview);
+                setResult(RESULT_OK, i);
+                finish();
             }else {
                 // Sending failed or it was canceled, show failure message to the user
                 // [START_EXCLUDE]
