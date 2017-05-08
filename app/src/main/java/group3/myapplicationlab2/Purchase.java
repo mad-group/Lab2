@@ -6,6 +6,7 @@ import android.util.Pair;
 import android.util.SparseArray;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,11 +16,11 @@ import java.util.*;
  * Created by mc on 03/04/17.
  */
 
-public class Purchase {
+public class Purchase implements Serializable {
     private String path_image = "nopath";
     private Long date_millis;
     private String causal;
-    private Float total_amount;
+    private double total_amount;
     private String author_name;
     private String group_id;
     private String date;
@@ -43,8 +44,8 @@ public class Purchase {
     public String getAuthorName(){return this.author_name;}
     public void setAuthorName(String an){this.author_name = an;}
 
-    public float getTotalAmount() {return this.total_amount;}
-    public void setTotalAmount(float ta){this.total_amount = ta;}
+    public double getTotalAmount() {return this.total_amount;}
+    public void setTotalAmount(double ta){this.total_amount = ta;}
 
     public String getCausal() {return this.causal;}
     public void setCausal(String causal){this.causal = causal;}
