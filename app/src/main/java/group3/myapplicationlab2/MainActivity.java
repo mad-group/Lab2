@@ -85,19 +85,16 @@ public class MainActivity extends AppCompatActivity
 
                 user = dataSnapshot.getValue(User.class);
 
-                Log.d("Debug", user.getEmail());
-                Log.d("Deb", user.getGroups().get(0).getName());
-                Log.d("Deb", user.getGroups().get(0).getId());
-
-                for (int i=0; i<user.getGroups().size(); i++){
-                    adapter.add(user.getGroups().get(i));
+                if (user.getGroups() != null){
+                    for (int i=0; i<user.getGroups().size(); i++){
+                        adapter.add(user.getGroups().get(i));
+                    }
                 }
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: ");
+                System.out.println("FAIL USER INFO");
             }
         });
 

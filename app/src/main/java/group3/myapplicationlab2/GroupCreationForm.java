@@ -42,6 +42,8 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private EditText groupName, groupDescription, newParticipant, groupPin;
     private Button btnNewPart;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference user;
+
 
     private final DatabaseReference myRef = mDatabase.getReference("Groups");
     private final DatabaseReference myRefUsers = mDatabase.getReference("Users");
@@ -184,6 +186,13 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             this.groupNameTmp = newGroup.getName();
             this.groupIdTmp = newGroup.getId();
             Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
+
+            /*user = FirebaseDatabase.getInstance().getReference("Users");
+            String user_id = auth.getCurrentUser().getUid();
+            DatabaseReference current_user =  user.child(user_id);*/
+
+            //current_user.child("groups").setValue();
+
         }
 
         if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )

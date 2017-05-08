@@ -6,6 +6,7 @@ import android.util.Pair;
 import android.util.SparseArray;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ import java.util.*;
  * Created by mc on 03/04/17.
  */
 
-public class Purchase {
+public class Purchase implements Serializable {
     private String path_image = "nopath";
     private Long date_millis;
     private String causal;

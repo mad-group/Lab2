@@ -35,6 +35,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.security.Key;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,7 +63,6 @@ public class GroupActivityExpense extends AppCompatActivity {
     private DatabaseReference mGroupReference;
 
     private String QUI = "GroupActivity";
-    Group this_group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,41 +72,49 @@ public class GroupActivityExpense extends AppCompatActivity {
 
 
         final DatabaseReference mGroupReference =  FirebaseDatabase.getInstance()
-                                                .getReference("Groups")
-                                                .child(gid);
+                                                    .getReference("Groups")
+                                                    .child(gid);
 
         final ValueEventListener GroupListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Map<String, Object> objectMap = (HashMap<String, Object>)
-                        dataSnapshot.getValue();
+                if (dataSnapshot.getValue() != null){
 
-                Group group = new Group();
+                    Map<String, Object> objectMap = (HashMap<String, Object>)
+                            dataSnapshot.getValue();
 
-                group.setName(objectMap.get("name").toString());
-                group.setDescription(objectMap.get("description").toString());
-                group.setPin(objectMap.get("pin").toString());
+                    Group group = new Group();
 
-                List<Purchase> purchases = new ArrayList<Purchase>();
-                Map <String, Object> objPurchases = (HashMap<String, Object>) objectMap.get("purchases");
-                for (Object ob: objPurchases.values()){
-                    Map <String, Object> purchase = (Map<String, Object>)ob;
+                    group.setName(objectMap.get("name").toString());
+                    group.setDescription(objectMap.get("description").toString());
+                    group.setPin(objectMap.get("pin").toString());
+                    group.setMembers((ArrayList<String>) objectMap.get("members"));
 
-                    Purchase p = new Purchase();
+                    List<Purchase> purchases = new ArrayList<Purchase>();
 
-                    p.setAuthorName(purchase.get("authorName").toString());
-                    p.setCausal(purchase.get("causal").toString());
-                    p.setDateMillis((long)purchase.get("dateMillis"));
-                    p.setGroup_id(purchase.get("group_id").toString());
-                    p.setPathImage(purchase.get("pathImage").toString());
-                    p.setTotalAmount((double)purchase.get("totalAmount"));
+                    if (objectMap.get("purchases") != null){
+                        Map <String, Object> objPurchases = (HashMap<String, Object>) objectMap.get("purchases");
+                        for (Object ob: objPurchases.values()){
+                            Map <String, Object> purchase = (Map<String, Object>)ob;
 
-                    purchases.add(p);
+                            Purchase p = new Purchase();
+
+                            p.setAuthorName(purchase.get("authorName").toString());
+                            p.setCausal(purchase.get("causal").toString());
+                            p.setDateMillis(Long.parseLong(purchase.get("dateMillis").toString()));
+                            p.setGroup_id(purchase.get("group_id").toString());
+                            p.setPathImage(purchase.get("pathImage").toString());
+                            p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
+
+                            purchases.add(p);
+                        }
+                    }
+
+                    group.setPurchases(purchases);
+                    expenseAdapter.addAll(group.getPurchases());
+
                 }
-
-                group.setPurchases(purchases);
-                expenseAdapter.addAll(group.getPurchases());
 
             }
 
@@ -133,18 +141,6 @@ public class GroupActivityExpense extends AppCompatActivity {
             public void onClick(View view) {
 
                 List<Purchase> spese = new ArrayList<Purchase>();
-
-                /*Purchase spesa1 = new Purchase();
-                spesa1.setAuthorName("Mario");
-                double prova = 5.0;
-                spesa1.setTotalAmount(prova);
-                spesa1.setCausal("motivo vero");
-                long data = 1494155754227L;
-                spesa1.setDateMillis(data);
-                spesa1.setGroup_id("fwefafdgt");
-
-                spese.add(spesa1);
-                mGroupReference.child("purchases").push().setValue(spesa1);*/
 
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 i.putExtra("group_id", getIntent().getStringExtra("group_id"));
@@ -186,13 +182,14 @@ public class GroupActivityExpense extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
-
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
 
+                Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
+                expenseAdapter.add(new_purchase);
             }
         }
     }
 
-}//[END CLASS]
+}
 
 

@@ -73,7 +73,6 @@ public class ExpenseInput extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Groups");
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +87,7 @@ public class ExpenseInput extends AppCompatActivity {
 
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
+
 
 
     }
@@ -128,11 +128,9 @@ public class ExpenseInput extends AppCompatActivity {
 
         if (allOk){
             String group_id = getIntent().getStringExtra("group_id");
-            //Purchase p = new Purchase(author, Float.parseFloat(amount),expense, myd.getTime());
             Purchase p = new Purchase();
             p.setAuthorName(author);
-            Log.d("Debug", p.getAuthorName());
-            p.setTotalAmount(Float.parseFloat(amount));
+            p.setTotalAmount(Double.parseDouble(amount));
             p.setCausal(expense);
             p.setDateMillis(myd.getTime());
             p.setGroup_id(group_id);
@@ -143,16 +141,11 @@ public class ExpenseInput extends AppCompatActivity {
                 p.setPathImage(this.imageOutFile.getPath());
 
             String pid = myRef.push().getKey();
-            myRef.child(group_id).child("Purchases").child(pid).setValue(p);
+            myRef.child(group_id).child("purchases").child(pid).setValue(p);
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(System.currentTimeMillis());
             context = v.getContext();
             Intent i = new Intent();
-/*            i.putExtra("author", author);
-            i.putExtra("expense", expense);
-            i.putExtra("amount",amount);
-            i.putExtra("date", myd.getTime());*/
-           // i.putExtra("filepath", p.getPathImage());
-          //  i.putExtra("pid",pid);
+            i.putExtra("new_purchase", p);
             setResult(RESULT_OK, i);
             finish();
         }
