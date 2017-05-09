@@ -216,10 +216,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        /*View header=navigationView.getHeaderView(0);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        TextView user_email = (TextView)header.findViewById(R.id.user_email);
-        user_email.setText(user.getEmail());*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_group);
         fab.setOnClickListener(new View.OnClickListener() {

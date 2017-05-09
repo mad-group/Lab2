@@ -11,6 +11,7 @@ public class GroupPreview implements Serializable {
     private String name;
     private String id;
     private String description;
+    private long lastModify;
 
 
     public GroupPreview(){
@@ -40,4 +41,7 @@ public class GroupPreview implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    public long getLastModify(){return this.lastModify;}
+    public void setLastModify(long lm){lastModify = lm;}
 }
