@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
-        else {
+/*        else {
             if (user.getGroups() != null){
                 currentGroupPreview = user.getGroups();
                 Collections.sort(currentGroupPreview,Collections.<GroupPreview>reverseOrder());
@@ -210,8 +210,7 @@ public class MainActivity extends AppCompatActivity
                 user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
             }
-
-        }
+        }//[End Else]*/
     }
 
     @Override

@@ -33,7 +33,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -153,6 +155,23 @@ public class ExpenseInput extends AppCompatActivity {
                     .child("groups")
                     .child(getIntent().getStringExtra("list_pos"))
                     .updateChildren(hm);
+
+            users.child(getIntent().getStringExtra("user_id"))
+                    .child("groups")
+                    .child(getIntent().getStringExtra("list_pos"))
+                    .orderByChild("lastModify").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d("debug", "ordered");
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("debug", "cancelled");
+
+                }
+            });
 
             context = v.getContext();
             Intent i = new Intent();
