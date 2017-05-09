@@ -86,13 +86,13 @@ public class MainActivity extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
 
-        user_info.addListenerForSingleValueEvent(new ValueEventListener() {
+        user_info.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 user = dataSnapshot.getValue(User.class);
-
                 if (user.getGroups() != null){
+                    Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+                    adapter.clear();
                     for (int i=0; i<user.getGroups().size(); i++){
                         adapter.add(user.getGroups().get(i));
                     }
@@ -139,69 +139,15 @@ public class MainActivity extends AppCompatActivity
         //listView.setAdapter(adapter);
         //adapter.clear();
 
-
-
-        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mDatabase = database.getReference("Groups");
-
-        ValueEventListener GroupListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("debug", "***********");
-                adapter.clear();
-                int index = 0;
-                HashMap<Long, Group> hm_groups = new HashMap<>();
-                HashMap <Long, String> hm_keys = new HashMap<>();
-                ArrayList<Long> ts = new ArrayList<>();
-                for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
-                    //Getting the data from database snapshot
-                    Group group = groupSnapshot.getValue(Group.class);
-                    List<String> members = group.getMembers();
-
-                    if (members.contains(auth.getCurrentUser().getUid()) ||
-                            members.contains(auth.getCurrentUser().getEmail())){
-                        //
-                        //Save the records:
-                        //<timestamp, groups> (to visualzie)
-                        //<timestamp, firebase groupID>, to allow put in the Expense input intent the GID
-                        //arraylist of ts, to order
-                        //
-                        hm_groups.put(group.getLastModifyTimeStamp(), group);
-                        hm_keys.put(group.getLastModifyTimeStamp(), groupSnapshot.getKey());
-                        ts.add(group.getLastModifyTimeStamp());
-                    }
-                }
-                //ordering in reverse order
-                Collections.sort(ts);
-                Collections.reverse(ts);
-                //
-                //For all the timestamps, i take the keys (the ts) and i put it in a collection which map
-                //listview position - group id
-                //put in the adpater the group
-                //
-                for (Long k : ts){
-                    groups_ids.add(index,hm_keys.get(k));
-                    index +=1;
-                    adapter.add(hm_groups.get(k));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        mDatabase.addValueEventListener(GroupListener);*/
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
-                //i.putExtra("group_id", groups_ids.get(position));
+                i.putExtra("user_id", user.getUid());
+                i.putExtra("list_pos", Integer.toString(position));
                 i.putExtra("group_id", user.getGroups().get(position).getId());
-                startActivity(i);
+                startActivityForResult(i,10);
             }
         });
 
@@ -232,6 +178,7 @@ public class MainActivity extends AppCompatActivity
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == CREATE_GROUP) {
             if(resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
@@ -248,10 +195,22 @@ public class MainActivity extends AppCompatActivity
 
                 currentGroupPreview.add(groupPreview);
                 user_info.child("groups").setValue(currentGroupPreview);
-
                 user.setGroups(currentGroupPreview);
 
             }
+        }
+        else {
+            if (user.getGroups() != null){
+                currentGroupPreview = user.getGroups();
+                Collections.sort(currentGroupPreview,Collections.<GroupPreview>reverseOrder());
+                adapter.clear();
+                for (GroupPreview gp : currentGroupPreview){
+                    adapter.add(gp);
+                }
+                user_info.child("groups").setValue(currentGroupPreview);
+                user.setGroups(currentGroupPreview);
+            }
+
         }
     }
 

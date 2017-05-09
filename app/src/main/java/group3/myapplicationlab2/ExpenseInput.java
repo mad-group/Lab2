@@ -15,6 +15,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -72,6 +73,8 @@ public class ExpenseInput extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Groups");
+    DatabaseReference users = database.getReference("Users");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +144,19 @@ public class ExpenseInput extends AppCompatActivity {
                 p.setPathImage(this.imageOutFile.getPath());
 
             String pid = myRef.push().getKey();
+            Long lastModify = System.currentTimeMillis();
+            HashMap<String,Object> hm = new HashMap<>();
+            hm.put("lastModify", lastModify);
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
-            myRef.child(group_id).child("lastModifyTimeStamp").setValue(System.currentTimeMillis());
+            myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
+            users.child(getIntent().getStringExtra("user_id"))
+                    .child("groups")
+                    .child(getIntent().getStringExtra("list_pos"))
+                    .updateChildren(hm);
+
             context = v.getContext();
             Intent i = new Intent();
+            Log.d("debug", getIntent().getStringExtra("list_pos"));
             i.putExtra("new_purchase", p);
             setResult(RESULT_OK, i);
             finish();

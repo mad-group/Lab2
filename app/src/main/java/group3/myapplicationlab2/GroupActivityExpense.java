@@ -143,7 +143,9 @@ public class GroupActivityExpense extends AppCompatActivity {
                 List<Purchase> spese = new ArrayList<Purchase>();
 
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
+                i.putExtra("user_id", getIntent().getStringExtra("user_id"));
                 i.putExtra("group_id", getIntent().getStringExtra("group_id"));
+                i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
                 startActivityForResult(i,1);
             }
         });
@@ -170,7 +172,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
             Intent i =new Intent(GroupActivityExpense.this, GroupStats.class);
 
-            startActivity(i);
+            startActivityForResult(i,1);
 
             return true;
         }

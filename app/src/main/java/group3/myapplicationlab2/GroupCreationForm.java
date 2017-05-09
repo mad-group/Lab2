@@ -223,6 +223,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                 groupPreview.setName(newGroup.getName());
                 groupPreview.setId(newGroup.getId());
                 groupPreview.setDescription(newGroup.getDescription());
+                groupPreview.setLastModify(System.currentTimeMillis());
 
                 Intent i = new Intent();
                 i.putExtra("new_groupPreview", groupPreview);
