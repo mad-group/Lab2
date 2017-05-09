@@ -21,17 +21,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JoinGroupActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
 
+    private DatabaseReference user_info;
+
+
     private EditText groupID, groupPassword;
     private Button Join;
 
     private ProgressBar progressBar;
+
+    private List<GroupPreview> currentGroupPreview;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +56,8 @@ public class JoinGroupActivity extends AppCompatActivity {
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        user = (User) getIntent().getSerializableExtra("user");
+        user_info = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
 
         Join.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +72,17 @@ public class JoinGroupActivity extends AppCompatActivity {
 
                         if (dataSnapshot.exists()){
                             //Getting the data from database snapshot
-                            Group group = dataSnapshot.getValue(Group.class);
+
+                            Map<String, Object> objectMap = (HashMap<String, Object>)
+                                    dataSnapshot.getValue();
+
+                            Group group = new Group();
+
+                            group.setName(objectMap.get("name").toString());
+                            group.setDescription(objectMap.get("description").toString());
+                            group.setPin(objectMap.get("pin").toString());
+                            group.setMembers((ArrayList<String>) objectMap.get("members"));
+
 
                             if (groupPassword.getText().toString().equals(group.getPin())){
                                 List<String> members = group.getMembers();
@@ -70,7 +92,31 @@ public class JoinGroupActivity extends AppCompatActivity {
                                     members.add(auth.getCurrentUser().getEmail());
                                     //Log.d("Debug", members.get(1));
                                     mDatabase.child("members").setValue(members);
+
+                                    if (user.getGroups() != null){
+                                        currentGroupPreview = user.getGroups();
+                                    }
+                                    else{
+                                        currentGroupPreview = new ArrayList<GroupPreview>();
+                                    }
+
+                                    GroupPreview groupPreview = new GroupPreview();
+                                    groupPreview.setName(group.getName());
+                                    groupPreview.setDescription(group.getDescription());
+                                    groupPreview.setId(groupID.getText().toString());
+
+                                    currentGroupPreview.add(groupPreview);
+                                    user_info.child("groups").setValue(currentGroupPreview);
+
+                                    user.setGroups(currentGroupPreview);
+
                                 }
+
+
+
+
+
+
                                 finish();
                             }
                             else{

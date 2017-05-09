@@ -1,5 +1,6 @@
 package group3.myapplicationlab2;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by mc on 26/04/17.
  */
 
-public class User {
+public class User implements Serializable {
     //private String ID;
     private String email;
     private String uid;

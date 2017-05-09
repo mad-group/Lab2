@@ -299,6 +299,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.join_group) {
 
             Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
+            i.putExtra("user", user);
             startActivity(i);
 
         } else if (id == R.id.logout) {
