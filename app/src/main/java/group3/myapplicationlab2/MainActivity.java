@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -78,10 +80,7 @@ public class MainActivity extends AppCompatActivity
         adapter = new GroupPreviewAdapter(this, groupPreviews);
         ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
-
-        //mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        //mDatabase.child("Groups");
+        registerForContextMenu(listView);
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
@@ -176,6 +175,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.group_modify, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.modify:
+                Log.d("debug", "aaaaa " + info.id + " " + info.position);
+                Log.d("debug", "modfy " + user.getGroups().get(info.position).getId());
+                return true;
+            case R.id.leave:
+                Log.d("debug", "Leave " + user.getGroups().get(info.position).getId());
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -199,18 +221,16 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
-/*        else {
-            if (user.getGroups() != null){
-                currentGroupPreview = user.getGroups();
-                Collections.sort(currentGroupPreview,Collections.<GroupPreview>reverseOrder());
+  /*      else {
+            if (user.getGroups() != null) {
+                Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
                 adapter.clear();
-                for (GroupPreview gp : currentGroupPreview){
-                    adapter.add(gp);
+                for (int i = 0; i < user.getGroups().size(); i++) {
+                    adapter.add(user.getGroups().get(i));
                 }
-                user_info.child("groups").setValue(currentGroupPreview);
-                user.setGroups(currentGroupPreview);
             }
-        }//[End Else]*/
+        }*/
+
     }
 
     @Override
