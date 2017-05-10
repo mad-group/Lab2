@@ -21,15 +21,22 @@ public class GroupStats extends AppCompatActivity {
     private ArrayList<String> arrayList;
     private ArrayAdapter<String> adapter;
 
+    private Group group;
+    private User user;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_stats);
         final Random r = new Random();
 
-        String[] spese = {"Andrian", "Flavia", "Michele", "Gaetano", "Diletta"};
-        arrayList = new ArrayList<>(Arrays.asList(spese));
-        adapter = new ArrayAdapter<String>(this, R.layout.group_balance_item, arrayList){
+        group = (Group) getIntent().getSerializableExtra("group");
+        user = (User) getIntent().getSerializableExtra("user");
+
+        ArrayList<String> members = new ArrayList<>(group.getMembers());
+
+        adapter = new ArrayAdapter<String>(this, R.layout.group_balance_item, members){
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // There is nothing to convert --> I need to create extra view
@@ -39,21 +46,23 @@ public class GroupStats extends AppCompatActivity {
                 }
 
                 TextView name = (TextView)convertView.findViewById(R.id.group_member_name);
+
                 name.setText(getItem(position).toString());
 
                 TextView debit_credit = (TextView)convertView.findViewById(R.id.expense_amount);
-                int i1 = r.nextInt(2 + 5)-2;
+                //int i1 = r.nextInt(2 + 5)-2;
+                Double debit = group.getAggPurchases().get(position);
 
-                if (i1 > 0){
-                    debit_credit.setText("+" + String.valueOf(i1)+" €");
+                if (debit > 0){
+                    debit_credit.setText("+" + String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(Color.parseColor("#51931b"));
                 }
-                else if (i1 <0) {
-                    debit_credit.setText(String.valueOf(i1)+" €");
+                else if (debit <0) {
+                    debit_credit.setText(String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(Color.parseColor("#ff0000"));
                 }
                 else {
-                    debit_credit.setText(String.valueOf(i1)+" €");
+                    debit_credit.setText(String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(Color.parseColor("#000000"));
                 }
                 return convertView;

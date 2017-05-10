@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("group_name", user.getGroups().get(position).getName());
                 i.putExtra("list_pos", Integer.toString(position));
                 i.putExtra("group_id", user.getGroups().get(position).getId());
+                i.putExtra("user", user);
 /*                Log.d("Debug", "pos: " + position +
                         " group_id: " + user.getGroups().get(position).getId() +
                         " group_na: " + user.getGroups().get(position).getName());*/

@@ -66,11 +66,15 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private String QUI = "GroupActivity";
 
+    private Group group;
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
         gid = getIntent().getStringExtra("group_id");
+        user = (User)getIntent().getSerializableExtra("user");
 
 
         final DatabaseReference mGroupReference =  FirebaseDatabase.getInstance()
@@ -86,7 +90,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     Map<String, Object> objectMap = (HashMap<String, Object>)
                             dataSnapshot.getValue();
 
-                    Group group = new Group();
+                    group = new Group();
 
                     group.setName(objectMap.get("name").toString());
                     group.setDescription(objectMap.get("description").toString());
@@ -171,12 +175,16 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.group_Stats) {
-            Log.d("Debug", "Stats clicked");
+            group.computeTotalExpense();
+            group.computeAggregateExpenses(user);
 
+            //Log.d("gsagad", "fadgaga");
             Intent i =new Intent(GroupActivityExpense.this, GroupStats.class);
+            i.putExtra("group", group);
+            i.putExtra("user", user);
+            //startActivityForResult(i,1);
 
-            startActivityForResult(i,1);
-
+            startActivity(i);
             return true;
         }
 

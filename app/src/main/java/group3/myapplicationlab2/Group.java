@@ -1,6 +1,8 @@
 package group3.myapplicationlab2;
 
 
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,6 +23,10 @@ public class Group implements Serializable {
     private FirebaseDatabase db;
     private String pin;
     private long lastModifyTimeStamp;
+    private Double total_amount;
+    private List<Double> aggPurchases;
+    private List<Double> myDebts;
+
 
     public Group() {
         //this.db = db;
@@ -75,4 +81,143 @@ public class Group implements Serializable {
 /*    public void setLastModifyTimeStamp(long lmts) {
         this.lastModifyTimeStamp = System.currentTimeMillis();
     }*/
+
+    public void computeAggregateExpenses(User user){
+
+        this.aggPurchases = new ArrayList<Double>();
+
+        while(this.aggPurchases.size() < this.members.size()){
+            this.aggPurchases.add(new Double(0));
+        }
+
+        /*for (int i = 0; i< this.purchases.size(); i++){
+            Purchase purchase = this.purchases.get(i);
+
+            Double toPay = new Double(0);
+            toPay = purchase.getTotalAmount()/this.getMembers().size();
+
+            int index = this.getMembers().indexOf(purchase.getAuthorName());
+
+            Log.d("DEBAASV", this.aggPurchases.toString());
+
+            for (int ii=0; ii<this.aggPurchases.size(); ii++){
+
+                if (ii==index){
+                    this.aggPurchases.set(ii, this.aggPurchases.get(ii) + purchase.getTotalAmount() - toPay);
+                }
+                else{
+                    this.aggPurchases.set(ii, this.aggPurchases.get(ii) - toPay);
+                }
+            }
+        }*/
+
+
+        for (int i = 0; i < this.purchases.size(); i++){
+            Purchase purchase = this.purchases.get(i);
+
+            Double toPay = new Double(0);
+            toPay = purchase.getTotalAmount()/this.getMembers().size();
+
+            int index = this.getMembers().indexOf(purchase.getAuthorName());
+
+            if (purchase.getAuthorName().equals(user.getEmail())){
+
+                for (int ii=0; ii<this.aggPurchases.size(); ii++){
+                    if (ii != index){
+                        this.aggPurchases.set(ii, this.aggPurchases.get(ii) + toPay);
+                    }
+                }
+
+            }
+            else{
+
+                for (int ii=0; ii<this.aggPurchases.size(); ii++){
+                    if (ii == index){
+                        this.aggPurchases.set(ii, this.aggPurchases.get(ii) - toPay);
+                    }
+                }
+
+            }
+
+        }
+
+        //Log.d("DEBUASFA", aggPurchases.get(0).toString());
+        //Log.d("DEBUASFA", aggPurchases.get(1).toString());
+        //Log.d("DEBUASFA", aggPurchases.get(2).toString());
+
+
+        /*for (int i = 0; i< this.purchases.size(); i++){
+            Purchase purchase = this.purchases.get(i);
+            int index = this.members.indexOf(purchase.getAuthorName());
+            Double amount = aggPurchases.get(index) + purchase.getTotalAmount();
+            aggPurchases.set(index, amount);
+        }*/
+
+       /* for (int i = 0; i<this.members.size(); i++) {
+            Log.d("Spesa di ", this.members.get(i));
+            Log.d("Amount ", aggPurchases.get(i).toString());
+        }*/
+        return;
+    }
+
+    public List<Double> getAggPurchases(){
+        return this.aggPurchases;
+    }
+
+    public void computeTotalExpense(){
+        Double total = new Double(0);
+
+        for (int i = 0; i< this.purchases.size(); i++){
+            Purchase purchase = this.purchases.get(i);
+            //int index = this.members.indexOf(purchase.getAuthorName());
+            total = total + purchase.getTotalAmount();
+            //Double amount = aggPurchases.get(index) + purchase.getTotalAmount();
+            //aggPurchases.set(index, amount);
+        }
+
+        this.total_amount = total;
+    }
+
+    public Double getTotalAmount(){
+        return this.total_amount;
+    }
+
+
+    public Double getTotalExpenses(List<Double> aggPurchases){
+        int i;
+        Double totExpenses = new Double(0);
+        for(i = 0; i < aggPurchases.size(); i++)
+            totExpenses = totExpenses + aggPurchases.get(i);
+        return totExpenses;
+    }
+
+    /*public List<Double> getDebtsEqualSplit() {
+        List<Double> aggPurchases = this.aggregateExpenses();
+        Double totalPurchases = this.getTotalExpenses(aggPurchases);
+        //float quotaPerEach = totalPurchases/this.members.size();
+        List<Double> debtsAndCredits = new ArrayList<Double>();
+        while(debtsAndCredits.size() < this.members.size()){
+            debtsAndCredits.add(new Double(0));
+        }
+
+//        for (int i = 0; i < aggPurchases.size(); i++){
+//            debtsAndCredits.set(i, (quotaPerEach - aggPurchases.get(i)));
+//        }
+
+        for (int i = 0; i < aggPurchases.size(); i++){
+            Double quotaPerEachPerExpenses = aggPurchases.get(i)/this.members.size();
+            for (int j = 0; j < this.members.size(); j++){
+                if (i!=j)
+                    debtsAndCredits.set(j, debtsAndCredits.get(j) - quotaPerEachPerExpenses);
+            }
+            debtsAndCredits.set(i, debtsAndCredits.get(i) + quotaPerEachPerExpenses);
+        }
+
+        for (int i = 0; i<this.members.size(); i++) {
+            Log.d("Spesa di ", this.members.get(i));
+            Log.d("Amount ", aggPurchases.get(i).toString());
+        }
+        return aggPurchases;
+    }*/
+
 }
