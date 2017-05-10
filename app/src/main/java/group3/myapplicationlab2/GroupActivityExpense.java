@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.GregorianCalendar;
@@ -61,6 +62,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private DatabaseReference mGroupReference;
+    List<Purchase> purchases = new ArrayList<Purchase>();
 
     private String QUI = "GroupActivity";
 
@@ -91,8 +93,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                     group.setPin(objectMap.get("pin").toString());
                     group.setMembers((ArrayList<String>) objectMap.get("members"));
 
-                    List<Purchase> purchases = new ArrayList<Purchase>();
-
+                    //List<Purchase> purchases = new ArrayList<Purchase>();
+                    purchases.removeAll(purchases);
                     if (objectMap.get("purchases") != null){
                         Map <String, Object> objPurchases = (HashMap<String, Object>) objectMap.get("purchases");
                         for (Object ob: objPurchases.values()){
@@ -110,7 +112,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                             purchases.add(p);
                         }
                     }
-
+                    Collections.sort(purchases,Collections.<Purchase>reverseOrder());
                     group.setPurchases(purchases);
                     expenseAdapter.addAll(group.getPurchases());
 
@@ -139,8 +141,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                List<Purchase> spese = new ArrayList<Purchase>();
 
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 i.putExtra("user_id", getIntent().getStringExtra("user_id"));
@@ -189,7 +189,10 @@ public class GroupActivityExpense extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
-                expenseAdapter.add(new_purchase);
+                purchases.add(0,new_purchase);
+                //Collections.sort(purchases, Collections.<Purchase>reverseOrder());
+                expenseAdapter.clear();
+                expenseAdapter.addAll(purchases);
             }
         }
     }

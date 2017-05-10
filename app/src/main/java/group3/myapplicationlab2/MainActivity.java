@@ -251,10 +251,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
-
             }
         }
-
     }
 
     @Override

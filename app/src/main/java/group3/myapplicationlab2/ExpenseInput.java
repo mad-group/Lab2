@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -72,11 +73,12 @@ public class ExpenseInput extends AppCompatActivity {
 
     private static final int PICK_IMAGE_ID = 234;
     private File imageOutFile = null;
+    private String author_key;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Groups");
     DatabaseReference users = database.getReference("Users");
-
+    DatabaseReference users_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,24 @@ public class ExpenseInput extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
 
+        final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
+/*        authorField.setEnabled(false);*/
+        users_name= database.getReference("Users").child(getIntent().getStringExtra("user_id")).child("email");
+        users_name.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null){
+                    authorField.setText(dataSnapshot.getValue(String.class));
+                    author_key = dataSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
     }
@@ -102,7 +122,8 @@ public class ExpenseInput extends AppCompatActivity {
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
         final EditText amountField = (EditText) findViewById(R.id.ie_et_amount);
 
-        String author = authorField.getText().toString();
+        //String author = authorField.getText().toString();
+        String author = author_key;
         String expense = expenseField.getText().toString();
         String amount = amountField.getText().toString();
         String date = dateField.getText().toString();
@@ -143,6 +164,7 @@ public class ExpenseInput extends AppCompatActivity {
             p.setCausal(expense);
             p.setDateMillis(myd.getTime());
             p.setGroup_id(group_id);
+            p.setLastModify(System.currentTimeMillis());
 
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");
