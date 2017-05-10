@@ -103,7 +103,7 @@ public class ExpenseInput extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null){
                     authorField.setText(dataSnapshot.getValue(String.class));
-                    author_key = getIntent().getStringExtra("user_id");
+                    author_key = dataSnapshot.getValue(String.class);
                 }
             }
 
