@@ -28,8 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:srcCompat="@drawable/ic_new_group"
         app:backgroundTint="@color/colorPrimary"
-        android:tint="@color/colorIcon"/>
+        android:tint="@color/colorIcon">
+
+    </android.support.design.widget.FloatingActionButton>
 
 </android.support.design.widget.CoordinatorLayout>

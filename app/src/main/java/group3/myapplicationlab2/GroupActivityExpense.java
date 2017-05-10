@@ -115,7 +115,6 @@ public class GroupActivityExpense extends AppCompatActivity {
                     expenseAdapter.addAll(group.getPurchases());
 
                 }
-
             }
 
             @Override
@@ -188,7 +187,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
-
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
                 expenseAdapter.add(new_purchase);
             }

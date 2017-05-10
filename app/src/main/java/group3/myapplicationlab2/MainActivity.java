@@ -179,11 +179,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_group);
+        fab.setImageResource(R.drawable.ic_new_group);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Log.d("Debug", "QUI");
                 Intent i = new Intent(MainActivity.this, GroupCreationForm.class);
                 startActivityForResult(i, CREATE_GROUP);
             }

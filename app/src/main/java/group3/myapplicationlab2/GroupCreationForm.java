@@ -186,7 +186,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             this.groupPinTmp = newGroup.getPin();
             this.groupNameTmp = newGroup.getName();
             this.groupIdTmp = newGroup.getId();
-            Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
 
         }
 
