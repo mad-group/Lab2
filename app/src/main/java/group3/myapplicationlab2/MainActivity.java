@@ -1,9 +1,15 @@
 package group3.myapplicationlab2;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<String> groups_ids = new ArrayList<>();
 
     private User user;
+    private  DatabaseReference user_groups;
     private DatabaseReference user_info;
     private GroupPreviewAdapter adapter;
 
@@ -85,6 +92,7 @@ public class MainActivity extends AppCompatActivity
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
+        user_groups = user_info.child("groups");
 
         user_info.addValueEventListener(new ValueEventListener() {
             @Override
@@ -151,9 +159,9 @@ public class MainActivity extends AppCompatActivity
                 }
                 i.putExtra("list_pos", Integer.toString(position));
                 i.putExtra("group_id", user.getGroups().get(position).getId());
-                Log.d("Debug", "pos: " + position +
+/*                Log.d("Debug", "pos: " + position +
                         " group_id: " + user.getGroups().get(position).getId() +
-                        " group_na: " + user.getGroups().get(position).getName());
+                        " group_na: " + user.getGroups().get(position).getName());*/
                 startActivityForResult(i,10);
             }
         });
@@ -199,7 +207,8 @@ public class MainActivity extends AppCompatActivity
                 Log.d("debug", "modfy " + user.getGroups().get(info.position).getId());
                 return true;
             case R.id.leave:
-                Log.d("debug", "Leave " + user.getGroups().get(info.position).getId());
+                final String uid = user.getUid();
+                drawLeavingDialogBox(user.getGroups().get(info.position).getId(), uid, info.position);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -298,8 +307,38 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void onClick(View view) {
-        //Intent i = new Intent(view.getContext(), ExpensesReports.class);
-        //startActivity(i);
+
+
+    private void drawLeavingDialogBox(String gid, String uid, final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.grpup_leaving_text)).setTitle(getString(R.string.leaving_group_title));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (!userHasDebits(user.getUid())){
+                    deleteUserFromGroup(position);
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private Boolean userHasDebits(String user_id){
+        return false;
+    }
+
+    private void deleteUserFromGroup(int position){
+        user_groups.child(Integer.toString(position)).removeValue();
+        currentGroupPreview.remove(position);
+        adapter.clear();
+        for(int i=0; i< currentGroupPreview.size(); i++){
+            adapter.add(currentGroupPreview.get(i));
+        }
+        user_groups.setValue(currentGroupPreview);
     }
 }
