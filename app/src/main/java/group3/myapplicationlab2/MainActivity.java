@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.CollationElementIterator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
         adapter = new GroupPreviewAdapter(this, groupPreviews);
-        ListView listView = (ListView) findViewById(R.id.group_list);
+        final ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
                 if (user.getGroups() != null){
-                    Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+                    //Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
                     adapter.clear();
                     for (int i=0; i<user.getGroups().size(); i++){
                         adapter.add(user.getGroups().get(i));
@@ -144,8 +145,15 @@ public class MainActivity extends AppCompatActivity
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
                 i.putExtra("user_id", user.getUid());
+
+                for (int pos =0; pos < user.getGroups().size(); pos++){
+
+                }
                 i.putExtra("list_pos", Integer.toString(position));
                 i.putExtra("group_id", user.getGroups().get(position).getId());
+                Log.d("Debug", "pos: " + position +
+                        " group_id: " + user.getGroups().get(position).getId() +
+                        " group_na: " + user.getGroups().get(position).getName());
                 startActivityForResult(i,10);
             }
         });
@@ -221,15 +229,22 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
-  /*      else {
+        else {
             if (user.getGroups() != null) {
-                Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+                currentGroupPreview = user.getGroups();
+                for (int j = 0; j < user.getGroups().size(); j++)
+                    //Log.d("debug", "first" + user.getGroups().get(j).getName());
+                Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
                 adapter.clear();
-                for (int i = 0; i < user.getGroups().size(); i++) {
+                for (int i = 0; i<currentGroupPreview.size(); i++) {
+                    //Log.d("debug", "after" + user.getGroups().get(i).getName());
                     adapter.add(user.getGroups().get(i));
                 }
+                user_info.child("groups").setValue(currentGroupPreview);
+                user.setGroups(currentGroupPreview);
+
             }
-        }*/
+        }
 
     }
 

@@ -49,9 +49,6 @@ public class GroupPreview implements Serializable, Comparable<GroupPreview> {
 
     @Override
     public int compareTo(@NonNull GroupPreview groupPreview) {
-        if (this.lastModify >= groupPreview.getLastModify())
-            return 1;
-        else
-            return -1;
+        return (int)(this.lastModify - groupPreview.getLastModify()) ;
     }
 }

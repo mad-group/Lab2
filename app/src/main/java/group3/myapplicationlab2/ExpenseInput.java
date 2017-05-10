@@ -133,6 +133,10 @@ public class ExpenseInput extends AppCompatActivity {
 
         if (allOk){
             String group_id = getIntent().getStringExtra("group_id");
+
+            Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
+                    " group_id: " + getIntent().getStringExtra("group_id"));
+
             Purchase p = new Purchase();
             p.setAuthorName(author);
             p.setTotalAmount(Double.parseDouble(amount));
@@ -156,22 +160,6 @@ public class ExpenseInput extends AppCompatActivity {
                     .child(getIntent().getStringExtra("list_pos"))
                     .updateChildren(hm);
 
-            users.child(getIntent().getStringExtra("user_id"))
-                    .child("groups")
-                    .child(getIntent().getStringExtra("list_pos"))
-                    .orderByChild("lastModify").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.d("debug", "ordered");
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.d("debug", "cancelled");
-
-                }
-            });
 
             context = v.getContext();
             Intent i = new Intent();

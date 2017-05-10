@@ -146,6 +146,9 @@ public class GroupActivityExpense extends AppCompatActivity {
                 i.putExtra("user_id", getIntent().getStringExtra("user_id"));
                 i.putExtra("group_id", getIntent().getStringExtra("group_id"));
                 i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
+
+                Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
+                        " group_id: " + getIntent().getStringExtra("group_id"));
                 startActivityForResult(i,1);
             }
         });
