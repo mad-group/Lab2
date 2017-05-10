@@ -86,10 +86,11 @@ public class MainActivity extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
 
-        user_info.addListenerForSingleValueEvent(new ValueEventListener() {
+        user_info.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                adapter.clear();
                 user = dataSnapshot.getValue(User.class);
 
                 if (user.getGroups() != null){
