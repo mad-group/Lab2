@@ -156,10 +156,7 @@ public class MainActivity extends AppCompatActivity
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
                 i.putExtra("user_id", user.getUid());
-
-                for (int pos =0; pos < user.getGroups().size(); pos++){
-
-                }
+                i.putExtra("group_name", user.getGroups().get(position).getName());
                 i.putExtra("list_pos", Integer.toString(position));
                 i.putExtra("group_id", user.getGroups().get(position).getId());
 /*                Log.d("Debug", "pos: " + position +
@@ -198,7 +195,7 @@ public class MainActivity extends AppCompatActivity
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.group_modify, menu);
+        inflater.inflate(R.menu.group_activity, menu);
     }
 
     @Override
@@ -338,7 +335,10 @@ public class MainActivity extends AppCompatActivity
 
     private void deleteUserFromGroup(int position){
         user_groups.child(Integer.toString(position)).removeValue();
-        currentGroupPreview.remove(position);
+        if (currentGroupPreview != null)
+            currentGroupPreview.remove(position);
+        else
+            currentGroupPreview = new ArrayList<>();
         adapter.clear();
         for(int i=0; i< currentGroupPreview.size(); i++){
             adapter.add(currentGroupPreview.get(i));
