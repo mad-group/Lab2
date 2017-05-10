@@ -19,10 +19,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/who"
         android:inputType="textPersonName"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:enabled="false"
+        android:textColor="#000000"/>
 
     <EditText
         android:id="@+id/ie_et_expense"
@@ -105,10 +106,10 @@
             android:id="@+id/ie_iv_from_camera"
             />
     </RelativeLayout>
-    <TextView
+<!--    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/debug_tv1"
         android:text="debug1"
-        android:layout_below="@id/relativeLayout"/>
+        android:layout_below="@id/relativeLayout"/>-->
     </RelativeLayout>

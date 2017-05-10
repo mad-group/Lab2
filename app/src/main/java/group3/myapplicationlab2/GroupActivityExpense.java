@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.GregorianCalendar;
@@ -61,6 +62,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private DatabaseReference mGroupReference;
+    List<Purchase> purchases = new ArrayList<Purchase>();
 
     private String QUI = "GroupActivity";
 
@@ -91,8 +93,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                     group.setPin(objectMap.get("pin").toString());
                     group.setMembers((ArrayList<String>) objectMap.get("members"));
 
-                    List<Purchase> purchases = new ArrayList<Purchase>();
-
+                    //List<Purchase> purchases = new ArrayList<Purchase>();
+                    purchases.removeAll(purchases);
                     if (objectMap.get("purchases") != null){
                         Map <String, Object> objPurchases = (HashMap<String, Object>) objectMap.get("purchases");
                         for (Object ob: objPurchases.values()){
@@ -110,12 +112,11 @@ public class GroupActivityExpense extends AppCompatActivity {
                             purchases.add(p);
                         }
                     }
-
+                    Collections.sort(purchases,Collections.<Purchase>reverseOrder());
                     group.setPurchases(purchases);
                     expenseAdapter.addAll(group.getPurchases());
 
                 }
-
             }
 
             @Override
@@ -134,16 +135,20 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("group_name"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                List<Purchase> spese = new ArrayList<Purchase>();
-
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
+                i.putExtra("user_id", getIntent().getStringExtra("user_id"));
                 i.putExtra("group_id", getIntent().getStringExtra("group_id"));
+                i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
+
+                Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
+                        " group_id: " + getIntent().getStringExtra("group_id"));
                 startActivityForResult(i,1);
             }
         });
@@ -170,7 +175,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
             Intent i =new Intent(GroupActivityExpense.this, GroupStats.class);
 
-            startActivity(i);
+            startActivityForResult(i,1);
 
             return true;
         }
@@ -183,9 +188,11 @@ public class GroupActivityExpense extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
-
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
-                expenseAdapter.add(new_purchase);
+                purchases.add(0,new_purchase);
+                //Collections.sort(purchases, Collections.<Purchase>reverseOrder());
+                expenseAdapter.clear();
+                expenseAdapter.addAll(purchases);
             }
         }
     }

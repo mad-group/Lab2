@@ -2,6 +2,7 @@ package group3.myapplicationlab2;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.widget.Toast;
@@ -16,7 +17,7 @@ import java.util.*;
  * Created by mc on 03/04/17.
  */
 
-public class Purchase implements Serializable {
+public class Purchase implements Serializable, Comparable<Purchase> {
     private String path_image = "nopath";
     private Long date_millis;
     private String causal;
@@ -24,6 +25,7 @@ public class Purchase implements Serializable {
     private String author_name;
     private String group_id;
     private String date;
+    private long lastModify;
     //private String author_id;
     //private int partition_id; //the id of partion methods
     //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
@@ -73,6 +75,13 @@ public class Purchase implements Serializable {
 
     public void setGroup_id(String group_id){this.group_id = group_id;}
     public String getGroup_id(){return this.group_id;}
+
+    public Long getLastModify(){return this.lastModify;}
+    public void setLastModify(Long lm){lastModify = lm;}
+    @Override
+    public int compareTo(@NonNull Purchase purchase) {
+        return (int)(this.lastModify - purchase.getLastModify());
+    }
 
 
 

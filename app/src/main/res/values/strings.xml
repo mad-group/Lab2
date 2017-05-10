@@ -122,10 +122,17 @@
     <string name="join">Join</string>
     <string name="camera_permission_denied">Impossible use camera: permission denied</string>
     <string name="correct_purchase_added">Purchase added</string>
+
     <string name="title_activity_modify_group">ModifyGroup</string>
 
     <string name="modify_group">Modify group</string>
     <string name="participants_list">Participants</string>
     <string name="new_pin">New pin</string>
+
+    <string name="grpup_leaving_text">Do you really want leave the group?</string>
+    <string name="leaving_group_title">Leaving Group</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
 
 </resources>
