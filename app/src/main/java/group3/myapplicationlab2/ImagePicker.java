@@ -102,7 +102,7 @@ public class ImagePicker {
     }
 
 
-    private static File getTempFile(Context context) {
+    public static File getTempFile(Context context) {
         File imageFile = new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
         imageFile.getParentFile().mkdirs();
         return imageFile;

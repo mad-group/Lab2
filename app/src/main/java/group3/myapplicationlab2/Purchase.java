@@ -26,6 +26,7 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     private String group_id;
     private String date;
     private long lastModify;
+    private String id;
     //private String author_id;
     //private int partition_id; //the id of partion methods
     //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
@@ -43,6 +44,7 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     }
 */
 
+    public String getID() {return this.id;}
     public String getAuthorName(){return this.author_name;}
     public void setAuthorName(String an){this.author_name = an;}
 

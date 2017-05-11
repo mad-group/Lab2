@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -34,12 +35,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,10 +88,15 @@ public class ExpenseInput extends AppCompatActivity {
     DatabaseReference users = database.getReference("Users");
     DatabaseReference users_name;
 
+    private StorageReference mStorageReference;
+    //private FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_input);
+
+        mStorageReference = FirebaseStorage.getInstance().getReference();
 
         //print current date as default value in Date editText
         dateField = (EditText) findViewById(R.id.ie_tv_date);
@@ -125,7 +138,6 @@ public class ExpenseInput extends AppCompatActivity {
         String amount = amountField.getText().toString();
         String date = dateField.getText().toString();
 
-
         Date myd = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         try{
@@ -163,12 +175,33 @@ public class ExpenseInput extends AppCompatActivity {
             p.setGroup_id(group_id);
             p.setLastModify(System.currentTimeMillis());
 
+            // IMAGE INSERT IN THE DB ***************
+            String pid = myRef.push().getKey();
+            Uri file = Uri.fromFile(ImagePicker.getTempFile(this));
+            DatabaseReference myPurchRef = myRef.child(group_id).child("purchases");
+            String myPurchID = myPurchRef.getKey(); // Contains purchase ID
+            StorageReference storageReference = mStorageReference.child("images/groups/" + group_id
+                    + "/purchases/" + pid + ".jpg");
+
+            storageReference.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //Toast.makeText(ExpenseInput.this, getString(R.string.picture_inserted), Toast.LENGTH_LONG).show();
+                }
+            })
+                .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    //Toast.makeText(ExpenseInput.this, getString(R.string.insert_failed), Toast.LENGTH_LONG).show();
+                }
+            });
+
+
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");
             else
                 p.setPathImage(this.imageOutFile.getPath());
 
-            String pid = myRef.push().getKey();
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
             hm.put("lastModify", lastModify);
@@ -178,8 +211,7 @@ public class ExpenseInput extends AppCompatActivity {
                     .child("groups")
                     .child(getIntent().getStringExtra("list_pos"))
                     .updateChildren(hm);
-
-
+            
             context = v.getContext();
             Intent i = new Intent();
             Log.d("debug", getIntent().getStringExtra("list_pos"));
