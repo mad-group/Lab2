@@ -197,7 +197,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();
     }
 
-    private void onInviteClicked(String groupName, String groupPin, String groupId) {
+    public void onInviteClicked(String groupName, String groupPin, String groupId) {
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                 .setMessage(getString(R.string.invitation_message))
                 .setEmailHtmlContent(getString(R.string.invitation_email, currentUser, groupIdTmp, groupPinTmp))

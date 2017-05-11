@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -63,6 +65,10 @@ public class MainActivity extends AppCompatActivity
 
     private final int CREATE_GROUP = 1;
     private static final int MODIFY_GROUP = 2;
+    private static final int REQUEST_INVITE =0;
+
+    private String pin_str;
+    private int pos;
 
 
     @Override
@@ -203,6 +209,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.modify:
@@ -210,11 +217,42 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("group_name", user.getGroups().get(info.position).getName());
                 i.putExtra("group_desc", user.getGroups().get(info.position).getDescription());
                 i.putExtra("group_id", user.getGroups().get(info.position).getId());
-                startActivityForResult(i,MODIFY_GROUP);
+                startActivityForResult(i, MODIFY_GROUP);
                 return true;
             case R.id.leave:
                 final String uid = user.getUid();
                 drawLeavingDialogBox(user.getGroups().get(info.position).getId(), uid, info.position);
+                return true;
+            case R.id.add_members:
+                DatabaseReference pin = FirebaseDatabase.getInstance().getReference("Groups")
+                        .child(user.getGroups().get(info.position).getId())
+                        .child("pin");
+                pos = info.position;
+                pin.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange (DataSnapshot dataSnapshot){
+                        pin_str = dataSnapshot.getValue(String.class);
+                        Log.d("debug", "aaa + " + pin_str);
+                        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                                .setMessage(getString(R.string.invitation_message))
+                                .setEmailHtmlContent(getString(R.string.invitation_email,
+                                        user.getGroups().get(pos).getName(),
+                                        user.getGroups().get(pos).getId(),
+                                        pin_str))
+                                .setEmailSubject(user.getGroups().get(pos).getName()+
+                                        " "+ getString(R.string.email_subject))
+                                .build();
+                        startActivityForResult(intent, REQUEST_INVITE);
+                    }
+
+                    @Override
+                    public void onCancelled (DatabaseError databaseError){
+                        System.out.println("FAIL PIN INFO");
+                    }
+                });
+
+
+
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -349,4 +387,7 @@ public class MainActivity extends AppCompatActivity
         }
         user_groups.setValue(currentGroupPreview);
     }
+
 }
+
+
