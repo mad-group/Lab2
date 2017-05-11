@@ -128,5 +128,6 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_group_modify">GroupModify</string>
     <string name="title_activity_group_modifcation">groupModifcation</string>
+    <string name="bt_modify_group">modify group</string>
 
 </resources>
