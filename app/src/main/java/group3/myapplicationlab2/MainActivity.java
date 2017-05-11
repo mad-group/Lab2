@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
 
                 GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
-                adapter.add(groupPreview);
+                adapter.insert(groupPreview,0);
 
                 if (user.getGroups() != null){
                     currentGroupPreview = user.getGroups();
@@ -277,6 +277,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 currentGroupPreview.add(groupPreview);
+                Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
                 user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
 
