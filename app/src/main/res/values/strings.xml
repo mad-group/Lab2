@@ -126,5 +126,7 @@
     <string name="leaving_group_title">Leaving Group</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="title_activity_group_modify">GroupModify</string>
+    <string name="title_activity_group_modifcation">groupModifcation</string>
 
 </resources>

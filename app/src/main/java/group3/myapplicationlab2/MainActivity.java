@@ -47,6 +47,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private List<GroupPreview> currentGroupPreview;
 
     private final int CREATE_GROUP = 1;
+    private static final int MODIFY_GROUP = 2;
 
 
     @Override
@@ -204,8 +206,11 @@ public class MainActivity extends AppCompatActivity
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.modify:
-                Log.d("debug", "aaaaa " + info.id + " " + info.position);
-                Log.d("debug", "modfy " + user.getGroups().get(info.position).getId());
+                Intent i = new Intent(MainActivity.this, GroupModification.class);
+                i.putExtra("group_name", user.getGroups().get(info.position).getName());
+                i.putExtra("group_desc", user.getGroups().get(info.position).getDescription());
+                i.putExtra("group_id", user.getGroups().get(info.position).getId());
+                startActivityForResult(i,MODIFY_GROUP);
                 return true;
             case R.id.leave:
                 final String uid = user.getUid();
