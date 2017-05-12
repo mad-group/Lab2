@@ -77,14 +77,42 @@ public class JoinGroupActivity extends AppCompatActivity {
                                     dataSnapshot.getValue();
 
                             Group group = new Group();
-
-                            group.setName(objectMap.get("name").toString());
-                            group.setDescription(objectMap.get("description").toString());
-                            group.setPin(objectMap.get("pin").toString());
-                            group.setMembers((ArrayList<String>) objectMap.get("members"));
-
+                            group.GroupConstructor(objectMap);
 
                             if (groupPassword.getText().toString().equals(group.getPin())){
+                                auth = FirebaseAuth.getInstance();
+
+                                if (!dataSnapshot.hasChild(auth.getCurrentUser().getUid())){
+
+                                    GroupMember groupMember = new GroupMember();
+                                    groupMember.setName(user.getName());
+                                    groupMember.setEmail(user.getEmail());
+
+                                    mDatabase.child("members2").child(auth.getCurrentUser().getUid()).setValue(groupMember);
+
+                                    if (user.getGroups() != null){
+                                        currentGroupPreview = user.getGroups();
+                                    }
+                                    else{
+                                        currentGroupPreview = new ArrayList<GroupPreview>();
+                                    }
+
+                                    GroupPreview groupPreview = new GroupPreview();
+                                    groupPreview.setName(group.getName());
+                                    groupPreview.setDescription(group.getDescription());
+                                    groupPreview.setId(groupID.getText().toString());
+
+                                    currentGroupPreview.add(groupPreview);
+                                    user_info.child("groups").setValue(currentGroupPreview);
+
+                                    user.setGroups(currentGroupPreview);
+                                }
+
+                                finish();
+                            }
+
+
+                            /*if (groupPassword.getText().toString().equals(group.getPin())){
                                 List<String> members = group.getMembers();
                                 auth = FirebaseAuth.getInstance();
 
@@ -113,12 +141,8 @@ public class JoinGroupActivity extends AppCompatActivity {
                                 }
 
 
-
-
-
-
                                 finish();
-                            }
+                            }*/
                             else{
                                 Toast.makeText(JoinGroupActivity.this, "Incorrect GroupID or Password", Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);

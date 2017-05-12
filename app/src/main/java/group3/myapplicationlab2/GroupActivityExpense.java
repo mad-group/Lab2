@@ -89,37 +89,9 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                     Map<String, Object> objectMap = (HashMap<String, Object>)
                             dataSnapshot.getValue();
-
                     group = new Group();
-
-                    group.setName(objectMap.get("name").toString());
-                    group.setDescription(objectMap.get("description").toString());
-                    group.setPin(objectMap.get("pin").toString());
-                    group.setMembers((ArrayList<String>) objectMap.get("members"));
-
-                    //List<Purchase> purchases = new ArrayList<Purchase>();
-                    purchases.removeAll(purchases);
-                    if (objectMap.get("purchases") != null){
-                        Map <String, Object> objPurchases = (HashMap<String, Object>) objectMap.get("purchases");
-                        for (Object ob: objPurchases.values()){
-                            Map <String, Object> purchase = (Map<String, Object>)ob;
-
-                            Purchase p = new Purchase();
-
-                            p.setAuthorName(purchase.get("authorName").toString());
-                            p.setCausal(purchase.get("causal").toString());
-                            p.setDateMillis(Long.parseLong(purchase.get("dateMillis").toString()));
-                            p.setGroup_id(purchase.get("group_id").toString());
-                            p.setPathImage(purchase.get("pathImage").toString());
-                            p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
-
-                            purchases.add(p);
-                        }
-                    }
-                    Collections.sort(purchases,Collections.<Purchase>reverseOrder());
-                    group.setPurchases(purchases);
+                    group.GroupConstructor(objectMap);
                     expenseAdapter.addAll(group.getPurchases());
-
                 }
             }
 
@@ -150,6 +122,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 i.putExtra("user_id", getIntent().getStringExtra("user_id"));
                 i.putExtra("group_id", getIntent().getStringExtra("group_id"));
                 i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
+                i.putExtra("user", user);
 
                 Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
                         " group_id: " + getIntent().getStringExtra("group_id"));
@@ -175,10 +148,11 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.group_Stats) {
-            group.computeTotalExpense();
-            group.computeAggregateExpenses(user);
+            //group.computeTotalExpense();
+            //group.computeAggregateExpenses(user);
 
-            //Log.d("gsagad", "fadgaga");
+            group.computePaymentProportion(user);
+
             Intent i =new Intent(GroupActivityExpense.this, GroupStats.class);
             i.putExtra("group", group);
             i.putExtra("user", user);

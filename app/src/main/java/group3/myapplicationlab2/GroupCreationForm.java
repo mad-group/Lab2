@@ -42,8 +42,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private EditText groupName, groupDescription, newParticipant, groupPin;
     private Button btnNewPart;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference user;
-
 
     private final DatabaseReference myRef = mDatabase.getReference("Groups");
     private final DatabaseReference myRefUsers = mDatabase.getReference("Users");
@@ -64,11 +62,15 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private String currentUser = null;
 
     private Group newGroup;
+    private User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_creation_form);
+
+        user = (User)getIntent().getSerializableExtra("user");
 
         // User input
         groupName = (EditText)findViewById(R.id.new_group);
@@ -171,16 +173,23 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         if (prova) {
             FirebaseAuth auth = FirebaseAuth.getInstance();
 
-            List<String> l = new ArrayList<String>();
-            List<String> lp = new ArrayList<String>();
-            l.add(auth.getCurrentUser().getEmail());
-            newGroup.setMembers(l);
+            //List<String> l = new ArrayList<String>();
+            //List<String> lp = new ArrayList<String>();
+            //l.add(auth.getCurrentUser().getEmail());
+            //newGroup.setMembers(l);
             this.currentUser = auth.getCurrentUser().getEmail();
 
             String id = myRef.push().getKey();
+
             Log.d("PRIMO", id);
             //myRef.push().setValue(newGroup);
             myRef.child(id).setValue(newGroup);
+
+
+            GroupMember groupMember = new GroupMember();
+            groupMember.setName(user.getName());
+            groupMember.setEmail(user.getEmail());
+            myRef.child(id).child("members2").child(user.getUid()).setValue(groupMember);
 
             newGroup.setId(id);
             this.groupPinTmp = newGroup.getPin();

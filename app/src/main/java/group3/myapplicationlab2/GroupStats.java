@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,12 +19,8 @@ import java.util.Random;
 
 public class GroupStats extends AppCompatActivity {
 
-    private ArrayList<String> arrayList;
-    private ArrayAdapter<String> adapter;
-
     private Group group;
     private User user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +31,20 @@ public class GroupStats extends AppCompatActivity {
         group = (Group) getIntent().getSerializableExtra("group");
         user = (User) getIntent().getSerializableExtra("user");
 
-        ArrayList<String> members = new ArrayList<>(group.getMembers());
+        ArrayList<GroupMember> members = new ArrayList<GroupMember>(group.getGroupMembers());
 
-        adapter = new ArrayAdapter<String>(this, R.layout.group_balance_item, members){
+        String property = user.getEmail();
+        for(int j = 0; j < members.size(); j++)
+        {
+            GroupMember obj = members.get(j);
+            if(obj.getEmail().equals(property)){
+                //found, delete.
+                members.remove(j);
+                break;
+            }
+        }
+
+        ArrayAdapter<GroupMember> memberArrayAdapter = new ArrayAdapter<GroupMember>(this, R.layout.group_balance_item, members){
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // There is nothing to convert --> I need to create extra view
@@ -46,12 +54,10 @@ public class GroupStats extends AppCompatActivity {
                 }
 
                 TextView name = (TextView)convertView.findViewById(R.id.group_member_name);
-
-                name.setText(getItem(position).toString());
+                name.setText(getItem(position).getName());
 
                 TextView debit_credit = (TextView)convertView.findViewById(R.id.expense_amount);
-                //int i1 = r.nextInt(2 + 5)-2;
-                Double debit = group.getAggPurchases().get(position);
+                Double debit = getItem(position).getPayment();
 
                 if (debit > 0){
                     debit_credit.setText("+" + String.format( "%.2f €", debit ));
@@ -71,19 +77,10 @@ public class GroupStats extends AppCompatActivity {
 
         final ListView list;
         list = (ListView)findViewById(R.id.group_balance);
-        list.setAdapter(adapter);
+        list.setAdapter(memberArrayAdapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
     }
 
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 public class User implements Serializable {
     //private String ID;
+    private String name;
     private String email;
     private String uid;
     private List<GroupPreview> groups;
@@ -37,5 +38,11 @@ public class User implements Serializable {
     }
 
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }
