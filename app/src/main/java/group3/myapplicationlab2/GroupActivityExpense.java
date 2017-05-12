@@ -145,7 +145,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                         getString(R.string.stats_no_pruchases_text));
 
             }
-            else if(group.getMembers() == null || group.getMembers().size()<2){
+            else if(group.getGroupMembers() == null || group.getGroupMembers().size()<2){
 
                 drawLeavingDialogBox(getString(R.string.stats_no_members),
                         getString(R.string.stats_no_members_text));
