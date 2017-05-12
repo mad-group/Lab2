@@ -59,10 +59,7 @@
             android:name=".JoinGroupActivity"
             android:label="@string/title_activity_join_group"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".GroupModification"
-            android:label="@string/title_activity_group_modifcation"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".GroupModification"></activity>
     </application>
 
 </manifest>

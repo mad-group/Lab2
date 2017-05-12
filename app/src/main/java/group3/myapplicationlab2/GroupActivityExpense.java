@@ -197,8 +197,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
-                purchases.add(0,new_purchase);
-                //Collections.sort(purchases, Collections.<Purchase>reverseOrder());
+                purchases.add(new_purchase);
+                Collections.sort(purchases, Collections.<Purchase>reverseOrder());
                 expenseAdapter.clear();
                 expenseAdapter.addAll(purchases);
             }

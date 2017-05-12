@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("group_name", user.getGroups().get(info.position).getName());
                 i.putExtra("group_desc", user.getGroups().get(info.position).getDescription());
                 i.putExtra("group_id", user.getGroups().get(info.position).getId());
+                i.putExtra("user_id", user.getUid());
                 startActivityForResult(i, MODIFY_GROUP);
                 return true;
             case R.id.leave:
