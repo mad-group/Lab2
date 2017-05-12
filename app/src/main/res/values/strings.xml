@@ -129,5 +129,6 @@
     <string name="title_activity_group_modify">GroupModify</string>
     <string name="title_activity_group_modifcation">groupModifcation</string>
     <string name="bt_modify_group">modify group</string>
+    <string name="user_name">Your name</string>
 
 </resources>

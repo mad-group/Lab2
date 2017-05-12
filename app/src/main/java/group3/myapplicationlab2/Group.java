@@ -26,18 +26,63 @@ public class Group implements Serializable {
     private Double total_amount;
     private List<Double> aggPurchases;
     private List<Double> myDebts;
-
+    private List<GroupMember> groupMembers;
 
     public Group() {
         //this.db = db;
     }
 
-    /*public Group(String name, int id,  List<String> members, String description){
-        this.name = name;
-        this.id =  id;
-        this.members = members;
-        this.description = description;
-    }*/
+    public void GroupConstructor(Map<String, Object> objectHashMap){
+
+        this.setName(objectHashMap.get("name").toString());
+        this.setDescription(objectHashMap.get("description").toString());
+        this.setPin(objectHashMap.get("pin").toString());
+        this.setMembers((ArrayList<String>) objectHashMap.get("members"));
+
+        List<GroupMember> groupMembers = new ArrayList<GroupMember>();
+
+        if (objectHashMap.get("members2") != null){
+
+            Map <String, Object> objMember = (HashMap<String, Object>) objectHashMap.get("members2");
+            for (Object obj_member: objMember.values()){
+                Map <String, Object> member = (Map<String, Object>)obj_member;
+
+                GroupMember groupMember = new GroupMember();
+                groupMember.setName(member.get("name").toString());
+                groupMember.setEmail(member.get("email").toString());
+
+                groupMembers.add(groupMember);
+            }
+
+            this.groupMembers = groupMembers;
+        }
+
+        List<Purchase> purchases = new ArrayList<Purchase>();
+        purchases.removeAll(purchases);
+
+        if (objectHashMap.get("purchases") != null){
+            Map <String, Object> objPurchases = (HashMap<String, Object>) objectHashMap.get("purchases");
+            for (Object ob: objPurchases.values()){
+                Map <String, Object> purchase = (Map<String, Object>)ob;
+
+                Purchase p = new Purchase();
+
+                p.setAuthorName(purchase.get("authorName").toString());
+                p.setUser_name(purchase.get("user_name").toString());
+                p.setCausal(purchase.get("causal").toString());
+                p.setDateMillis(Long.parseLong(purchase.get("dateMillis").toString()));
+                p.setGroup_id(purchase.get("group_id").toString());
+                p.setPathImage(purchase.get("pathImage").toString());
+                p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
+
+                purchases.add(p);
+            }
+        }
+
+        Collections.sort(purchases,Collections.<Purchase>reverseOrder());
+        this.setPurchases(purchases);
+
+    }
 
     public String getName(){
         return this.name;
@@ -78,9 +123,33 @@ public class Group implements Serializable {
     }
 
     public Long getLastModifyTimeStamp(){return this.lastModifyTimeStamp;}
-/*    public void setLastModifyTimeStamp(long lmts) {
-        this.lastModifyTimeStamp = System.currentTimeMillis();
-    }*/
+
+    public void computePaymentProportion(User user){
+        String mySelf = user.getEmail();
+        //Integer mySelfIndex = this.members.indexOf(user.getEmail());
+
+        for (int i=0; i < this.purchases.size(); i++){
+            Purchase purchase = this.purchases.get(i);
+            Double toPay = new Double(0);
+            toPay = purchase.getTotalAmount()/this.groupMembers.size();
+            String owner = purchase.getAuthorName();
+
+            if (owner.equals(mySelf)){
+                for (int ii=0; ii<this.groupMembers.size(); ii++){
+                    if(!this.groupMembers.get(ii).getEmail().equals(mySelf)){
+                        this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() + toPay);
+                    }
+                }
+            }
+            else {
+                for (int ii=0; ii<this.groupMembers.size(); ii++){
+                    if (this.groupMembers.get(ii).getEmail().equals(owner)){
+                        this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() - toPay);
+                    }
+                }
+            }
+        }
+    }
 
     public void computeAggregateExpenses(User user){
 
@@ -89,28 +158,6 @@ public class Group implements Serializable {
         while(this.aggPurchases.size() < this.members.size()){
             this.aggPurchases.add(new Double(0));
         }
-
-        /*for (int i = 0; i< this.purchases.size(); i++){
-            Purchase purchase = this.purchases.get(i);
-
-            Double toPay = new Double(0);
-            toPay = purchase.getTotalAmount()/this.getMembers().size();
-
-            int index = this.getMembers().indexOf(purchase.getAuthorName());
-
-            Log.d("DEBAASV", this.aggPurchases.toString());
-
-            for (int ii=0; ii<this.aggPurchases.size(); ii++){
-
-                if (ii==index){
-                    this.aggPurchases.set(ii, this.aggPurchases.get(ii) + purchase.getTotalAmount() - toPay);
-                }
-                else{
-                    this.aggPurchases.set(ii, this.aggPurchases.get(ii) - toPay);
-                }
-            }
-        }*/
-
 
         for (int i = 0; i < this.purchases.size(); i++){
             Purchase purchase = this.purchases.get(i);
@@ -141,22 +188,6 @@ public class Group implements Serializable {
 
         }
 
-        //Log.d("DEBUASFA", aggPurchases.get(0).toString());
-        //Log.d("DEBUASFA", aggPurchases.get(1).toString());
-        //Log.d("DEBUASFA", aggPurchases.get(2).toString());
-
-
-        /*for (int i = 0; i< this.purchases.size(); i++){
-            Purchase purchase = this.purchases.get(i);
-            int index = this.members.indexOf(purchase.getAuthorName());
-            Double amount = aggPurchases.get(index) + purchase.getTotalAmount();
-            aggPurchases.set(index, amount);
-        }*/
-
-       /* for (int i = 0; i<this.members.size(); i++) {
-            Log.d("Spesa di ", this.members.get(i));
-            Log.d("Amount ", aggPurchases.get(i).toString());
-        }*/
         return;
     }
 
@@ -169,10 +200,7 @@ public class Group implements Serializable {
 
         for (int i = 0; i< this.purchases.size(); i++){
             Purchase purchase = this.purchases.get(i);
-            //int index = this.members.indexOf(purchase.getAuthorName());
             total = total + purchase.getTotalAmount();
-            //Double amount = aggPurchases.get(index) + purchase.getTotalAmount();
-            //aggPurchases.set(index, amount);
         }
 
         this.total_amount = total;
@@ -182,7 +210,6 @@ public class Group implements Serializable {
         return this.total_amount;
     }
 
-
     public Double getTotalExpenses(List<Double> aggPurchases){
         int i;
         Double totExpenses = new Double(0);
@@ -191,33 +218,11 @@ public class Group implements Serializable {
         return totExpenses;
     }
 
-    /*public List<Double> getDebtsEqualSplit() {
-        List<Double> aggPurchases = this.aggregateExpenses();
-        Double totalPurchases = this.getTotalExpenses(aggPurchases);
-        //float quotaPerEach = totalPurchases/this.members.size();
-        List<Double> debtsAndCredits = new ArrayList<Double>();
-        while(debtsAndCredits.size() < this.members.size()){
-            debtsAndCredits.add(new Double(0));
-        }
+    public List<GroupMember> getGroupMembers() {
+        return groupMembers;
+    }
 
-//        for (int i = 0; i < aggPurchases.size(); i++){
-//            debtsAndCredits.set(i, (quotaPerEach - aggPurchases.get(i)));
-//        }
-
-        for (int i = 0; i < aggPurchases.size(); i++){
-            Double quotaPerEachPerExpenses = aggPurchases.get(i)/this.members.size();
-            for (int j = 0; j < this.members.size(); j++){
-                if (i!=j)
-                    debtsAndCredits.set(j, debtsAndCredits.get(j) - quotaPerEachPerExpenses);
-            }
-            debtsAndCredits.set(i, debtsAndCredits.get(i) + quotaPerEachPerExpenses);
-        }
-
-        for (int i = 0; i<this.members.size(); i++) {
-            Log.d("Spesa di ", this.members.get(i));
-            Log.d("Amount ", aggPurchases.get(i).toString());
-        }
-        return aggPurchases;
-    }*/
-
+    public void setGroupMembers(List<GroupMember> groupMembers) {
+        this.groupMembers = groupMembers;
+    }
 }

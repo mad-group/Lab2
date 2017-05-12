@@ -26,6 +26,7 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     private String group_id;
     private String date;
     private long lastModify;
+    private String user_name;
     //private String author_id;
     //private int partition_id; //the id of partion methods
     //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
@@ -84,36 +85,11 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     }
 
 
+    public String getUser_name() {
+        return user_name;
+    }
 
-
-/*
-    public String getAuthorId(){return this.author_id;}
-    public String getPurchase_id(){return this.purchase_id;}
-*/
-/*return an hashmap which is formatted as
-    * <purhcase ID | [(u1, amount1),(u2, amount2)]>
-    * */
-/*    public HashMap<Integer, SparseArray<Float>> debtisAndCreditsPerPurchase(Purchase p){
-        HashMap <Integer, SparseArray<Float>> out = new HashMap<>();
-        int key = p.getPurchase_id();
-        SparseArray<Float> creditsAndDebits = new SparseArray<>();
-
-        //create first element
-        creditsAndDebits.put(p.author_id, p.author_amount);
-
-        *//* Scan all participants list. Multiply -1 the values, and puts in the out list *//*
-        for (int i = 0; i<p.participants.size(); i++){
-            int user_key = p.participants.keyAt(i);
-            float temp_amount = p.participants.get(key, (float)0);
-            if (temp_amount != 0){
-                creditsAndDebits.put(key, temp_amount);
-            }
-        }
-
-        *//*Insertion int out hashmap of all the credits and debits situation for a given purchase*//*
-        out.put(key, creditsAndDebits);
-
-        return out;
-    }*/
-
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
 }

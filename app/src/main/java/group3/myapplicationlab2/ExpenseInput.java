@@ -80,10 +80,14 @@ public class ExpenseInput extends AppCompatActivity {
     DatabaseReference users = database.getReference("Users");
     DatabaseReference users_name;
 
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_input);
+
+        user = (User)getIntent().getSerializableExtra("user");
 
         //print current date as default value in Date editText
         dateField = (EditText) findViewById(R.id.ie_tv_date);
@@ -162,6 +166,7 @@ public class ExpenseInput extends AppCompatActivity {
             p.setDateMillis(myd.getTime());
             p.setGroup_id(group_id);
             p.setLastModify(System.currentTimeMillis());
+            p.setUser_name(user.getName());
 
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");

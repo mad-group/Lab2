@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword;
+    private EditText inputEmail, inputPassword, inputName;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
@@ -36,6 +36,7 @@ public class SignupActivity extends AppCompatActivity {
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
+        inputName = (EditText) findViewById(R.id.name);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -61,6 +62,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
+                final String name = inputName.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
@@ -82,6 +84,11 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
+                if (TextUtils.isEmpty(name)){
+                    Toast.makeText(getApplicationContext(), "Enter a Name", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 progressBar.setVisibility(View.VISIBLE);
                 //create user
                 auth.createUserWithEmailAndPassword(email, password)
@@ -100,6 +107,7 @@ public class SignupActivity extends AppCompatActivity {
                                     mdatabase = FirebaseDatabase.getInstance().getReference("Users");
                                     String user_id = auth.getCurrentUser().getUid();
                                     DatabaseReference current_user =  mdatabase.child(user_id);
+                                    current_user.child("name").setValue(name);
                                     current_user.child("email").setValue(auth.getCurrentUser().getEmail());
                                     current_user.child("uid").setValue(auth.getCurrentUser().getUid());
                                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
