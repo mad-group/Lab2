@@ -155,8 +155,10 @@ public class GroupActivityExpense extends AppCompatActivity {
             if (group.getPurchases().size() == 0){
                 drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
                         getString(R.string.stats_no_pruchases_text));
+
             }
-            else if(group.getMembers().size() ==0){
+            else if(group.getMembers() == null || group.getMembers().size()<2){
+                Log.d("if chec", "in if");
                 drawLeavingDialogBox(getString(R.string.stats_no_members),
                         getString(R.string.stats_no_members_text));
 
