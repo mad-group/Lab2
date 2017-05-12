@@ -54,17 +54,9 @@ import java.util.Objects;
 
 public class GroupActivityExpense extends AppCompatActivity {
 
-    private ArrayList<String> arrayList;
-    private ArrayAdapter<String> adapter;
     ExpenseAdapter expenseAdapter;
     Locale l = Locale.ENGLISH;
     private String gid;
-
-    private FirebaseAuth auth;
-    private DatabaseReference mGroupReference;
-    List<Purchase> purchases = new ArrayList<Purchase>();
-
-    private String QUI = "GroupActivity";
 
     private Group group;
     private User user;
@@ -147,25 +139,20 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.group_Stats) {
-            //group.computeTotalExpense();
-            //group.computeAggregateExpenses(user);
-
-            group.computePaymentProportion(user);
 
             if (group.getPurchases().size() == 0){
                 drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
                         getString(R.string.stats_no_pruchases_text));
             }
-            else if(group.getMembers().size() ==0){
+            else if(group.getGroupMembers().size() < 2){
                 drawLeavingDialogBox(getString(R.string.stats_no_members),
                         getString(R.string.stats_no_members_text));
-
             }
             else {
+                group.computePaymentProportion(user);
                 Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
                 i.putExtra("group", group);
                 i.putExtra("user", user);
-                //startActivityForResult(i,1);
                 startActivity(i);
                 return true;
             }
@@ -180,10 +167,9 @@ public class GroupActivityExpense extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
-                purchases.add(new_purchase);
-                Collections.sort(purchases, Collections.<Purchase>reverseOrder());
+                group.getPurchases().add(new_purchase);
                 expenseAdapter.clear();
-                expenseAdapter.addAll(purchases);
+                expenseAdapter.addAll(group.getPurchases());
             }
         }
     }
