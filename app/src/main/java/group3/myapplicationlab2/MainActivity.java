@@ -116,6 +116,14 @@ public class MainActivity extends AppCompatActivity
                         adapter.add(user.getGroups().get(i));
                     }
                 }
+
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navigationView.setNavigationItemSelectedListener(MainActivity.this);
+                View header=navigationView.getHeaderView(0);
+                TextView user_email = (TextView)header.findViewById(R.id.user_email);
+                user_email.setText(user.getEmail());
+                TextView user_name = (TextView)header.findViewById(R.id.username);
+                user_name.setText(user.getName());
             }
 
             @Override
@@ -186,9 +194,6 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_group);
         fab.setImageResource(R.drawable.ic_new_group);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -200,7 +205,6 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(i, CREATE_GROUP);
             }
         });
-
     }
 
     @Override
