@@ -111,6 +111,13 @@ public class Group implements Serializable {
 
     public Long getLastModifyTimeStamp(){return this.lastModifyTimeStamp;}
 
+    public void resetPaymentProportion(){
+        for (int ii=0; ii<this.getGroupMembers().size(); ii++){
+            this.groupMembers.get(ii).setPayment(new Double(0));
+        }
+        return;
+    }
+
     public void computePaymentProportion(User user){
         String mySelf = user.getEmail();
 

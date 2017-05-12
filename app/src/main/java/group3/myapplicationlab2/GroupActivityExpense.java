@@ -151,6 +151,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                         getString(R.string.stats_no_members_text));
             }
             else {
+                group.resetPaymentProportion();
                 group.computePaymentProportion(user);
                 Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
                 i.putExtra("group", group);
