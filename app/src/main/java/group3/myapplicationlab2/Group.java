@@ -29,7 +29,6 @@ public class Group implements Serializable {
     private List<GroupMember> groupMembers;
 
     public Group() {
-        //this.db = db;
     }
 
     public void GroupConstructor(Map<String, Object> objectHashMap){
@@ -40,33 +39,24 @@ public class Group implements Serializable {
         this.setMembers((ArrayList<String>) objectHashMap.get("members"));
 
         List<GroupMember> groupMembers = new ArrayList<GroupMember>();
-
         if (objectHashMap.get("members2") != null){
-
             Map <String, Object> objMember = (HashMap<String, Object>) objectHashMap.get("members2");
             for (Object obj_member: objMember.values()){
                 Map <String, Object> member = (Map<String, Object>)obj_member;
-
                 GroupMember groupMember = new GroupMember();
                 groupMember.setName(member.get("name").toString());
                 groupMember.setEmail(member.get("email").toString());
-
                 groupMembers.add(groupMember);
             }
-
             this.groupMembers = groupMembers;
         }
-
         List<Purchase> purchases = new ArrayList<Purchase>();
         purchases.removeAll(purchases);
-
         if (objectHashMap.get("purchases") != null){
             Map <String, Object> objPurchases = (HashMap<String, Object>) objectHashMap.get("purchases");
             for (Object ob: objPurchases.values()){
                 Map <String, Object> purchase = (Map<String, Object>)ob;
-
                 Purchase p = new Purchase();
-
                 p.setAuthorName(purchase.get("authorName").toString());
                 p.setUser_name(purchase.get("user_name").toString());
                 p.setCausal(purchase.get("causal").toString());
@@ -74,14 +64,11 @@ public class Group implements Serializable {
                 p.setGroup_id(purchase.get("group_id").toString());
                 p.setPathImage(purchase.get("pathImage").toString());
                 p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
-
                 purchases.add(p);
             }
         }
-
         Collections.sort(purchases,Collections.<Purchase>reverseOrder());
         this.setPurchases(purchases);
-
     }
 
     public String getName(){
@@ -126,14 +113,12 @@ public class Group implements Serializable {
 
     public void computePaymentProportion(User user){
         String mySelf = user.getEmail();
-        //Integer mySelfIndex = this.members.indexOf(user.getEmail());
 
         for (int i=0; i < this.purchases.size(); i++){
             Purchase purchase = this.purchases.get(i);
             Double toPay = new Double(0);
             toPay = purchase.getTotalAmount()/this.groupMembers.size();
             String owner = purchase.getAuthorName();
-
             if (owner.equals(mySelf)){
                 for (int ii=0; ii<this.groupMembers.size(); ii++){
                     if(!this.groupMembers.get(ii).getEmail().equals(mySelf)){
