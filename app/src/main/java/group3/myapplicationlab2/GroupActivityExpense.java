@@ -110,9 +110,10 @@ public class GroupActivityExpense extends AppCompatActivity {
                             p.setCausal(purchase.get("causal").toString());
                             p.setDateMillis(Long.parseLong(purchase.get("dateMillis").toString()));
                             p.setGroup_id(purchase.get("group_id").toString());
-                            p.setPathImage(purchase.get("pathImage").toString());
+                            p.setPathImage(purchase.get("pathImage").toString());   //Sets the image path in DB
+                            Log.d("PathImage", purchase.get("pathImage").toString());
                             p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
-
+                            //TODO: scaricare la foto se non è già presente in memoria
                             purchases.add(p);
                         }
                     }

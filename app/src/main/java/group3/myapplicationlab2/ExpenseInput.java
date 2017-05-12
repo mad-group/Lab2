@@ -89,7 +89,6 @@ public class ExpenseInput extends AppCompatActivity {
     DatabaseReference users_name;
 
     private StorageReference mStorageReference;
-    //private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,27 +179,27 @@ public class ExpenseInput extends AppCompatActivity {
             Uri file = Uri.fromFile(ImagePicker.getTempFile(this));
             DatabaseReference myPurchRef = myRef.child(group_id).child("purchases");
             String myPurchID = myPurchRef.getKey(); // Contains purchase ID
-            StorageReference storageReference = mStorageReference.child("images/groups/" + group_id
-                    + "/purchases/" + pid + ".jpg");
+            String pathImageDB = "images/groups/" + group_id + "/purchases/" + pid + ".jpg";
+            StorageReference storageReference = mStorageReference.child(pathImageDB);
 
             storageReference.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    //Toast.makeText(ExpenseInput.this, getString(R.string.picture_inserted), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ExpenseInput.this, getString(R.string.picture_inserted), Toast.LENGTH_SHORT).show();
                 }
             })
                 .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    //Toast.makeText(ExpenseInput.this, getString(R.string.insert_failed), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ExpenseInput.this, getString(R.string.insert_failed), Toast.LENGTH_SHORT).show();
                 }
             });
-
 
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");
             else
-                p.setPathImage(this.imageOutFile.getPath());
+                //p.setPathImage(this.imageOutFile.getPath());
+                p.setPathImage(pathImageDB);    // This adds the image path placed in the DB
 
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
@@ -211,7 +210,7 @@ public class ExpenseInput extends AppCompatActivity {
                     .child("groups")
                     .child(getIntent().getStringExtra("list_pos"))
                     .updateChildren(hm);
-            
+
             context = v.getContext();
             Intent i = new Intent();
             Log.d("debug", getIntent().getStringExtra("list_pos"));

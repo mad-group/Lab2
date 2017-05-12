@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.*;
 import java.util.ArrayList;
 
@@ -29,6 +36,7 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Purchase purchase = getItem(position);
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.expense_item, parent, false);
         }
@@ -44,9 +52,21 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         expense.setText(purchase.getCausal());
         expDate.setText(purchase.getDate());
 
+        // Da qui prendiamo l'URL dell'immagine della spesa corrente
         if (purchase.getPathImage()!=null && purchase.getPathImage()!= "nopath") {
-            File imgFile = new File(purchase.getPathImage());
+            // Qui salvo correttamente il path dell'immagine, ma non riesco a farla vedere nella lista
+            StorageReference sr = storageReference.child(purchase.getPathImage());
+            File imgFile = null;
+            try {
+                Log.d("Try", purchase.getPathImage());
+                imgFile = File.createTempFile("images", ".jpg");
+            } catch (IOException e) {
+                Log.d("Catch", "Error catch");
+            }
+            sr.getFile(imgFile);
+            //File imgFile = new File(purchase.getPathImage());
             if(imgFile.exists()) {
+                Log.d("Esiste", "Dentro if exists");
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 expView.setImageBitmap(myBitmap);
             }
