@@ -1,9 +1,11 @@
 package group3.myapplicationlab2;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -81,6 +83,14 @@ public class GroupStats extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    private void drawLeavingDialogBox(String title, String text) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(text).setTitle(title);
+       /* builder.setPositiveButton(getString(R.string.ok));*/
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

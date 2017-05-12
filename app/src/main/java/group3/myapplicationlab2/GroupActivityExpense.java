@@ -101,7 +101,6 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
 
         };
-
         mGroupReference.addListenerForSingleValueEvent(GroupListener);
 
         ArrayList<Purchase> spese = new ArrayList<Purchase>();
@@ -153,13 +152,23 @@ public class GroupActivityExpense extends AppCompatActivity {
 
             group.computePaymentProportion(user);
 
-            Intent i =new Intent(GroupActivityExpense.this, GroupStats.class);
-            i.putExtra("group", group);
-            i.putExtra("user", user);
-            //startActivityForResult(i,1);
+            if (group.getPurchases().size() == 0){
+                drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
+                        getString(R.string.stats_no_pruchases_text));
+            }
+            else if(group.getMembers().size() ==0){
+                drawLeavingDialogBox(getString(R.string.stats_no_members),
+                        getString(R.string.stats_no_members_text));
 
-            startActivity(i);
-            return true;
+            }
+            else {
+                Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
+                i.putExtra("group", group);
+                i.putExtra("user", user);
+                //startActivityForResult(i,1);
+                startActivity(i);
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -177,6 +186,18 @@ public class GroupActivityExpense extends AppCompatActivity {
                 expenseAdapter.addAll(purchases);
             }
         }
+    }
+
+    private void drawLeavingDialogBox(String title, String text) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(text).setTitle(title);
+        builder.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

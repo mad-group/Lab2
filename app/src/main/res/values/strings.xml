@@ -130,5 +130,9 @@
     <string name="title_activity_group_modifcation">groupModifcation</string>
     <string name="bt_modify_group">modify group</string>
     <string name="user_name">Your name</string>
+    <string name="stats_no_pruchases">There isn\'t any purchase!</string>
+    <string name="stats_no_pruchases_text">If there are not any purchase is impossible to show the debits among the group members.</string>
+    <string name="stats_no_members">You are alone in this group!</string>
+    <string name="stats_no_members_text">Is impossible to compute debits and credits if you are alone in this groups.</string>
 
 </resources>
