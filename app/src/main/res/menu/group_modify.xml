@@ -5,4 +5,7 @@
         />
     <item android:id="@+id/leave"
         android:title="Leave Group" />
+
+    <item android:id="@+id/add_members"
+        android:title="Add Members" />
 </menu>
