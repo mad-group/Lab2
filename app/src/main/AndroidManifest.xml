@@ -60,6 +60,9 @@
             android:label="@string/title_activity_join_group"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GroupModification"></activity>
-    </application>
 
+        <service android:name=".BroadcastService">
+        </service>
+
+    </application>
 </manifest>

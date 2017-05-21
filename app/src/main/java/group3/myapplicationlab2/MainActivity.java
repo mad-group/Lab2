@@ -1,8 +1,11 @@
 package group3.myapplicationlab2;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
@@ -49,6 +52,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String mBroadcastStringAction = "group3.myapplicationlab2.broadcast.string";
+    public static final String mBroadcastIntegerAction = "group3.myapplicationlab2.broadcast.integer";
+    public static final String mBroadcastArrayListAction = "group3.myapplicationlab2.broadcast.arraylist";
+    private IntentFilter mIntentFilter;
 
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
@@ -74,8 +81,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        auth = FirebaseAuth.getInstance();
+
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(mBroadcastStringAction);
+        mIntentFilter.addAction(mBroadcastIntegerAction);
+        mIntentFilter.addAction(mBroadcastArrayListAction);
+        Intent serviceIntent = new Intent(this, BroadcastService.class);
+        startService(serviceIntent);
+        Log.d("SA", "started service");
+
+
+        /*auth = FirebaseAuth.getInstance();
         // this listener will be called when there is change in firebase user session
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -90,7 +108,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         auth.addAuthStateListener(authListener);
-        setContentView(R.layout.activity_main);
 
         final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
         adapter = new GroupPreviewAdapter(this, groupPreviews);
@@ -130,7 +147,8 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("FAIL USER INFO");
             }
-        });
+        });*/
+
 
 
 
@@ -166,7 +184,7 @@ public class MainActivity extends AppCompatActivity
         //listView.setAdapter(adapter);
         //adapter.clear();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
@@ -177,22 +195,18 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("group_id", user.getGroups().get(position).getId());
                 i.putExtra("user", user);
 
-
-/*                Log.d("Debug", "pos: " + position +
-                        " group_id: " + user.getGroups().get(position).getId() +
-                        " group_na: " + user.getGroups().get(position).getName());*/
                 startActivityForResult(i,10);
             }
-        });
+        });*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_group);
         fab.setImageResource(R.drawable.ic_new_group);
@@ -205,6 +219,41 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(i, CREATE_GROUP);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("qfusa", "data ricevuti");
+            /*mTextView.setText(mTextView.getText()
+                    + "Broadcast From Service: \n");
+            if (intent.getAction().equals(mBroadcastStringAction)) {
+                mTextView.setText(mTextView.getText()
+                        + intent.getStringExtra("Data") + "\n\n");
+            } else if (intent.getAction().equals(mBroadcastIntegerAction)) {
+                mTextView.setText(mTextView.getText().toString()
+                        + intent.getIntExtra("Data", 0) + "\n\n");
+            } else if (intent.getAction().equals(mBroadcastArrayListAction)) {
+                mTextView.setText(mTextView.getText()
+                        + intent.getStringArrayListExtra("Data").toString()
+                        + "\n\n");
+                Intent stopIntent = new Intent(MainActivity.this,
+                        BroadcastService.class);
+                stopService(stopIntent);
+            }*/
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(mReceiver);
+        super.onPause();
     }
 
     @Override
@@ -396,6 +445,8 @@ public class MainActivity extends AppCompatActivity
         }
         user_groups.setValue(currentGroupPreview);
     }
+
+
 
 }
 
