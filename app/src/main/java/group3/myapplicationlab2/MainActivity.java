@@ -1,8 +1,12 @@
 package group3.myapplicationlab2;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
@@ -10,7 +14,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -38,6 +44,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.CollationElementIterator;
 import java.util.Collection;
@@ -45,10 +52,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
@@ -132,10 +142,39 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+
+                    displayFirebaseRegId();
+
+                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+                    Log.d("DEAFAEF", message);
+                }
+
+            }
+        };
+
+        displayFirebaseRegId();
 
 
 
-        //Value event listener for realtime data update
+
+
+
+
+    //Value event listener for realtime data update
         /*mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -347,9 +386,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.join_group) {
 
-            Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
-            i.putExtra("user", user);
-            startActivity(i);
+            //Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
+            //i.putExtra("user", user);
+            //startActivity(i);
+
+            startService(new Intent(this, NotifyService.class));
+            Log.d("SAGAG", "SERVICE START!");
 
         } else if (id == R.id.logout) {
             auth.signOut();
@@ -395,6 +437,31 @@ public class MainActivity extends AppCompatActivity
             adapter.add(currentGroupPreview.get(i));
         }
         user_groups.setValue(currentGroupPreview);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // register GCM registration complete receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Config.REGISTRATION_COMPLETE));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Config.PUSH_NOTIFICATION));
+
+        // clear the notification area when the app is opened
+        NotificationUtils.clearNotifications(getApplicationContext());
+    }
+
+    private void displayFirebaseRegId() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        String regId = pref.getString("regId", null);
+
+        Log.d(TAG, "Firebase reg id: " + regId);
+
     }
 
 }
