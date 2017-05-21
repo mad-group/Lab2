@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity
     public static final String mBroadcastStringAction = "group3.myapplicationlab2.broadcast.string";
     public static final String mBroadcastIntegerAction = "group3.myapplicationlab2.broadcast.integer";
     public static final String mBroadcastArrayListAction = "group3.myapplicationlab2.broadcast.arraylist";
+
+    public static final String mBroadcastnewGroupAction = "group3.myapplicationlab2.broadcast.newGroup";
+
+
     private IntentFilter mIntentFilter;
 
     private FirebaseAuth auth;
@@ -88,12 +92,12 @@ public class MainActivity extends AppCompatActivity
         mIntentFilter.addAction(mBroadcastStringAction);
         mIntentFilter.addAction(mBroadcastIntegerAction);
         mIntentFilter.addAction(mBroadcastArrayListAction);
+        mIntentFilter.addAction(mBroadcastnewGroupAction);
         Intent serviceIntent = new Intent(this, BroadcastService.class);
         startService(serviceIntent);
-        Log.d("SA", "started service");
 
 
-        /*auth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         // this listener will be called when there is change in firebase user session
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -109,8 +113,7 @@ public class MainActivity extends AppCompatActivity
         };
         auth.addAuthStateListener(authListener);
 
-        final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
-        adapter = new GroupPreviewAdapter(this, groupPreviews);
+        adapter = new GroupPreviewAdapter(this, new ArrayList<GroupPreview>());
         final ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
@@ -126,6 +129,7 @@ public class MainActivity extends AppCompatActivity
                 adapter.clear();
 
                 user = dataSnapshot.getValue(User.class);
+
                 if (user.getGroups() != null){
                     //Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
                     adapter.clear();
@@ -147,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("FAIL USER INFO");
             }
-        });*/
+        });
 
 
 
@@ -184,7 +188,7 @@ public class MainActivity extends AppCompatActivity
         //listView.setAdapter(adapter);
         //adapter.clear();
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
@@ -194,10 +198,10 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("list_pos", Integer.toString(position));
                 i.putExtra("group_id", user.getGroups().get(position).getId());
                 i.putExtra("user", user);
-
+                user.getGroups().get(position).resetNotifications();
                 startActivityForResult(i,10);
             }
-        });*/
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -231,22 +235,21 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i("qfusa", "data ricevuti");
-            /*mTextView.setText(mTextView.getText()
-                    + "Broadcast From Service: \n");
-            if (intent.getAction().equals(mBroadcastStringAction)) {
-                mTextView.setText(mTextView.getText()
-                        + intent.getStringExtra("Data") + "\n\n");
-            } else if (intent.getAction().equals(mBroadcastIntegerAction)) {
-                mTextView.setText(mTextView.getText().toString()
-                        + intent.getIntExtra("Data", 0) + "\n\n");
-            } else if (intent.getAction().equals(mBroadcastArrayListAction)) {
-                mTextView.setText(mTextView.getText()
-                        + intent.getStringArrayListExtra("Data").toString()
-                        + "\n\n");
-                Intent stopIntent = new Intent(MainActivity.this,
-                        BroadcastService.class);
-                stopService(stopIntent);
-            }*/
+
+            if (intent.getAction().equals(mBroadcastStringAction)){
+                Integer pos = new Integer(intent.getStringExtra("position"));
+                Log.d("POSITIONA", pos.toString());
+                user.getGroups().get(pos).addNotifications();
+                adapter.clear();
+                adapter.addAll(user.getGroups());
+                adapter.notifyDataSetChanged();
+                //Log.d("posizione", intent.getStringExtra("position"));
+            }
+            else if (intent.getAction().equals(mBroadcastnewGroupAction)){
+                GroupPreview groupPreview = (GroupPreview) intent.getSerializableExtra("newGroup");
+                Log.d("Aggiunto", "Gruppo");
+                Log.d("NME", groupPreview.getName());
+            }
         }
     };
 

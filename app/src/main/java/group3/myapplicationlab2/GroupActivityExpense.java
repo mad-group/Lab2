@@ -189,6 +189,13 @@ public class GroupActivityExpense extends AppCompatActivity {
         dialog.show();
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent main = new Intent(this, MainActivity.class);
+        startActivity(main);
+
+    }
+
 }
 
 

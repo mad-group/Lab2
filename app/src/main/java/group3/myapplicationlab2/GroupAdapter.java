@@ -29,11 +29,11 @@ public class GroupAdapter extends ArrayAdapter<Group> {
         }
         // Lookup view for data population
         TextView groupName = (TextView) convertView.findViewById(R.id.group_item_name);
-        TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
+        //TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
         //TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
         // Populate the data into the template view using the data object
         groupName.setText(group.getName());
-        groupDescription.setText(group.getDescription());
+        //groupDescription.setText(group.getDescription());
         //tvHome.setText(user.hometown);
 
         // Return the completed view to render on screen

@@ -2,6 +2,8 @@ package group3.myapplicationlab2;
 
 import android.support.annotation.NonNull;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 /**
@@ -14,7 +16,7 @@ public class GroupPreview implements Serializable, Comparable<GroupPreview> {
     private String id;
     private String description;
     private long lastModify;
-
+    private Integer notifications=0;
 
     public GroupPreview(){
 
@@ -50,5 +52,20 @@ public class GroupPreview implements Serializable, Comparable<GroupPreview> {
     @Override
     public int compareTo(@NonNull GroupPreview groupPreview) {
         return (int)(this.lastModify - groupPreview.getLastModify()) ;
+    }
+
+    @Exclude
+    public Integer getNotifications() {
+        return notifications;
+    }
+
+    @Exclude
+    public void addNotifications(){
+        this.notifications = this.notifications + 1;
+    }
+
+    @Exclude
+    public void resetNotifications(){
+        this.notifications = 0;
     }
 }

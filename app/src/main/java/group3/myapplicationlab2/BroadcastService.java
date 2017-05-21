@@ -1,11 +1,22 @@
 package group3.myapplicationlab2;
 
 import android.annotation.TargetApi;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -15,24 +26,98 @@ import java.util.ArrayList;
 
 public class BroadcastService extends Service {
 
+    private DatabaseReference groupPreviewReference;
+
     private String LOG_TAG = "boh";
     private ArrayList<String> mList;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //LOG_TAG = this.getClass().getSimpleName();
-        Log.d("boh", "In onCreate");
-        mList = new ArrayList<String>();
-        mList.add("Object 1");
-        mList.add("Object 2");
-        mList.add("Object 3");
+
+        groupPreviewReference = FirebaseDatabase.getInstance()
+                                    .getReference("Users")
+                                    .child("OFLZaRPFVlTelJhjfwYsXMiW1xz2")
+                                    .child("groups");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("boh", "In onStartCommand");
-        new Thread(new Runnable() {
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                /*GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(MainActivity.mBroadcastnewGroupAction);
+                broadcastIntent.putExtra("newGroup", groupPreview);
+                sendBroadcast(broadcastIntent);*/
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
+
+                /*Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(MainActivity.mBroadcastStringAction);
+                broadcastIntent.putExtra("position", dataSnapshot.getKey());
+                //broadcastIntent.putExtra("groupPreview", groupPreview);
+                sendBroadcast(broadcastIntent);*/
+
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(BroadcastService.this)
+                                .setSmallIcon(R.drawable.ic_new_group)
+                                .setContentTitle(getResources().getText(R.string.app_name))
+                                .setContentText("A new expense was added in "+groupPreview.getName())
+                                .setAutoCancel(true);
+                // Creates an explicit intent for an Activity in your app
+                Intent resultIntent = new Intent(BroadcastService.this, GroupActivityExpense.class);
+                resultIntent.putExtra("group_id", groupPreview.getId());
+                resultIntent.putExtra("group_name", groupPreview.getName());
+
+                // The stack builder object will contain an artificial back stack for the
+                // started Activity.
+                // This ensures that navigating backward from the Activity leads out of
+                // your application to the Home screen.
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(BroadcastService.this);
+                // Adds the back stack for the Intent (but not the Intent itself)
+                stackBuilder.addParentStack(GroupActivityExpense.class);
+                // Adds the Intent that starts the Activity to the top of the stack
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent =
+                        stackBuilder.getPendingIntent(
+                                0,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                mBuilder.setContentIntent(resultPendingIntent);
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                // mId allows you to update the notification later on.
+                mNotificationManager.notify(10, mBuilder.build());
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        groupPreviewReference.addChildEventListener(childEventListener);
+
+        /*new Thread(new Runnable() {
             public void run() {
                 try {
                     Thread.sleep(5000);
@@ -63,7 +148,7 @@ public class BroadcastService extends Service {
                 broadcastIntent.putExtra("Data", mList);
                 sendBroadcast(broadcastIntent);
             }
-        }).start();
+        }).start();*/
         return START_REDELIVER_INTENT;
     }
 
