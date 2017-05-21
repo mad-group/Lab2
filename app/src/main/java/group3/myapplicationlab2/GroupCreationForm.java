@@ -40,7 +40,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private ArrayList<String> membersList;
     private ArrayAdapter<String> membersAdapter;
     private EditText groupName, groupDescription, newParticipant, groupPin;
-    private Button btnNewPart;
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 
     private final DatabaseReference myRef = mDatabase.getReference("Groups");
@@ -128,6 +127,8 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                     User user = groupsnapshot.getValue(User.class);
                     users.add(user.getEmail());
                 }
+
+
             }
 
             @Override
@@ -137,6 +138,14 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             }
         };
         myRefUsers.addValueEventListener(UsersListener);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_part_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prepareUser(view);
+            }
+        });
 
     }/*[END onCreate]*/
 

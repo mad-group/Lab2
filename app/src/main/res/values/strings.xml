@@ -16,10 +16,14 @@
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="title_activity_join_group">Join a group</string>
 
-    <string name="who">Who?</string>
-    <string name="what">What?</string>
+    <string name="what">What did you pay?</string>
+    <string name="whatHint">E.g. Washing machine repair</string>
+
     <string name="When">When?</string>
-    <string name="how_much">How Much?</string>
+    <string name="whenHint">E.g. 31/12/2016</string>
+    <string name="how_much">How Much did it cost?</string>
+    <string name="how_muchHint">E.g. 35 €</string>
+    <string name="photo">Photo of the receipt?</string>
 
     <string name="miss_author">Set the expense author name.</string>
     <string name="miss_expense">Set what has been bought.</string>
@@ -73,12 +77,14 @@
     <string name="enter_password">Enter password!</string>
     <string name="pick_image_intent_text">Select Source</string>
 
-    <string name="group_name">Group name</string>
-    <string name="group_description">Group description</string>
-    <string name="radiogroup_title">Choose a default splitting criterion</string>
-    <string name="equal_parts">Equal parts</string>
-    <string name="per_quotes">Per quotes</string>
-    <string name="per_percentage">Per percentage</string>
+    <string name="groupName">Group name</string>
+    <string name="groupNameHint">Type group name here...</string>
+    <string name="groupSubject">Group subject</string>
+    <string name="groupSubjectHint">Type the subject here...</string>
+    <string name="radiogroup_title">Choose a default split criterion</string>
+    <string name="equal_parts">Split equally</string>
+    <string name="per_quotes">Split by quotes</string>
+    <string name="per_percentage">Split by percentages</string>
     <string name="insert_member">Insert a new member</string>
     <string name="add_participant">Create Group</string>
 
@@ -101,8 +107,9 @@
     <string name="invitation_cta">test cta</string>
     <string name="invitation_email_subject">You\'are invited in a group</string>
 
-    <string name="group_pin">Group pin</string>
-    <string name="wrong_group_pin">PIN group has to have at least 6 charachters</string>
+    <string name="groupPin">Group password</string>
+    <string name="groupPinHint">Type group password here...</string>
+    <string name="wrong_group_pin">The password must be of at least 6 characters</string>
     <string name="email_subject"> Money Tracker joining group invitation</string>
     <string name="invitation_failed">Invitation failed</string>
     <string name="invitation_email">

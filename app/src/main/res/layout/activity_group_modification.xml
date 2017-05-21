@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:cursorVisible="true"
             android:textCursorDrawable="@null"
-            android:hint="@string/group_name"
+            android:hint="@string/groupNameHint"
             android:inputType="textCapSentences|textAutoCorrect"/>
         <EditText
             android:id="@+id/mod_group_description"
@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:textCursorDrawable="@null"
             android:cursorVisible="true"
-            android:hint="@string/group_description"
+            android:hint="@string/groupSubjectHint"
             android:inputType="textCapSentences|textAutoCorrect"
             android:layout_marginBottom="0dp"
             android:paddingTop="20dp"/>
@@ -41,7 +41,7 @@
             android:id="@+id/mod_group_pin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/group_pin"
+            android:hint="@string/groupPinHint"
             android:layout_marginBottom="20dp"
             android:paddingTop="20dp"/>
 

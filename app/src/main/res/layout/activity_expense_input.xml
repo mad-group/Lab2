@@ -1,67 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="group3.myapplicationlab2.ExpenseInput">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="group3.myapplicationlab2.ExpenseInput">
 
-    <RelativeLayout
-        android:id="@+id/edit_box_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
-    <EditText
-        android:id="@+id/ie_et_author"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:enabled="false"
-        android:textColor="#000000"/>
+<RelativeLayout
+    android:id="@+id/edit_box_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="10dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/what"
+        android:textColor="@color/colorPrimaryDark"/>
     <EditText
         android:id="@+id/ie_et_expense"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/what"
+        android:hint="@string/whatHint"
         android:inputType="textPersonName"
-        android:layout_below="@+id/ie_et_author"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:paddingTop="20dp"
+        android:drawableLeft="@mipmap/ic_shop_bag"/>
 
+    <TextView
+        android:id="@+id/text_cost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ie_et_expense"
+        android:text="@string/how_much"
+        android:textColor="@color/colorPrimaryDark"/>
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ie_et_amount"
+        android:text="@string/when"
+        android:textColor="@color/colorPrimaryDark"/>
     <EditText
         android:id="@+id/ie_et_amount"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/how_much"
+        android:hint="@string/how_muchHint"
         android:inputType="numberDecimal"
-        android:layout_below="@+id/ie_et_expense"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/text_cost"
+        android:drawableLeft="@mipmap/ic_euro"/>
+
 
     <EditText
         android:id="@+id/ie_tv_date"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:inputType="date"
-        android:hint="@string/when"
+        android:hint="@string/whenHint"
         android:onClick="dataPicker"
         android:focusableInTouchMode="false"
-        android:layout_below="@+id/ie_et_amount"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/ie_et_amount"
-        android:layout_alignEnd="@+id/ie_et_amount" />
+        android:layout_below="@+id/text_time"
+        android:drawableRight="@mipmap/ic_time"
+        />
 
+
+    <TextView
+        android:id="@+id/text_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ie_tv_date"
+        android:text="@string/photo"
+        android:textColor="@color/colorPrimaryDark"/>
+    <ImageButton
+        android:id="@+id/ie_ib_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_photo"
+        app:srcCompat="@drawable/ic_menu_camera"
+        android:onClick="takeImage"
+        android:layout_centerHorizontal="true"
+
+        />
 </RelativeLayout>
 <RelativeLayout
     android:layout_width="wrap_content"
@@ -70,27 +91,11 @@
     android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
     android:layout_alignParentRight="true">
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="Save"
-        android:layout_centerHorizontal="true"
-        android:onClick="saveExpense"
-        android:textAlignment="center"
-        android:layout_below="@+id/ie_ib_camera"
-        />
 
-    <ImageButton
-        android:id="@+id/ie_ib_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_menu_camera"
-        android:onClick="takeImage"
-        android:layout_centerHorizontal="true"
 
-        />
+
 </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -106,10 +111,25 @@
             android:id="@+id/ie_iv_from_camera"
             />
     </RelativeLayout>
+
+
+
 <!--    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/debug_tv1"
         android:text="debug1"
         android:layout_below="@id/relativeLayout"/>-->
-    </RelativeLayout>
+<android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab_save"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_gravity="bottom|right"
+    android:layout_margin="@dimen/fab_margin"
+    app:srcCompat="@mipmap/ic_check"
+    app:backgroundTint="@color/colorPrimary"
+    android:tint="@color/colorIcon">
+</android.support.design.widget.FloatingActionButton>
+</RelativeLayout>

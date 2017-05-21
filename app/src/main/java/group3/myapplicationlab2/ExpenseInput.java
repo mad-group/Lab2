@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -99,9 +100,9 @@ public class ExpenseInput extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
 
-        final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
+        //final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
 /*        authorField.setEnabled(false);*/
-        users_name= database.getReference("Users").child(getIntent().getStringExtra("user_id")).child("email");
+/*        users_name= database.getReference("Users").child(getIntent().getStringExtra("user_id")).child("email");
         users_name.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,11 +116,19 @@ public class ExpenseInput extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+        });*/
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_save);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveExpense(view);
+            }
         });
     }
 
     public void saveExpense(View v) {
-        final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
+//        final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
         final EditText amountField = (EditText) findViewById(R.id.ie_et_amount);
 
