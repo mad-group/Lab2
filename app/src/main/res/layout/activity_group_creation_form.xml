@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="@dimen/activity_top_margin"
     tools:context="group3.myapplicationlab2.GroupCreationForm">
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/ll_group_creation"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/activity_top_margin"
+        android:paddingRight="@dimen/activity_right_margin"
+        android:paddingLeft="@dimen/activity_left_margin"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
@@ -21,113 +27,90 @@
         android:layout_marginTop="0dp"
         app:layout_constraintHorizontal_bias="1.0">
 
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/groupName"
+            android:textColor="@color/colorPrimaryDark"
+            />
         <EditText
             android:id="@+id/new_group"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:cursorVisible="true"
             android:textCursorDrawable="@null"
-            android:hint="@string/group_name"
-            android:inputType="textCapSentences|textAutoCorrect"/>
+            android:hint="@string/groupNameHint"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:paddingTop="20dp"
+            />
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/groupSubject"
+            android:textColor="@color/colorPrimaryDark"
+            />
         <EditText
             android:id="@+id/group_description"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textCursorDrawable="@null"
             android:cursorVisible="true"
-            android:hint="@string/group_description"
+            android:hint="@string/groupSubjectHint"
             android:inputType="textCapSentences|textAutoCorrect"
             android:layout_marginBottom="0dp"
-            android:paddingTop="20dp"/>
-        <EditText
-            android:id="@+id/group_pin"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/group_pin"
-            android:inputType="textCapSentences|textAutoCorrect"
-            android:layout_marginBottom="20dp"
             android:paddingTop="20dp"/>
 
         <TextView
             android:paddingTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/radiogroup_title"/>
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:prompt="@string/splitting_criterion_prompt"
-            android:entries="@array/splitting_criteria"
-            android:layout_marginBottom="20dp">
-        </Spinner>
-
-        <!--<RadioGroup
-            android:paddingTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/radiogroup_title"/>
-            <RadioButton
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/equal_parts"/>
-            <RadioButton
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/per_quotes"/>
-            <RadioButton
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/per_percentage"/>
-        </RadioGroup> -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <!--
-        <EditText
-            android:id="@+id/new_participant"
-            android:paddingTop="0dp"
-            android:padding="10dp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:inputType="text"
-            android:hint="@string/insert_member"/>
-            -->
-        <Button
-            android:id="@+id/new_part_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_participant"
-            android:onClick="prepareUser"
+            android:text="@string/groupPin"
+            android:textColor="@color/colorPrimaryDark"
             />
-    </LinearLayout>
-
-<!--
-    <ListView
-        android:id="@+id/list_part"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="170dp" />
--->
-<!--        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/new_group_btn"
-            android:layout_gravity="bottom|end"
-            android:paddingBottom="5dp"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/group_pin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_user"
-            android:onClick="sendInvitation"
-            />-->
+            android:hint="@string/groupPinHint"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:layout_marginBottom="0dp"
+            android:paddingTop="20dp"/>
+
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/radiogroup_title"
+            android:textColor="@color/colorPrimaryDark"
+            />
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:prompt="@string/splitting_criterion_prompt"
+                android:entries="@array/splitting_criteria"
+                android:layout_marginBottom="20dp"
+                android:paddingTop="20dp">
+            </Spinner>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/new_part_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@mipmap/ic_arrow_dx"
+            app:backgroundTint="@color/colorPrimary"
+            android:tint="@color/colorIcon">
+
+        </android.support.design.widget.FloatingActionButton>
+
+
+
+</RelativeLayout>

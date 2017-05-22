@@ -18,7 +18,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="1.0">
-    <EditText
+<!--    <EditText
         android:id="@+id/ie_et_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,36 +26,54 @@
         android:inputType="textPersonName"
 
         android:enabled="false"
-        android:textColor="#000000"/>
+        android:textColor="#000000"/>-->
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/what"
+        android:textColor="@color/colorPrimaryDark"/>
     <EditText
         android:id="@+id/ie_et_expense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/what"
+        android:hint="@string/whatHint"
         android:inputType="textPersonName"
         />
-
-    <EditText
-        android:id="@+id/ie_et_amount"
+    <TextView
+        android:id="@+id/text_cost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/how_much"
-        android:inputType="numberDecimal"
-     />
+        android:layout_below="@+id/ie_et_expense"
+        android:text="@string/how_much"
+        android:textColor="@color/colorPrimaryDark"/>
+        <EditText
+            android:id="@+id/ie_et_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/how_muchHint"
+            android:inputType="numberDecimal"
+            />
 
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ie_et_amount"
+        android:text="@string/when"
+        android:textColor="@color/colorPrimaryDark"/>
     <EditText
         android:id="@+id/ie_tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:inputType="date"
-        android:hint="@string/when"
+        android:hint="@string/whenHint"
         android:onClick="dataPicker"
         android:focusableInTouchMode="false"
         />
+
+
+
 
     <TextView
         android:paddingTop="10dp"
@@ -69,6 +87,25 @@
             android:id="@+id/lv_members">
         </ListView>
 
+
+    <TextView
+        android:id="@+id/text_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ie_tv_date"
+        android:text="@string/photo"
+        android:textColor="@color/colorPrimaryDark"/>
+    <ImageButton
+        android:id="@+id/ie_ib_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_photo"
+        app:srcCompat="@drawable/ic_menu_camera"
+        android:onClick="takeImage"
+        android:layout_centerHorizontal="true"
+
+        />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -81,7 +118,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp">
@@ -108,3 +145,16 @@
 
     </android.support.v7.widget.LinearLayoutCompat>
 </android.support.constraint.ConstraintLayout>
+
+<android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab_save"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_gravity="bottom|right"
+    android:layout_margin="@dimen/fab_margin"
+    app:srcCompat="@mipmap/ic_check"
+    app:backgroundTint="@color/colorPrimary"
+    android:tint="@color/colorIcon">
+</android.support.design.widget.FloatingActionButton>

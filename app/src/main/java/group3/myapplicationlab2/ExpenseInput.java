@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -107,18 +108,20 @@ public class ExpenseInput extends AppCompatActivity {
         authorField.setText(user.getName());
         author_key = user.getUid();
 
-        final ArrayList<GroupMember> groupMembers = new ArrayList<GroupMember>();
-        MembersAdapter membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers);
-        lv = (ListView) findViewById(R.id.lv_members);
-        lv.setAdapter(membersAdapter);
-        membersAdapter.addAll(group.getGroupMembers());
 
-        setEditTextAmountListener();
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_save);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveExpense(view);
+            }
+        });
 
     }
 
 
     public void saveExpense(View v) {
+
 
         Map<String,Object> map = createContributorsMap();
         for(String key : map.keySet()){
