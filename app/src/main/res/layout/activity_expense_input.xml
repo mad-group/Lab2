@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="700dp">
+
+<LinearLayout
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
+    android:orientation="vertical"
 tools:context="group3.myapplicationlab2.ExpenseInput">
 
 <RelativeLayout
@@ -29,7 +34,108 @@ tools:context="group3.myapplicationlab2.ExpenseInput">
         android:paddingTop="20dp"
         android:drawableLeft="@mipmap/ic_shop_bag"/>
 
+    <LinearLayout
+        android:id="@+id/linear_layout_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/ie_et_expense">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ie_et_expense"
+                android:text="@string/how_much"
+                android:textColor="@color/colorPrimaryDark"/>
+            <EditText
+                android:id="@+id/ie_et_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/how_muchHint"
+                android:inputType="numberDecimal"
+                android:layout_below="@+id/text_cost"
+                android:drawableLeft="@mipmap/ic_euro"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ie_et_amount"
+                android:text="@string/when"
+                android:textColor="@color/colorPrimaryDark"/>
+            <EditText
+                android:id="@+id/ie_tv_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="@string/whenHint"
+                android:onClick="dataPicker"
+                android:focusableInTouchMode="false"
+                android:layout_below="@+id/text_time"
+                android:drawableLeft="@mipmap/ic_calendar"/>
+        </LinearLayout>
+    </LinearLayout>
+
     <TextView
+        android:id="@+id/text_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_id"
+        android:text="@string/photo"
+        android:textColor="@color/colorPrimaryDark"/>
+    <ImageButton
+        android:id="@+id/ie_ib_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_photo"
+        app:srcCompat="@drawable/ic_menu_camera"
+        android:onClick="takeImage"
+        android:layout_centerHorizontal="true"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ie_ib_camera">
+
+    </ListView>
+</RelativeLayout>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@id/edit_box_layout"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_alignParentRight="true">
+
+</RelativeLayout>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/relativeLayout"
+    android:layout_below="@id/edit_box_layout">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_menu_gallery"
+        android:id="@+id/ie_iv_from_camera"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
+
+    <!--<TextView
         android:id="@+id/text_cost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,8 +168,7 @@ tools:context="group3.myapplicationlab2.ExpenseInput">
         android:onClick="dataPicker"
         android:focusableInTouchMode="false"
         android:layout_below="@+id/text_time"
-        android:drawableRight="@mipmap/ic_time"
-        />
+        android:drawableRight="@mipmap/ic_time"/>
 
 
     <TextView
@@ -80,9 +185,7 @@ tools:context="group3.myapplicationlab2.ExpenseInput">
         android:layout_below="@+id/text_photo"
         app:srcCompat="@drawable/ic_menu_camera"
         android:onClick="takeImage"
-        android:layout_centerHorizontal="true"
-
-        />
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
 <RelativeLayout
     android:layout_width="wrap_content"
@@ -114,12 +217,13 @@ tools:context="group3.myapplicationlab2.ExpenseInput">
 
 
 
-<!--    <TextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/debug_tv1"
         android:text="debug1"
         android:layout_below="@id/relativeLayout"/>-->
+
 <android.support.design.widget.FloatingActionButton
     android:id="@+id/fab_save"
     android:layout_width="wrap_content"
@@ -132,4 +236,5 @@ tools:context="group3.myapplicationlab2.ExpenseInput">
     app:backgroundTint="@color/colorPrimary"
     android:tint="@color/colorIcon">
 </android.support.design.widget.FloatingActionButton>
-</RelativeLayout>
+</LinearLayout>
+</ScrollView>

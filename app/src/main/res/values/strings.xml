@@ -20,7 +20,7 @@
     <string name="whatHint">E.g. Washing machine repair</string>
 
     <string name="When">When?</string>
-    <string name="whenHint">E.g. 31/12/2016</string>
+    <string name="whenHint">dd/mm/yyyy</string>
     <string name="how_much">How Much did it cost?</string>
     <string name="how_muchHint">E.g. 35 €</string>
     <string name="photo">Photo of the receipt?</string>
