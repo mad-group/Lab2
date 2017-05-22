@@ -84,6 +84,7 @@ public class ExpenseInput extends AppCompatActivity {
 
     private User user;
     private Group group;
+    private MembersAdapter membersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +105,16 @@ public class ExpenseInput extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
 
-        final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
-        authorField.setText(user.getName());
         author_key = user.getUid();
+
+        setEditTextAmountListener();
+
+        lv = (ListView)findViewById(R.id.list_participants_expense);
+        ArrayList<GroupMember> groupMembers = new ArrayList<>();
+        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers);
+        lv.setAdapter(membersAdapter);
+        membersAdapter.addAll(group.getGroupMembers());
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_save);
@@ -130,7 +138,7 @@ public class ExpenseInput extends AppCompatActivity {
 
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
 
-        //String author = authorField.getText().toString();
+       // String author = authorField.getText().toString();
         String author = author_key;
         String expense = expenseField.getText().toString();
         String amount = amountField.getText().toString();
