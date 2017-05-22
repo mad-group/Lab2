@@ -101,13 +101,13 @@ public class ExpenseInput extends AppCompatActivity {
         showDate(year, month, day);
 
         //final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
-/*        authorField.setEnabled(false);*/
-/*        users_name= database.getReference("Users").child(getIntent().getStringExtra("user_id")).child("email");
+        //authorField.setEnabled(false);
+        users_name= database.getReference("Users").child(getIntent().getStringExtra("user_id")).child("email");
         users_name.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null){
-                    authorField.setText(dataSnapshot.getValue(String.class));
+//                    authorField.setText(dataSnapshot.getValue(String.class));
                     author_key = dataSnapshot.getValue(String.class);
                 }
             }
@@ -116,7 +116,7 @@ public class ExpenseInput extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });*/
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_save);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +132,7 @@ public class ExpenseInput extends AppCompatActivity {
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
         final EditText amountField = (EditText) findViewById(R.id.ie_et_amount);
 
-        //String author = authorField.getText().toString();
+       // String author = authorField.getText().toString();
         String author = author_key;
         String expense = expenseField.getText().toString();
         String amount = amountField.getText().toString();
