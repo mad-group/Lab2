@@ -7,9 +7,10 @@
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="700dp">
+        android:layout_height="1000dp">
 
         <LinearLayout
+            android:id="@+id/linear_prova"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
@@ -20,7 +21,7 @@
             <RelativeLayout
                 android:id="@+id/edit_box_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
@@ -109,11 +110,12 @@
                     android:layout_centerHorizontal="true"/>
 
                 <ListView
+                    android:id="@+id/list_participants_expense"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/ie_ib_camera">
-
                 </ListView>
+
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -124,6 +126,8 @@
                 android:layout_alignParentRight="true">
 
             </RelativeLayout>
+
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -232,6 +236,7 @@
 
         </LinearLayout>
     </ScrollView>
+
     <android.support.design.widget.FloatingActionButton
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fab_save"
