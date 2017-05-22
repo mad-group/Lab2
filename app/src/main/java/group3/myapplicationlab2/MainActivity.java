@@ -52,15 +52,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String mBroadcastStringAction = "group3.myapplicationlab2.broadcast.string";
-    public static final String mBroadcastIntegerAction = "group3.myapplicationlab2.broadcast.integer";
-    public static final String mBroadcastArrayListAction = "group3.myapplicationlab2.broadcast.arraylist";
-
-    public static final String mBroadcastnewGroupAction = "group3.myapplicationlab2.broadcast.newGroup";
-
-
-    private IntentFilter mIntentFilter;
-
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
 
@@ -87,25 +78,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(mBroadcastStringAction);
-        mIntentFilter.addAction(mBroadcastIntegerAction);
-        mIntentFilter.addAction(mBroadcastArrayListAction);
-        mIntentFilter.addAction(mBroadcastnewGroupAction);
-        Intent serviceIntent = new Intent(this, BroadcastService.class);
-        startService(serviceIntent);
-
-
         auth = FirebaseAuth.getInstance();
-        // this listener will be called when there is change in firebase user session
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 }
@@ -145,6 +123,11 @@ public class MainActivity extends AppCompatActivity
                 user_email.setText(user.getEmail());
                 TextView user_name = (TextView)header.findViewById(R.id.username);
                 user_name.setText(user.getName());
+
+                Intent serviceIntent = new Intent(MainActivity.this, BroadcastService.class);
+                serviceIntent.putExtra("user", user);
+                startService(serviceIntent);
+
             }
 
             @Override
@@ -153,40 +136,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-
-
-
-        //Value event listener for realtime data update
-        /*mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Log.d("Debug", postSnapshot.getValue(""));
-                    //Getting the data from snapshot
-                    //Group group = postSnapshot.getValue(Group.class);
-
-                    //Log.d("Debug", group.getName());
-                    //Adding it to a string
-                    //String string = "Name: "+person.getName()+"\nAddress: "+person.getAddress()+"\n\n";
-
-                    //Displaying it on textview
-                    //textViewPersons.setText(string);
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });*/
-
-        //final ArrayList<Group> arrayOfGroups = new ArrayList<Group>();
-        //final GroupAdapter adapter = new GroupAdapter(this, arrayOfGroups);
-
-        //ListView listView = (ListView) findViewById(R.id.group_list);
-        //listView.setAdapter(adapter);
-        //adapter.clear();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -206,11 +155,11 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        toggle.syncState();*/
+        toggle.syncState();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_group);
         fab.setImageResource(R.drawable.ic_new_group);
@@ -228,34 +177,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(mReceiver, mIntentFilter);
     }
-
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i("qfusa", "data ricevuti");
-
-            if (intent.getAction().equals(mBroadcastStringAction)){
-                Integer pos = new Integer(intent.getStringExtra("position"));
-                Log.d("POSITIONA", pos.toString());
-                user.getGroups().get(pos).addNotifications();
-                adapter.clear();
-                adapter.addAll(user.getGroups());
-                adapter.notifyDataSetChanged();
-                //Log.d("posizione", intent.getStringExtra("position"));
-            }
-            else if (intent.getAction().equals(mBroadcastnewGroupAction)){
-                GroupPreview groupPreview = (GroupPreview) intent.getSerializableExtra("newGroup");
-                Log.d("Aggiunto", "Gruppo");
-                Log.d("NME", groupPreview.getName());
-            }
-        }
-    };
 
     @Override
     protected void onPause() {
-        unregisterReceiver(mReceiver);
         super.onPause();
     }
 
@@ -268,7 +193,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.modify:
@@ -310,9 +234,6 @@ public class MainActivity extends AppCompatActivity
                         System.out.println("FAIL PIN INFO");
                     }
                 });
-
-
-
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -448,8 +369,6 @@ public class MainActivity extends AppCompatActivity
         }
         user_groups.setValue(currentGroupPreview);
     }
-
-
 
 }
 

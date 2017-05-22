@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -18,8 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-
 /**
  * Created by anr.putina on 21/05/17.
  */
@@ -27,32 +26,30 @@ import java.util.ArrayList;
 public class BroadcastService extends Service {
 
     private DatabaseReference groupPreviewReference;
+    private User user;
+
 
     private String LOG_TAG = "boh";
-    private ArrayList<String> mList;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         groupPreviewReference = FirebaseDatabase.getInstance()
-                                    .getReference("Users")
-                                    .child("OFLZaRPFVlTelJhjfwYsXMiW1xz2")
-                                    .child("groups");
+                                    .getReference("Users");
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("boh", "In onStartCommand");
 
+        user = (User)intent.getSerializableExtra("user");
+
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                /*GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(MainActivity.mBroadcastnewGroupAction);
-                broadcastIntent.putExtra("newGroup", groupPreview);
-                sendBroadcast(broadcastIntent);*/
+
             }
 
             @Override
@@ -60,22 +57,20 @@ public class BroadcastService extends Service {
 
                 GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
 
-                /*Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(MainActivity.mBroadcastStringAction);
-                broadcastIntent.putExtra("position", dataSnapshot.getKey());
-                //broadcastIntent.putExtra("groupPreview", groupPreview);
-                sendBroadcast(broadcastIntent);*/
-
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(BroadcastService.this)
                                 .setSmallIcon(R.drawable.ic_new_group)
                                 .setContentTitle(getResources().getText(R.string.app_name))
                                 .setContentText("A new expense was added in "+groupPreview.getName())
-                                .setAutoCancel(true);
+                                .setAutoCancel(true)
+                                .setVibrate(new long[] { 100, 500})
+                                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
                 // Creates an explicit intent for an Activity in your app
                 Intent resultIntent = new Intent(BroadcastService.this, GroupActivityExpense.class);
                 resultIntent.putExtra("group_id", groupPreview.getId());
                 resultIntent.putExtra("group_name", groupPreview.getName());
+                resultIntent.putExtra("user", user);
 
                 // The stack builder object will contain an artificial back stack for the
                 // started Activity.
@@ -115,40 +110,7 @@ public class BroadcastService extends Service {
             }
         };
 
-        groupPreviewReference.addChildEventListener(childEventListener);
-
-        /*new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(MainActivity.mBroadcastStringAction);
-                broadcastIntent.putExtra("Data", "Broadcast Data");
-                sendBroadcast(broadcastIntent);
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                broadcastIntent.setAction(MainActivity.mBroadcastIntegerAction);
-                broadcastIntent.putExtra("Data", 10);
-                sendBroadcast(broadcastIntent);
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                broadcastIntent
-                        .setAction(MainActivity.mBroadcastArrayListAction);
-                broadcastIntent.putExtra("Data", mList);
-                sendBroadcast(broadcastIntent);
-            }
-        }).start();*/
+        groupPreviewReference.child(user.getUid()).child("groups").addChildEventListener(childEventListener);
         return START_REDELIVER_INTENT;
     }
 
