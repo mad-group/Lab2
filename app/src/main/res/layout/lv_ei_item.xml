@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_lv_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <TextView
+        android:id="@+id/item_member"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:paddingBottom="@dimen/expense_item_text_padding"
+        android:paddingTop="@dimen/expense_item_text_padding"
+        android:text="Member  "
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/item_amount"
+        android:inputType="number"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/expense_item_text_padding"
+        android:paddingTop="@dimen/expense_item_text_padding"
+        android:text="Amount"
+        android:textSize="20sp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/item_user_id"
+        android:layout_width="2dp"
+        android:layout_height="2dp"
+        android:visibility="invisible"
+        />
+<!--    <TextView
+        android:id="@+id/item_euros"
+        android:inputType="number"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/expense_item_text_padding"
+        android:paddingTop="@dimen/expense_item_text_padding"
+        android:textSize="20sp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_toRightOf="@id/item_amount"/>-->
+
+    <NumberPicker
+        android:id="@+id/numberPicker"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        />
+
+
+</LinearLayout>

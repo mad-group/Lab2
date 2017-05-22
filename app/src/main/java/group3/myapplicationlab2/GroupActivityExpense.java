@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -60,6 +61,9 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private Group group;
     private User user;
+    ListView listView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,11 @@ public class GroupActivityExpense extends AppCompatActivity {
                             dataSnapshot.getValue();
                     group = new Group();
                     group.GroupConstructor(objectMap);
+                    Collections.sort(group.getPurchases());
+                    Collections.reverse(group.getPurchases());
                     expenseAdapter.addAll(group.getPurchases());
+                    //paintListViewBackground();
+
                 }
             }
 
@@ -97,7 +105,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         ArrayList<Purchase> spese = new ArrayList<Purchase>();
         expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese);
-        ListView listView = (ListView) findViewById(R.id.expense_list);
+        listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
@@ -110,10 +118,10 @@ public class GroupActivityExpense extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
-                i.putExtra("user_id", getIntent().getStringExtra("user_id"));
-                i.putExtra("group_id", getIntent().getStringExtra("group_id"));
-                i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
+                group.setId(getIntent().getStringExtra("group_id"));
+                i.putExtra("group", group);
                 i.putExtra("user", user);
+                i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
 
                 Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
                         " group_id: " + getIntent().getStringExtra("group_id"));
@@ -172,6 +180,9 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
                 group.getPurchases().add(new_purchase);
                 expenseAdapter.clear();
+                //paintListViewBackground();
+                Collections.sort(group.getPurchases());
+                Collections.reverse(group.getPurchases());
                 expenseAdapter.addAll(group.getPurchases());
             }
         }
@@ -187,6 +198,22 @@ public class GroupActivityExpense extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void paintListViewBackground(){
+        List<Purchase> list = group.getPurchases();
+        for(int i=0; i < list.size(); i++) {
+            Log.d("Debug", list.get(i).getAuthorName() + " - " + user.getEmail());
+            if ( list.get(i).getAuthorName().equals(user.getEmail())){
+                listView.setBackgroundColor(getResources().getColor(R.color.colorListBG1));
+                expenseAdapter.add(list.get(i));
+            }else{
+                listView.setBackgroundColor(getResources().getColor(R.color.colorListBG2));
+                expenseAdapter.add(list.get(i));
+            }
+
+        }
+        Log.d("Debug", "---------------------------");
     }
 
 }

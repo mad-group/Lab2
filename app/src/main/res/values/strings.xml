@@ -76,6 +76,7 @@
     <string name="group_name">Group name</string>
     <string name="group_description">Group description</string>
     <string name="radiogroup_title">Choose a default splitting criterion</string>
+    <string name="radiogroup_title_expense">Choose a splitting criterion</string>
     <string name="equal_parts">Equal parts</string>
     <string name="per_quotes">Per quotes</string>
     <string name="per_percentage">Per percentage</string>
@@ -134,5 +135,7 @@
     <string name="stats_no_pruchases_text">If there are not any purchase is impossible to show the debits among the group members.</string>
     <string name="stats_no_members">You are alone in this group!</string>
     <string name="stats_no_members_text">Is impossible to compute debits and credits if you are alone in the groups.</string>
+    <string name="insert_expense">Insert new expense</string>
+
 
 </resources>

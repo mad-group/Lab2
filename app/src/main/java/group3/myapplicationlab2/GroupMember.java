@@ -12,6 +12,7 @@ public class GroupMember implements Serializable {
     private String name;
     private String email;
     private Double payment= new Double(0);
+    private String user_id;
 
     public String getName() {
         return name;
@@ -36,5 +37,8 @@ public class GroupMember implements Serializable {
     public void setPayment(Double payment) {
         this.payment = payment;
     }
+
+    public void setUser_id(String uid){user_id = uid;}
+    public String getUser_id(){return user_id;}
 }
 

@@ -2,9 +2,13 @@ package group3.myapplicationlab2;
 
 
 import android.util.Log;
+import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.security.Timestamp;
@@ -27,6 +31,7 @@ public class Group implements Serializable {
     private List<Double> aggPurchases;
     private List<Double> myDebts;
     private List<GroupMember> groupMembers;
+    private List<String> userKeys;
 
     public Group() {
     }
@@ -46,6 +51,7 @@ public class Group implements Serializable {
                 GroupMember groupMember = new GroupMember();
                 groupMember.setName(member.get("name").toString());
                 groupMember.setEmail(member.get("email").toString());
+                groupMember.setUser_id(member.get("user_id").toString());
                 groupMembers.add(groupMember);
             }
             this.groupMembers = groupMembers;
@@ -217,4 +223,5 @@ public class Group implements Serializable {
     public void setGroupMembers(List<GroupMember> groupMembers) {
         this.groupMembers = groupMembers;
     }
+
 }

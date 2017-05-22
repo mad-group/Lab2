@@ -23,14 +23,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ContentFrameLayout;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +52,7 @@ import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,34 +66,32 @@ import java.util.*;
 public class ExpenseInput extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     Context context;
-    Uri path_image = null;
     Calendar myCalendar = Calendar.getInstance();
     private int year, month, day;
     private EditText dateField;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Bitmap mImageBitmap;
+    private EditText amountField;
     private ImageView mImageView;
-    static int test = 0;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
+    private ListView lv;
 
     private static final int PICK_IMAGE_ID = 234;
     private File imageOutFile = null;
     private String author_key;
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Groups");
-    DatabaseReference users = database.getReference("Users");
-    DatabaseReference users_name;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("Groups");
+    private DatabaseReference users = database.getReference("Users");
 
     private User user;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_input);
-
         user = (User)getIntent().getSerializableExtra("user");
+        group = (Group)getIntent().getSerializableExtra("group");
+
+        setTitle(group.getName() + " - New expense");
 
         //print current date as default value in Date editText
         dateField = (EditText) findViewById(R.id.ie_tv_date);
@@ -100,28 +104,28 @@ public class ExpenseInput extends AppCompatActivity {
         showDate(year, month, day);
 
         final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
-/*        authorField.setEnabled(false);*/
-        users_name= database.getReference("Users").child(getIntent().getStringExtra("user_id")).child("email");
-        users_name.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null){
-                    authorField.setText(dataSnapshot.getValue(String.class));
-                    author_key = dataSnapshot.getValue(String.class);
-                }
-            }
+        authorField.setText(user.getName());
+        author_key = user.getUid();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        final ArrayList<GroupMember> groupMembers = new ArrayList<GroupMember>();
+        MembersAdapter membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers);
+        lv = (ListView) findViewById(R.id.lv_members);
+        lv.setAdapter(membersAdapter);
+        membersAdapter.addAll(group.getGroupMembers());
 
-            }
-        });
+        setEditTextAmountListener();
+
     }
 
+
     public void saveExpense(View v) {
-        final EditText authorField = (EditText) findViewById(R.id.ie_et_author);
+
+        Map<String,Object> map = createContributorsMap();
+        for(String key : map.keySet()){
+            Log.d("Debug", "key: " + key + " Price: " + map.get(key));
+        }
+
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
-        final EditText amountField = (EditText) findViewById(R.id.ie_et_amount);
 
         //String author = authorField.getText().toString();
         String author = author_key;
@@ -141,23 +145,28 @@ public class ExpenseInput extends AppCompatActivity {
 
         boolean allOk = true;
         if(author == null || author.isEmpty()){
-            Toast.makeText(getApplicationContext(), R.string.miss_author, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), R.string.miss_author, Toast.LENGTH_SHORT).show();
+/*            String err = getResources().getString(R.string.miss_author);
+            author.setError(err);*/
             allOk = false;
         }
         if(expense == null || expense.isEmpty()){
-            Toast.makeText(getApplicationContext(), R.string.miss_amount, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), R.string.miss_amount, Toast.LENGTH_SHORT).show();
+            String err = getResources().getString(R.string.miss_expense);
+            expenseField.setError(err);
             allOk = false;
         }
         if(amount == null || amount.isEmpty()){
-            Toast.makeText(getApplicationContext(), R.string.miss_expense, Toast.LENGTH_SHORT).show();
+            String err = getResources().getString(R.string.miss_amount);
+            amountField.setError(err);
             allOk = false;
         }
 
-        if (allOk){
-            String group_id = getIntent().getStringExtra("group_id");
 
-            Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
-                    " group_id: " + getIntent().getStringExtra("group_id"));
+
+        if (allOk){
+            String group_id = group.getId();
+            Log.d("Debug", group_id);
 
             Purchase p = new Purchase();
             p.setAuthorName(author);
@@ -167,6 +176,9 @@ public class ExpenseInput extends AppCompatActivity {
             p.setGroup_id(group_id);
             p.setLastModify(System.currentTimeMillis());
             p.setUser_name(user.getName());
+            p.setAuthor_id(user.getUid());
+            p.setContributors(createContributorsMap());
+
 
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");
@@ -179,7 +191,7 @@ public class ExpenseInput extends AppCompatActivity {
             hm.put("lastModify", lastModify);
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
-            users.child(getIntent().getStringExtra("user_id"))
+            users.child(user.getUid())
                     .child("groups")
                     .child(getIntent().getStringExtra("list_pos"))
                     .updateChildren(hm);
@@ -296,5 +308,74 @@ public class ExpenseInput extends AppCompatActivity {
         }
     }
 
+    private void drawDialogBoxEqual(String title, float amount) {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setTitle(title);
+        String str="";
+        for (int i =0; i<group.getGroupMembers().size();i++){
+            Log.d("Debug", "insideFor");
+            str += group.getGroupMembers().get(i).getName() + "\t" + Float.toString(amount/group.getGroupMembers().size()) + "€\n";
+        }
+        builder.setMessage(str);
+        builder.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        android.support.v7.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void setEditTextAmountListener(){
+        amountField = (EditText) findViewById(R.id.ie_et_amount);
+        amountField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                TextView et;
+                View v;
+                float fraction;
+                for (int i =0; i<lv.getCount(); i++){
+                    v = lv.getChildAt(i);
+                    et = (TextView) v.findViewById(R.id.item_amount);
+                    if(editable.toString().isEmpty()){
+                        et.setText("0");
+                    }
+                    else {
+                        fraction = Float.parseFloat(editable.toString()) / sumParts();
+                        et.setText(new DecimalFormat("##.##").format(fraction));
+                    }
+                }
+
+            }
+        });
+    }
+
+    private int sumParts(){
+        return group.getGroupMembers().size();
+    }
+
+    private Map<String, Object> createContributorsMap() {
+        Map<String, Object> map = new HashMap<>();
+        TextView et_amount;
+        TextView et_id;
+        View vv;
+        for (int ii = 0; ii < lv.getCount(); ii++) {
+            vv = lv.getChildAt(ii);
+            et_amount = (TextView) vv.findViewById(R.id.item_amount);
+            et_id = (TextView) vv.findViewById(R.id.item_user_id);
+            map.put(et_id.getText().toString(), Double.parseDouble(et_amount.getText().toString()));
+
+        }
+        return map;
+    }
 }
 

@@ -87,6 +87,7 @@ public class JoinGroupActivity extends AppCompatActivity {
                                     GroupMember groupMember = new GroupMember();
                                     groupMember.setName(user.getName());
                                     groupMember.setEmail(user.getEmail());
+                                    groupMember.setUser_id(user.getUid());
 
                                     mDatabase.child("members2").child(auth.getCurrentUser().getUid()).setValue(groupMember);
 

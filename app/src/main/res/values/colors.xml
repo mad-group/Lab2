@@ -5,7 +5,8 @@
      <color name="colorAccent">#fffcfc</color>
      <color name="colorPrimaryLight">#80CBC4</color>
     <color name="colorIcon">#FFFFFF</color>
-
+    <color name="colorListBG1">#bfffbf</color>
+    <color name="colorListBG2">#FFFFF0</color>
 
     <color name="bg_login">#26ae90</color>
     <color name="bg_register">#2e3237</color>

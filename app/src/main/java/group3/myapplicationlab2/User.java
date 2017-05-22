@@ -18,13 +18,11 @@ public class User implements Serializable {
     public void setEmail(String email){
         this.email = email;
     }
-
     public String getEmail(){return email;}
 
     public String getUid() {
         return uid;
     }
-
     public void setUid(String uid) {
         this.uid = uid;
     }
@@ -32,7 +30,6 @@ public class User implements Serializable {
     public List<GroupPreview> getGroups(){
         return this.groups;
     }
-
     public void setGroups(List<GroupPreview> groups){
         this.groups = groups;
     }
@@ -41,7 +38,6 @@ public class User implements Serializable {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }

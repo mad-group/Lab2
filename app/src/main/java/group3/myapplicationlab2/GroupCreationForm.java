@@ -189,7 +189,9 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             GroupMember groupMember = new GroupMember();
             groupMember.setName(user.getName());
             groupMember.setEmail(user.getEmail());
+            groupMember.setUser_id(user.getUid());
             myRef.child(id).child("members2").child(user.getUid()).setValue(groupMember);
+
 
             newGroup.setId(id);
             this.groupPinTmp = newGroup.getPin();
