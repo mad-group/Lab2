@@ -44,15 +44,14 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         expense.setText(purchase.getCausal());
         expDate.setText(purchase.getDate());
 
-        if (purchase.getPathImage()!=null && purchase.getPathImage()!= "nopath") {
+        if (purchase.getPathImage()!=null && !purchase.getPathImage().equals("nopath")) {
             File imgFile = new File(purchase.getPathImage());
             if(imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 expView.setImageBitmap(myBitmap);
             }
-            else{
-            }
         }
+
 
         return convertView;
     }

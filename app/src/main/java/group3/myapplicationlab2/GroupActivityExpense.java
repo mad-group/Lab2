@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -36,6 +37,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.Key;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -129,6 +132,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
         });
 
+        registerListenerOnListView();
+
     }
 
     @Override
@@ -214,6 +219,16 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         }
         Log.d("Debug", "---------------------------");
+    }
+
+    public void registerListenerOnListView(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object o = listView.getItemAtPosition(position);
+                Purchase p = (Purchase)o;
+
+            }
+        });
     }
 
 }
