@@ -226,6 +226,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = listView.getItemAtPosition(position);
                 Purchase p = (Purchase)o;
+                Intent i = new Intent(getApplicationContext(), PurchaseContributors.class);
+                startActivity(i);
 
             }
         });
