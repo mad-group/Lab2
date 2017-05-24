@@ -177,13 +177,14 @@ public class ExpenseInput extends AppCompatActivity {
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
             hm.put("lastModify", lastModify);
+            hm.put("lastEvent", "expenseInput");
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
+
             users.child(getIntent().getStringExtra("user_id"))
                     .child("groups")
                     .child(getIntent().getStringExtra("list_pos"))
                     .updateChildren(hm);
-
 
             context = v.getContext();
             Intent i = new Intent();

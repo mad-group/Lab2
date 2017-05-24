@@ -16,6 +16,7 @@ public class GroupPreview implements Serializable, Comparable<GroupPreview> {
     private String id;
     private String description;
     private long lastModify;
+    private String lastEvent;
     private Integer notifications=0;
 
     public GroupPreview(){
@@ -67,5 +68,13 @@ public class GroupPreview implements Serializable, Comparable<GroupPreview> {
     @Exclude
     public void resetNotifications(){
         this.notifications = 0;
+    }
+
+    public String getLastEvent() {
+        return lastEvent;
+    }
+
+    public void setLastEvent(String lastEvent) {
+        this.lastEvent = lastEvent;
     }
 }

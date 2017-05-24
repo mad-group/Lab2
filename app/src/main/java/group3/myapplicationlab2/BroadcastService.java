@@ -28,9 +28,6 @@ public class BroadcastService extends Service {
     private DatabaseReference groupPreviewReference;
     private User user;
 
-
-    private String LOG_TAG = "boh";
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,7 +39,6 @@ public class BroadcastService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("boh", "In onStartCommand");
 
         user = (User)intent.getSerializableExtra("user");
 
@@ -57,11 +53,20 @@ public class BroadcastService extends Service {
 
                 GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
 
+                String lastEvent = groupPreview.getLastEvent();
+                String message = "New Message";
+                if (lastEvent.equals("expenseInput")){
+                    message = "A new expense was added in ";
+                }
+                else if (lastEvent.equals("groupChangeName")){
+                    message = "A group changed name in ";
+                }
+
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(BroadcastService.this)
                                 .setSmallIcon(R.drawable.ic_new_group)
                                 .setContentTitle(getResources().getText(R.string.app_name))
-                                .setContentText("A new expense was added in "+groupPreview.getName())
+                                .setContentText(message+groupPreview.getName())
                                 .setAutoCancel(true)
                                 .setVibrate(new long[] { 100, 500})
                                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
@@ -117,7 +122,6 @@ public class BroadcastService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         // Wont be called as service is not bound
-        Log.i(LOG_TAG, "In onBind");
         return null;
     }
 
@@ -125,13 +129,11 @@ public class BroadcastService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        Log.i(LOG_TAG, "In onTaskRemoved");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(LOG_TAG, "In onDestroy");
     }
 
 }
