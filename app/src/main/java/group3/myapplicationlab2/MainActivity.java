@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         auth = FirebaseAuth.getInstance();
         // this listener will be called when there is change in firebase user session
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {

@@ -6,12 +6,69 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="group3.myapplicationlab2.PurchaseContributors"
-    tools:showIn="@layout/activity_purchase_contributors">
+    tools:showIn="@layout/activity_purchase_contributors"
+    android:id="@+id/nested_scrollview"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/ll_scroll_2"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="5">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+            <TextView
+                android:id="@+id/scroll_tv_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_margin="@dimen/text_margin"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:text="Author"
+                android:background="?attr/selectableItemBackgroundBorderless"
+
+                />
+
+            <TextView
+                android:id="@+id/scroll_tv_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textAlignment="center"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                />
+
+            <TextView
+                android:id="@+id/scroll_tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textAlignment="center"
+                android:layout_weight="2"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:text="Date"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/scroll_lv_contributors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:textAlignment="center"
+            android:layout_weight="2"
+            android:textColor="#000000"
+            android:text="Cotribtuors to pruchase"/>
+
+    </LinearLayout>
+
 
 </android.support.v4.widget.NestedScrollView>

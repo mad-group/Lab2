@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,6 +118,7 @@ public class ExpenseInput extends AppCompatActivity {
 
 
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_save);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +182,7 @@ public class ExpenseInput extends AppCompatActivity {
             Log.d("Debug", group_id);
 
             Purchase p = new Purchase();
+            p.setAuthor_id(author);
             p.setAuthorName(author);
             p.setTotalAmount(Double.parseDouble(amount));
             p.setCausal(expense);
@@ -189,6 +192,8 @@ public class ExpenseInput extends AppCompatActivity {
             p.setUser_name(user.getName());
             p.setAuthor_id(user.getUid());
             p.setContributors(createContributorsMap());
+
+            Log.d("Debug", "dim " + p.getContributors().size());
 
 
             if (this.imageOutFile == null)

@@ -227,6 +227,11 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Object o = listView.getItemAtPosition(position);
                 Purchase p = (Purchase)o;
                 Intent i = new Intent(getApplicationContext(), PurchaseContributors.class);
+                Log.d("Debug", "dim " + p.getCausal());
+
+                i.putExtra("group", group);
+                i.putExtra("user",user);
+                i.putExtra("purchase",p);
                 startActivity(i);
 
             }

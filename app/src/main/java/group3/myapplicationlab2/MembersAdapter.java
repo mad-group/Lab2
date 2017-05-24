@@ -37,8 +37,9 @@ class MembersAdapter extends ArrayAdapter<GroupMember> {
         member.setText(groupMember.getName());
         amount.setText("0");
         user_id_tv.setText(groupMember.getUser_id());
-        //nb.setMinValue(0);
-        nb.setValue(1);
+        nb.setMinValue(0);
+        nb.setValue(10);
+
 
         return convertView;
     }

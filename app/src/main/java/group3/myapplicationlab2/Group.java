@@ -70,6 +70,11 @@ public class Group implements Serializable {
                 p.setGroup_id(purchase.get("group_id").toString());
                 p.setPathImage(purchase.get("pathImage").toString());
                 p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
+                Map <String, Object> objContributors = (HashMap<String, Object>) objectHashMap.get("contributors");
+                for (Object ob2: objPurchases.values()){
+                    //
+                }
+
                 purchases.add(p);
             }
         }
