@@ -125,7 +125,7 @@ public class Group implements Serializable {
     }
 
     public void computePaymentProportion(User user){
-        String mySelf = user.getEmail();
+        String mySelf = user.getUid();
 
         for (int i=0; i < this.purchases.size(); i++){
             Purchase purchase = this.purchases.get(i);
