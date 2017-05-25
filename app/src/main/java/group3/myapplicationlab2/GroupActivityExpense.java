@@ -191,9 +191,9 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        finish();
         Intent main = new Intent(this, MainActivity.class);
         startActivity(main);
-
     }
 
 }

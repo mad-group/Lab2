@@ -61,6 +61,16 @@ public class BroadcastService extends Service {
                 else if (lastEvent.equals("groupChangeName")){
                     message = "A group changed name in ";
                 }
+                else {
+
+                }
+
+                /*if (ApplicationLifecycleManager.isAppVisible()){
+                    Log.d("VISIBILEEEEE", "YES");
+                }
+                else {
+                    Log.d("VISIBILEEEEE", "NOOOO");
+                }*/
 
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(BroadcastService.this)

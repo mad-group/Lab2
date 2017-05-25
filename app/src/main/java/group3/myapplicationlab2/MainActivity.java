@@ -72,11 +72,12 @@ public class MainActivity extends AppCompatActivity
     private String pin_str;
     private int pos;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
 
         auth = FirebaseAuth.getInstance();
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
@@ -288,6 +289,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            finish();
         }
     }
 
