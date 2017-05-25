@@ -55,9 +55,6 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
 
-    private ListView list;
-    private ArrayList<String> groups_ids = new ArrayList<>();
-
     private User user;
     private  DatabaseReference user_groups;
     private DatabaseReference user_info;
@@ -72,12 +69,16 @@ public class MainActivity extends AppCompatActivity
     private String pin_str;
     private int pos;
 
+    private DataBaseProxy dataBaseProxy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
+
+        dataBaseProxy = new DataBaseProxy();
 
         auth = FirebaseAuth.getInstance();
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {

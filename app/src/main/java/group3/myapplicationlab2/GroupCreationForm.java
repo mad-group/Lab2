@@ -37,25 +37,14 @@ import java.util.List;
 public class GroupCreationForm extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = GroupCreationForm.class.getSimpleName();
-    private ArrayList<String> membersList;
-    private ArrayAdapter<String> membersAdapter;
-    private EditText groupName, groupDescription, newParticipant, groupPin;
-    private Button btnNewPart;
-    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private EditText groupName, groupDescription, groupPin;
 
-    private final DatabaseReference myRef = mDatabase.getReference("Groups");
-    private final DatabaseReference myRefUsers = mDatabase.getReference("Users");
-
-    private final List<String> members = new ArrayList<String>();
-    private List<String> Mylist = new ArrayList<String>();
-    private ListView lw;
     private final int REQUEST_INVITE = 0;
 
     private GoogleApiClient mGoogleApiClient;
 
     List<String> users = new ArrayList<String>();
 
-    List<String> myList_notregistered = new ArrayList<String>();
     private String groupNameTmp = null;
     private String groupIdTmp = null;
     private String groupPinTmp = null;
@@ -63,6 +52,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
     private Group newGroup;
     private User user;
+    private DataBaseProxy dataBaseProxy;
 
 
     @Override
@@ -71,24 +61,12 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         setContentView(R.layout.activity_group_creation_form);
 
         user = (User)getIntent().getSerializableExtra("user");
+        dataBaseProxy = new DataBaseProxy();
 
         // User input
         groupName = (EditText)findViewById(R.id.new_group);
         groupDescription = (EditText)findViewById(R.id.group_description);
         groupPin = (EditText) findViewById(R.id.group_pin);
-
-
-        //newParticipant = (EditText)findViewById(R.id.new_participant);
-        //btnNewPart = (Button)findViewById(R.id.new_part_btn);
-
-
-/*        // Insert new participants
-        lw = (ListView)findViewById(R.id.list_part);
-        String[] participants = {};
-        List<String> Mylist = new ArrayList<String>();
-        membersList = new ArrayList<>(Arrays.asList(participants));
-        membersAdapter = new ArrayAdapter<String>(this, R.layout.new_member_item, R.id.new_member, Mylist);
-        lw.setAdapter(membersAdapter);*/
 
         // Create an auto-managed GoogleApiClient with access to App Invites.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -119,24 +97,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                                 }
                             }
                         });
-
-        ValueEventListener UsersListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot groupsnapshot : dataSnapshot.getChildren()) {
-                    //Getting the data from database snapshot
-                    User user = groupsnapshot.getValue(User.class);
-                    users.add(user.getEmail());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        myRefUsers.addValueEventListener(UsersListener);
 
     }/*[END onCreate]*/
 
@@ -172,31 +132,19 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         //db insert of new group
         if (prova) {
             FirebaseAuth auth = FirebaseAuth.getInstance();
-
-            //List<String> l = new ArrayList<String>();
-            //List<String> lp = new ArrayList<String>();
-            //l.add(auth.getCurrentUser().getEmail());
-            //newGroup.setMembers(l);
             this.currentUser = auth.getCurrentUser().getEmail();
 
-            String id = myRef.push().getKey();
-
-            Log.d("PRIMO", id);
-            //myRef.push().setValue(newGroup);
-            myRef.child(id).setValue(newGroup);
-
+            String groupId = dataBaseProxy.insertGroup(newGroup);
 
             GroupMember groupMember = new GroupMember();
-            groupMember.setName(user.getName());
-            groupMember.setEmail(user.getEmail());
-            myRef.child(id).child("members2").child(user.getUid()).setValue(groupMember);
+            groupMember.groupMemberConstructor(user.getName(), user.getEmail());
 
-            newGroup.setId(id);
+            dataBaseProxy.insertMemberInGroup(groupId, user.getUid(), groupMember);
+
+            newGroup.setId(groupId);
             this.groupPinTmp = newGroup.getPin();
             this.groupNameTmp = newGroup.getName();
             this.groupIdTmp = newGroup.getId();
-            //Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
-
         }
 
         if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
@@ -229,21 +177,21 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                 }
 
                 GroupPreview groupPreview = new GroupPreview();
-                groupPreview.setName(newGroup.getName());
-                groupPreview.setId(newGroup.getId());
-                groupPreview.setDescription(newGroup.getDescription());
-                groupPreview.setLastModify(System.currentTimeMillis());
-                groupPreview.setLastEvent("GroupCreation");
+                groupPreview.GroupPreviewConstructor(
+                        newGroup.getName(),
+                        newGroup.getId(),
+                        newGroup.getDescription(),
+                        System.currentTimeMillis(),
+                        "GroupCreation",
+                        user.getUid()
+                );
 
                 Intent i = new Intent();
                 i.putExtra("new_groupPreview", groupPreview);
                 setResult(RESULT_OK, i);
                 finish();
             }else {
-                // Sending failed or it was canceled, show failure message to the user
-                // [START_EXCLUDE]
                 Toast.makeText(getApplicationContext(), R.string.invitation_failed, Toast.LENGTH_SHORT).show();
-                // [END_EXCLUDE]
             }
         }
     }
@@ -253,77 +201,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         //showMessage(getString(R.string.google_play_services_error));
         Toast.makeText(getApplicationContext(), "failed conn", Toast.LENGTH_SHORT).show();
-    }
-
-    public void sendInvitation(View v){
-
-       /* if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
-            //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
-            onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
-        else
-            Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();*/
-
-
-/*        //members is a list of mail
-        if (members.size()<1){
-            String err = getResources().getString(R.string.no_user_insert);
-            newParticipant.setError(err);
-            prova = false;
-        }else{
-            newGroup.setMembers(members);
-            //Toast.makeText(getApplicationContext(), "invitation here", Toast.LENGTH_SHORT).show();
-        }*/
-
-        //for(int i =0; i< members.size(); i++)
-        //    Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_LONG).show();
-
-       /* if (prova)
-
-            //for ()
-            myList_notregistered.clear();
-            for (String i : members){
-
-                if (!(users.contains(i))){
-                    myList_notregistered.add(i);
-                }
-                else{
-                    continue;
-                }
-            }
-            Log.d("Deb", myList_notregistered.get(0));
-
-            if (myList_notregistered.size()>0){
-
-
-                ArrayList<String> arrayOfGEmail = new ArrayList<String>(myList_notregistered);
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayOfGEmail);
-
-                new AlertDialog.Builder(this)
-                        .setTitle("Do you want to invite these users?")
-                        .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                onInviteClicked("Il signore", "PUTTANA LA MADONNA" );
-                                adapter.clear();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                                adapter.clear();
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }*/
-
-
-
     }
 
 }

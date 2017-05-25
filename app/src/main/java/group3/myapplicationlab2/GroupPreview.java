@@ -24,6 +24,16 @@ public class GroupPreview implements Serializable, Comparable<GroupPreview> {
 
     }
 
+    public void GroupPreviewConstructor (String name, String id, String description, long lastModify, String lastEvent, String lastAuthor){
+        this.name = name;
+        this.id = id;
+        this.description = description;
+        this.lastModify = lastModify;
+        this.lastEvent = lastEvent;
+        this.lastAuthor = lastAuthor;
+        return;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

@@ -1,5 +1,7 @@
 package group3.myapplicationlab2;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.io.Serializable;
 
 /**
@@ -12,6 +14,11 @@ public class GroupMember implements Serializable {
     private String name;
     private String email;
     private Double payment= new Double(0);
+
+    public void groupMemberConstructor(String name, String email){
+        this.name = name;
+        this.email = email;
+    }
 
     public String getName() {
         return name;
@@ -36,5 +43,6 @@ public class GroupMember implements Serializable {
     public void setPayment(Double payment) {
         this.payment = payment;
     }
+
 }
 
