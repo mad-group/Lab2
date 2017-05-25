@@ -91,21 +91,6 @@ public class PurchaseContributors extends AppCompatActivity {
             drawNewCotnributor(pcList.get(i));
         }
 
-
-
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        })*/;
-    }
-
-    public void onClickTest(){
-        Log.d("debug", "clicked");
-
     }
 
     private void drawNewCotnributor(PurchaseContributor pc_){
@@ -115,9 +100,9 @@ public class PurchaseContributors extends AppCompatActivity {
             View linearLayout = findViewById(R.id.ll_scroll_3);
             final TextView tv = new TextView(this);
             if (!pc.getPayed())
-                tv.setText(pc.getUser_name() + " owes to " + purchase.getUser_name() + " " + pc.getAmount() + "€");
+                tv.setText(pc.getUser_name() + getString(R.string.owes_to) + purchase.getUser_name() + " " + pc.getAmount() + "€");
             else
-                tv.setText(pc.getUser_name() + " payed to " + purchase.getUser_name() + " " + pc.getAmount() + "€");
+                tv.setText(pc.getUser_name() + getString(R.string.payed_to) + purchase.getUser_name() + " " + pc.getAmount() + "€");
             tv.setTextSize((float) 25);
             tv.setTextColor(Color.parseColor("#000000"));
             tv.setClickable(true);
