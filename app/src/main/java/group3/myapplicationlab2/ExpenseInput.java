@@ -178,6 +178,7 @@ public class ExpenseInput extends AppCompatActivity {
             HashMap<String,Object> hm = new HashMap<>();
             hm.put("lastModify", lastModify);
             hm.put("lastEvent", "expenseInput");
+            hm.put("lastAuthor", user.getUid());
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
 
