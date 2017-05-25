@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -116,6 +117,16 @@ public class ExpenseInput extends AppCompatActivity {
         lv.setAdapter(membersAdapter);
         membersAdapter.addAll(group.getGroupMembers());
 
+/*
+        for (int i=0; i< lv.getCount(); i++){
+            if (lv.getChildAt(i) == null){
+                Log.d("debug", "list not initial");
+            }
+            //setPartsListener(lv.getChildAt(i));
+            //setArrowsListener();
+        }
+*/
+
 
 
 
@@ -128,6 +139,22 @@ public class ExpenseInput extends AppCompatActivity {
         });
 
     }
+
+    public void onStart(){
+        super.onStart();
+        for (int i=0; i< lv.getCount(); i++){
+            if (lv.getChildAt(i) == null){
+                Log.d("debug", "list not initial");
+            }
+            else{
+                Log.d("debug", "pos " + i);
+            }
+            //setPartsListener(lv.getChildAt(i));
+            //setArrowsListener();
+        }
+
+    }
+
 
 
     public void saveExpense(View v) {
@@ -334,23 +361,6 @@ public class ExpenseInput extends AppCompatActivity {
         }
     }
 
-    private void drawDialogBoxEqual(String title, float amount) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        builder.setTitle(title);
-        String str="";
-        for (int i =0; i<group.getGroupMembers().size();i++){
-            Log.d("Debug", "insideFor");
-            str += group.getGroupMembers().get(i).getName() + "\t" + Float.toString(amount/group.getGroupMembers().size()) + "€\n";
-        }
-        builder.setMessage(str);
-        builder.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
-        android.support.v7.app.AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
     private void setEditTextAmountListener(){
         amountField = (EditText) findViewById(R.id.ie_et_amount);
         amountField.addTextChangedListener(new TextWatcher() {
@@ -366,18 +376,20 @@ public class ExpenseInput extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                TextView et;
+                TextView tv;
                 View v;
+                EditText et;
                 float fraction;
                 for (int i =0; i<lv.getCount(); i++){
                     v = lv.getChildAt(i);
-                    et = (TextView) v.findViewById(R.id.item_amount);
+                    tv = (TextView) v.findViewById(R.id.item_amount);
                     if(editable.toString().isEmpty()){
-                        et.setText("0");
+                        tv.setText("0");
                     }
                     else {
+                        //fraction = Float.parseFloat(editable.toString()) * Integer.parseInt(et.getText().toString())/ sumParts();
                         fraction = Float.parseFloat(editable.toString()) / sumParts();
-                        et.setText(new DecimalFormat("##.##").format(fraction));
+                        tv.setText(new DecimalFormat("##.##").format(fraction));
                     }
                 }
 
@@ -385,8 +397,62 @@ public class ExpenseInput extends AppCompatActivity {
         });
     }
 
+    private void setPartsListener() {
+        View v;
+        for (int i=0; i< lv.getCount(); i++){
+            v = lv.getChildAt(i);
+            TextView itemAmount = (TextView) v.findViewById(R.id.item_amount);
+
+        }
+ /*       final View v = v_;
+        TextView itemAmount = (TextView) v.findViewById(R.id.item_amount);
+        itemAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                EditText et = (EditText) v.findViewById(R.id.item_part);
+                EditText totalAmount = (EditText) v.findViewById(R.id.ie_et_amount);
+                int myParts = Integer.parseInt(et.getText().toString());
+                float currentTotalAmount = Float.parseFloat(totalAmount.getText().toString());
+                int allParts = sumParts();
+                float fraction;
+
+                if (allParts == 0) {
+                    //setAtuhorUniqueContributor();
+                    Log.d("Debug", "division per zero");
+                }
+                else{
+                    fraction = currentTotalAmount * myParts / allParts;
+                    itemAmount.setText(Float.toString(fraction));
+                }
+
+            }
+        });*/
+
+    }
+
     private int sumParts(){
-        return group.getGroupMembers().size();
+        View v;
+        EditText et;
+        int parts = 0;
+        for (int i=0; i<lv.getCount(); i++){
+            v = lv.getChildAt(i);
+            et = (EditText) v.findViewById(R.id.item_part);
+            parts += Integer.parseInt(et.getText().toString());
+        }
+        return parts;
+
+        //return group.getGroupMembers().size();
     }
 
     private List<PurchaseContributor> createPurchaseContributorsList() {
@@ -416,5 +482,22 @@ public class ExpenseInput extends AppCompatActivity {
         }
         return l;
     }
+    public void decreaseValue(View view) {
+        EditText et = (EditText) findViewById(R.id.item_part);
+        int parts = Integer.parseInt(et.getText().toString());
+        if (parts == 0){
+            et.setText("0");
+        }
+        else{
+            et.setText(Integer.toString(parts--));
+        }
+    }
+
+    public void increaseValue(View view) {
+        EditText et = (EditText) findViewById(R.id.item_part);
+        int parts = Integer.parseInt(et.getText().toString());
+        et.setText(Integer.toString(parts++));
+    }
+
 }
 

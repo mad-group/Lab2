@@ -42,15 +42,31 @@
         android:visibility="invisible"
         />
 
-    <NumberPicker
-        android:id="@+id/numberPicker"
+    <ImageView
         android:layout_width="wrap_content"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-
+        android:layout_height="wrap_content"
+        android:id="@+id/item_up_part"
+        android:src="@drawable/ic_collapse_arrow1600"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
         />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_part"
+        android:inputType="number"
+        android:text="1"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_down_part"
+        android:src="@drawable/ic_expand_arrow1600"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        />
+
 
 
 </LinearLayout>
