@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Money Tracker</string>
+    <string name="app_name">Money Sharing</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -104,7 +104,7 @@
     <string name="insert_group_descr">There are any description</string>
 
     <string name="invitation_title">Chose your friends to invite!</string>
-    <string name="invitation_message"><html><h1>Money Tracker group invite</h1></html></string>
+    <string name="invitation_message"><html><h1>Money Sharing group invite</h1></html></string>
     <string name="invitation_deep_link">https://www.google.it</string>
     <string name="invitation_custom_image">http://pix.iemoji.com/images/emoji/apple/ios-9/256/grinning-face-with-smiling-eyes.png</string>
     <string name="invitation_cta">test cta</string>
@@ -113,11 +113,11 @@
     <string name="groupPin">Group password</string>
     <string name="groupPinHint">Type group password here...</string>
     <string name="wrong_group_pin">The password must be of at least 6 characters</string>
-    <string name="email_subject"> Money Tracker joining group invitation</string>
+    <string name="email_subject"> Money Sharing joining group invitation</string>
     <string name="invitation_failed">Invitation failed</string>
     <string name="invitation_email">
         <![CDATA[<p>Dear user,<br/>
-         you received an invitation to join a Money Tracker group from %1$s.
+         you received an invitation to join a Money Sharing group from %1$s.
          <br/>
          If you want to join it, please fill the join group form with the following ID and password.
          Otherwise, ignore this email.
