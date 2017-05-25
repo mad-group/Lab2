@@ -113,7 +113,7 @@ public class ExpenseInput extends AppCompatActivity {
 
         lv = (ListView)findViewById(R.id.list_participants_expense);
         ArrayList<GroupMember> groupMembers = new ArrayList<>();
-        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers);
+        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers,0);
         lv.setAdapter(membersAdapter);
         membersAdapter.addAll(group.getGroupMembers());
 
@@ -199,6 +199,10 @@ public class ExpenseInput extends AppCompatActivity {
         if(amount == null || amount.isEmpty()){
             String err = getResources().getString(R.string.miss_amount);
             amountField.setError(err);
+            allOk = false;
+        }
+
+        if(sumParts()==0){
             allOk = false;
         }
 
@@ -378,16 +382,17 @@ public class ExpenseInput extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 TextView tv;
                 View v;
-                EditText et;
                 float fraction;
                 for (int i =0; i<lv.getCount(); i++){
                     v = lv.getChildAt(i);
                     tv = (TextView) v.findViewById(R.id.item_amount);
                     if(editable.toString().isEmpty()){
+                        membersAdapter.setTotAmount((float)0);
                         tv.setText("0");
                     }
                     else {
                         //fraction = Float.parseFloat(editable.toString()) * Integer.parseInt(et.getText().toString())/ sumParts();
+                        membersAdapter.setTotAmount(Float.parseFloat(editable.toString()));
                         fraction = Float.parseFloat(editable.toString()) / sumParts();
                         tv.setText(new DecimalFormat("##.##").format(fraction));
                     }
@@ -397,49 +402,7 @@ public class ExpenseInput extends AppCompatActivity {
         });
     }
 
-    private void setPartsListener() {
-        View v;
-        for (int i=0; i< lv.getCount(); i++){
-            v = lv.getChildAt(i);
-            TextView itemAmount = (TextView) v.findViewById(R.id.item_amount);
 
-        }
- /*       final View v = v_;
-        TextView itemAmount = (TextView) v.findViewById(R.id.item_amount);
-        itemAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                EditText et = (EditText) v.findViewById(R.id.item_part);
-                EditText totalAmount = (EditText) v.findViewById(R.id.ie_et_amount);
-                int myParts = Integer.parseInt(et.getText().toString());
-                float currentTotalAmount = Float.parseFloat(totalAmount.getText().toString());
-                int allParts = sumParts();
-                float fraction;
-
-                if (allParts == 0) {
-                    //setAtuhorUniqueContributor();
-                    Log.d("Debug", "division per zero");
-                }
-                else{
-                    fraction = currentTotalAmount * myParts / allParts;
-                    itemAmount.setText(Float.toString(fraction));
-                }
-
-            }
-        });*/
-
-    }
 
     private int sumParts(){
         View v;
@@ -451,8 +414,6 @@ public class ExpenseInput extends AppCompatActivity {
             parts += Integer.parseInt(et.getText().toString());
         }
         return parts;
-
-        //return group.getGroupMembers().size();
     }
 
     private List<PurchaseContributor> createPurchaseContributorsList() {
@@ -481,22 +442,6 @@ public class ExpenseInput extends AppCompatActivity {
 
         }
         return l;
-    }
-    public void decreaseValue(View view) {
-        EditText et = (EditText) findViewById(R.id.item_part);
-        int parts = Integer.parseInt(et.getText().toString());
-        if (parts == 0){
-            et.setText("0");
-        }
-        else{
-            et.setText(Integer.toString(parts--));
-        }
-    }
-
-    public void increaseValue(View view) {
-        EditText et = (EditText) findViewById(R.id.item_part);
-        int parts = Integer.parseInt(et.getText().toString());
-        et.setText(Integer.toString(parts++));
     }
 
 }

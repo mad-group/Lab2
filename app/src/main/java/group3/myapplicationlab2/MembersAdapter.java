@@ -3,6 +3,7 @@ package group3.myapplicationlab2;
 import android.content.Context;
 import android.media.Image;
 import android.provider.ContactsContract;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,7 +17,9 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.api.BooleanResult;
+import com.google.android.gms.flags.impl.FlagProviderImpl;
 import com.google.firebase.auth.GetTokenResult;
 
 import java.util.ArrayList;
@@ -26,9 +29,11 @@ import java.util.ArrayList;
  */
 
 class MembersAdapter extends ArrayAdapter<GroupMember>{
+    float totAmount;
 
-    public MembersAdapter(Context context, ArrayList<GroupMember> groupMembers) {
+    public MembersAdapter(Context context, ArrayList<GroupMember> groupMembers, float ta) {
         super(context, 0, groupMembers);
+        totAmount = ta;
     }
 
     @Override
@@ -42,7 +47,7 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
         final TextView amount = (TextView) convertView.findViewById(R.id.item_amount);
         TextView user_id_tv = (TextView) convertView.findViewById(R.id.item_user_id);
         final EditText part = (EditText)convertView.findViewById(R.id.item_part);
-        final EditText totalAmount = (EditText) convertView.findViewById(R.id.ie_et_amount);
+
 
         member.setText(groupMember.getName());
         amount.setText("0");
@@ -56,7 +61,6 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
                 int parts = Integer.parseInt(part.getText().toString());
                 parts = parts +1;
                 part.setText(Integer.toString(parts));
-                Log.d("Debug", Integer.toString(parts));
             }
         });
 
@@ -70,8 +74,59 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
                 }else{
                     parts = parts -1;
                     part.setText(Integer.toString(parts));
-                    Log.d("Debug", Integer.toString(parts));
                 }
+
+            }
+        });
+
+        final View finalConvertView = convertView;
+        part.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                //float currentTotalAmount = Float.parseFloat(totalAmount.getText().toString());
+                int allParts = 0;
+                View v;
+                EditText localParts;
+                for (int i=0; i< parent.getChildCount(); i++){
+                    v = parent.getChildAt(i);
+                    localParts = (EditText)v.findViewById(R.id.item_part);
+                    allParts += Integer.parseInt(localParts.getText().toString());
+                }
+                float fraction;
+                float myAmount;
+                float localTotAmount = totAmount;
+                TextView localAmount;
+                for (int i=0; i< parent.getChildCount(); i++){
+                    v = parent.getChildAt(i);
+                    localParts = (EditText)v.findViewById(R.id.item_part);
+                    localAmount = (TextView) v.findViewById(R.id.item_amount);
+                    int myParts = Integer.parseInt(localParts.getText().toString());
+                    Log.d("debug", "local parts" + myParts);
+
+                    if (allParts == 0) {
+                        localAmount.setText("0");
+                    }
+                    else{
+                        //myAmount =  Float.parseFloat(amount.getText().toString());
+                        //localTotAmount = myAmount * (allParts - 1)/ myParts;
+
+                        fraction = localTotAmount * myParts / allParts;
+                        localAmount.setText(Float.toString(fraction));
+                    }
+
+                }
+
 
             }
         });
@@ -83,8 +138,12 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
 
 
 
+
+
         return convertView;
     }
 
-
+    public void setTotAmount(float totAmount) {
+        this.totAmount = totAmount;
+    }
 }
