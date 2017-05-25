@@ -58,12 +58,9 @@ public class GroupActivityExpense extends AppCompatActivity {
     ExpenseAdapter expenseAdapter;
     Locale l = Locale.ENGLISH;
     private String gid;
-
     private Group group;
     private User user;
     ListView listView;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

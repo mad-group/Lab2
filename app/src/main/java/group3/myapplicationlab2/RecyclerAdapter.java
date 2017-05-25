@@ -17,7 +17,49 @@ import java.util.ArrayList;
  */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    public ArrayList<Purchase> list;
+    // This contains the expenses list
+    private ArrayList<Purchase> list;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView author, amount;
+
+        public ViewHolder(View view) {
+            super(view);
+            author = (TextView) view.findViewById(R.id.tv_card_expense_name);
+            amount = (TextView) view.findViewById(R.id.tv_card_general_info);
+        }
+    }
+
+    // RecyclerAdapter CONSTRUCTOR
+    public RecyclerAdapter(ArrayList<Purchase> list) {
+        this.list = list;
+    }
+
+    @Override
+    // This method returns the inflated CardView
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_layout, viewGroup, false);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+        Purchase purc = list.get(i);
+        // Here the definition of what we want to show in the expense card
+        viewHolder.author.setText(purc.getAuthorName());
+        viewHolder.amount.setText(purc.getCausal());
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+}
+        /*viewHolder.itemImage.setImageResource(images[i]);
+    }
+    }
+
+
 
     /*private String[] titles = {"Chapter One",
             "Chapter Two",
@@ -32,7 +74,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             "Item two details", "Item three details",
             "Item four details", "Item file details",
             "Item six details", "Item seven details",
-            "Item eight details"};*/
+            "Item eight details"};
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public int currentItem;
@@ -50,11 +92,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     Snackbar.make(v, "Click detected on item " + position,
                             Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
-            });*/
+            });
         }
     }
 
-    // Recycler adapter: it receives purchases list
+    // Recycler adapter CONSTRUCTOR: it receives purchases list
     public RecyclerAdapter(ArrayList<Purchase> list) {
         this.list = list;
     }
@@ -72,11 +114,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         // Here the definition of what we want to show in the expense card
         viewHolder.expenseAuthor.setText(purc.getAuthorName());
         viewHolder.expenseName.setText(purc.getCausal());
-        /*viewHolder.itemImage.setImageResource(images[i]);*/
+        /*viewHolder.itemImage.setImageResource(images[i]);
     }
 
     @Override
     public int getItemCount() {
         return list.size();
-    }
-}
+    } */
