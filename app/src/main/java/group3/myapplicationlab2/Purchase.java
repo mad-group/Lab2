@@ -28,7 +28,8 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     private long lastModify;
     private String user_name;
     private String author_id;
-    private Map<String,Object> contributors;
+    private String purchase_id;
+    private List<PurchaseContributor> contributors;
     //private int partition_id; //the id of partion methods
     //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
     //private String purchase_id;
@@ -96,6 +97,10 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     public String getAuthor_id(){return this.author_id;}
     public void setAuthor_id(String author_id){this.author_id = author_id;}
 
-    public void setContributors(Map<String,Object> map){contributors = map;}
-    public Map<String,Object> getContributors(){return contributors;}
+    public void setContributors(List<PurchaseContributor> l){contributors = l;}
+    public List<PurchaseContributor> getContributors(){return contributors;}
+
+    public String getPurchase_id() {return purchase_id;}
+    public void setPurchase_id(String pid) {purchase_id=pid;}
+
 }
