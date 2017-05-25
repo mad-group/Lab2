@@ -54,8 +54,25 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
             public void onClick(View v) {
                 ((ListView) parent).performItemClick(v, position, 0);
                 int parts = Integer.parseInt(part.getText().toString());
-                part.setText(Integer.toString(parts++));
-                Log.d("Debug", Integer.toString(parts++));
+                parts = parts +1;
+                part.setText(Integer.toString(parts));
+                Log.d("Debug", Integer.toString(parts));
+            }
+        });
+
+        convertView.findViewById(R.id.item_down_part).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 0);
+                int parts = Integer.parseInt(part.getText().toString());
+                if (parts == 0){
+                    part.setText(Integer.toString(0));
+                }else{
+                    parts = parts -1;
+                    part.setText(Integer.toString(parts));
+                    Log.d("Debug", Integer.toString(parts));
+                }
+
             }
         });
 
