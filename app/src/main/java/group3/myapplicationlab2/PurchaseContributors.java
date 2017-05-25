@@ -110,11 +110,14 @@ public class PurchaseContributors extends AppCompatActivity {
 
     private void drawNewCotnributor(PurchaseContributor pc_){
         final PurchaseContributor pc = pc_;
-        if (!pc.getUser_id().equals(purchase.getAuthorName()) && !pc.getPayed()) {
+        if (!pc.getUser_id().equals(purchase.getAuthorName())) {
             //Log.d("debug", "pc_id: " + pc.getUser_id() + "p_auth_id: "+purchase.getAuthorName());
             View linearLayout = findViewById(R.id.ll_scroll_3);
             final TextView tv = new TextView(this);
-            tv.setText(pc.getUser_name() + " owes to " + purchase.getUser_name() + " " + pc.getAmount() + "€");
+            if (!pc.getPayed())
+                tv.setText(pc.getUser_name() + " owes to " + purchase.getUser_name() + " " + pc.getAmount() + "€");
+            else
+                tv.setText(pc.getUser_name() + " payed to " + purchase.getUser_name() + " " + pc.getAmount() + "€");
             tv.setTextSize((float) 25);
             tv.setTextColor(Color.parseColor("#000000"));
             tv.setClickable(true);

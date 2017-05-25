@@ -317,6 +317,12 @@ public class GroupActivityExpense extends AppCompatActivity {
         user_groups.child(position).removeValue();
         if (user.getGroups() != null)
             user.getGroups().remove(position);
+        DatabaseReference groupsQuery = FirebaseDatabase.getInstance().getReference()
+                .child("Groups")
+                .child(group.getId())
+                .child("members2")
+                .child(user.getUid());
+        groupsQuery.removeValue();
     }
 
 
