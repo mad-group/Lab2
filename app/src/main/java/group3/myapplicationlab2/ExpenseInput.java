@@ -133,10 +133,10 @@ public class ExpenseInput extends AppCompatActivity {
     public void saveExpense(View v) {
 
 
-        Map<String,Object> map = createContributorsMap();
+/*        Map<String,Object> map = createContributorsMap();
         for(String key : map.keySet()){
             Log.d("Debug", "key: " + key + " Price: " + map.get(key));
-        }
+        }*/
 
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
 
@@ -191,9 +191,10 @@ public class ExpenseInput extends AppCompatActivity {
             p.setLastModify(System.currentTimeMillis());
             p.setUser_name(user.getName());
             p.setAuthor_id(user.getUid());
-            p.setContributors(createContributorsMap());
+            /*p.setContributors(createPurchaseContributorsList());*/
+            List<PurchaseContributor> l = createPurchaseContributorsList();
 
-            Log.d("Debug", "dim " + p.getContributors().size());
+            //Log.d("Debug", "dim " + p.getContributors().size());
 
 
             if (this.imageOutFile == null)
@@ -205,7 +206,16 @@ public class ExpenseInput extends AppCompatActivity {
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
             hm.put("lastModify", lastModify);
+            p.setPurchase_id(pid);
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
+
+            String key;
+            for (PurchaseContributor pc: l){
+                key = myRef.child(group_id).child("purchases").child(pid).child("contributors").push().getKey();
+                pc.setContributor_id(key);
+                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(key).setValue(pc);
+            }
+
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
             users.child(user.getUid())
                     .child("groups")
@@ -379,19 +389,32 @@ public class ExpenseInput extends AppCompatActivity {
         return group.getGroupMembers().size();
     }
 
-    private Map<String, Object> createContributorsMap() {
-        Map<String, Object> map = new HashMap<>();
+    private List<PurchaseContributor> createPurchaseContributorsList() {
+        List<PurchaseContributor> l = new ArrayList<>();
         TextView et_amount;
         TextView et_id;
+        TextView et_userName;
         View vv;
         for (int ii = 0; ii < lv.getCount(); ii++) {
             vv = lv.getChildAt(ii);
             et_amount = (TextView) vv.findViewById(R.id.item_amount);
             et_id = (TextView) vv.findViewById(R.id.item_user_id);
-            map.put(et_id.getText().toString(), Double.parseDouble(et_amount.getText().toString()));
+            et_userName = (TextView) vv.findViewById(R.id.item_member);
+            PurchaseContributor pc = new PurchaseContributor();
+            pc.setUser_id(et_id.getText().toString().trim());
+            pc.setUser_name(et_userName.getText().toString().trim());
+            Double amount = Double.parseDouble(et_amount.getText().toString());
+            pc.setAmount(amount);
+            if (et_amount.getText().toString().equals("0")){
+                pc.setPayed(true);
+            }
+            else{
+                pc.setPayed(false);
+            }
+            l.add(pc);
 
         }
-        return map;
+        return l;
     }
 }
 

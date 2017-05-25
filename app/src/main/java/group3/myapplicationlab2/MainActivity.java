@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         auth = FirebaseAuth.getInstance();
         // this listener will be called when there is change in firebase user session
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
@@ -368,7 +368,9 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (!userHasDebits(user.getUid())){
-                    deleteUserFromGroup(position);
+                    //deleteUserFromGroup(position);
+                    Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -379,9 +381,13 @@ public class MainActivity extends AppCompatActivity
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+
     }
 
     private Boolean userHasDebits(String user_id){
+        for(int i =0; i< currentGroupPreview.size(); i++){
+            groups_ids.add(currentGroupPreview.get(i).getId());
+        }
         return false;
     }
 

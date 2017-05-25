@@ -1,19 +1,11 @@
 package group3.myapplicationlab2;
 
 
-import android.util.Log;
-import android.widget.ListView;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
-import java.security.Timestamp;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * Created by mc on 03/04/17.
  */
@@ -70,12 +62,25 @@ public class Group implements Serializable {
                 p.setGroup_id(purchase.get("group_id").toString());
                 p.setPathImage(purchase.get("pathImage").toString());
                 p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
-                Map <String, Object> objContributors = (HashMap<String, Object>) objectHashMap.get("contributors");
-                for (Object ob2: objPurchases.values()){
-                    //
-                }
+                p.setPurchase_id(purchase.get("purchase_id").toString());
 
-                purchases.add(p);
+                List<PurchaseContributor> pc_list = new ArrayList<>();
+                pc_list.removeAll(pc_list);
+                if (purchase.get("contributors")!=null){
+                    Map<String, Object> mapPC = (HashMap<String, Object>) purchase.get("contributors");
+                    for (Object ob2 : mapPC.values()){
+                        PurchaseContributor pc = new PurchaseContributor();
+                        Map<String,Object> pcFromMap =  (Map<String,Object>) ob2;
+                        pc.setPayed(Boolean.parseBoolean(pcFromMap.get("payed").toString()));
+                        pc.setUser_id(pcFromMap.get("user_id").toString());
+                        pc.setAmount(Double.parseDouble(pcFromMap.get("amount").toString()));
+                        pc.setUser_name(pcFromMap.get("user_name").toString());
+                        pc.setContributor_id(pcFromMap.get("contributor_id").toString());
+                        pc_list.add(pc);
+                    }
+                    p.setContributors(pc_list);
+                }
+                    purchases.add(p);
             }
         }
         Collections.sort(purchases,Collections.<Purchase>reverseOrder());
