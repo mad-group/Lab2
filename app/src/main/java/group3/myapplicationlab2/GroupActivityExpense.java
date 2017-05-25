@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,13 +59,17 @@ import java.util.Objects;
 
 public class GroupActivityExpense extends AppCompatActivity {
 
+    private static final int PURCHASE_CONTRIBUTOR = 698;
     ExpenseAdapter expenseAdapter;
     Locale l = Locale.ENGLISH;
     private String gid;
 
     private Group group;
     private User user;
-    ListView listView;
+    private ListView listView;
+
+    private int groupListPosition;
+
 
 
 
@@ -74,7 +79,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         setContentView(R.layout.activity_group_expense);
         gid = getIntent().getStringExtra("group_id");
         user = (User)getIntent().getSerializableExtra("user");
-
 
         final DatabaseReference mGroupReference =  FirebaseDatabase.getInstance()
                                                     .getReference("Groups")
@@ -134,12 +138,15 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         registerListenerOnListView();
 
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.group_activity, menu);
+
         return true;
     }
 
@@ -174,6 +181,12 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
         }
 
+        if (id == R.id.leave){
+            final String uid = user.getUid();
+            drawLeavingDialogBox(group.getDescription(), user.getUid(), getIntent().getStringExtra("list_pos"));
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -191,18 +204,39 @@ public class GroupActivityExpense extends AppCompatActivity {
                 expenseAdapter.addAll(group.getPurchases());
             }
         }
+        if (requestCode == PURCHASE_CONTRIBUTOR){
+            if(resultCode == RESULT_OK) {
+                int i = data.getIntExtra("pos",-1);
+                group.getPurchases().get(i).setContributors((List<PurchaseContributor>)data.getSerializableExtra("pcList"));
+            }
+
+        }
     }
 
     private void drawLeavingDialogBox(String title, String text) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+/*        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(text).setTitle(title);
         builder.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 return;
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();*/
+        AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(text);
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+
+                return;
+
+            } });
+        alertDialog.show();
+
     }
 
     private void paintListViewBackground(){
@@ -226,10 +260,71 @@ public class GroupActivityExpense extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = listView.getItemAtPosition(position);
                 Purchase p = (Purchase)o;
+                Intent i = new Intent(getApplicationContext(), PurchaseContributors.class);
+                //Log.d("Debug", "dim " + p.getContributors().size());
+
+                i.putExtra("group", group);
+                i.putExtra("group_id", gid);
+                i.putExtra("user",user);
+                i.putExtra("purchase",p);
+                i.putExtra("pos", position);
+                startActivityForResult(i, PURCHASE_CONTRIBUTOR);
 
             }
         });
     }
+
+    private void drawLeavingDialogBox(String gid, String uid, final String position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.grpup_leaving_text)).setTitle(getString(R.string.leaving_group_title));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (userHasDebits(user.getUid())==false){
+                    //deleteUserFromGroup(position);
+                    deleteUserFromGroup(position);
+                    finish();
+                }
+
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    private Boolean userHasDebits(String user_id){
+        List<Purchase> list = group.getPurchases();
+        for (Purchase p: list){
+            for(PurchaseContributor pc : p.getContributors()){
+                if(pc.getUser_id().equals(user.getUid()) && pc.getPayed()==false) {
+                    Log.d("debug", "aaaaaaaaaa");
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    private void deleteUserFromGroup(String position){
+        DatabaseReference user_groups;
+        user_groups = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("groups");
+        user_groups.child(position).removeValue();
+        if (user.getGroups() != null)
+            user.getGroups().remove(position);
+        DatabaseReference groupsQuery = FirebaseDatabase.getInstance().getReference()
+                .child("Groups")
+                .child(group.getId())
+                .child("members2")
+                .child(user.getUid());
+        groupsQuery.removeValue();
+    }
+
 
 }
 

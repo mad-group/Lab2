@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -36,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -111,9 +113,20 @@ public class ExpenseInput extends AppCompatActivity {
 
         lv = (ListView)findViewById(R.id.list_participants_expense);
         ArrayList<GroupMember> groupMembers = new ArrayList<>();
-        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers);
+        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers,0);
         lv.setAdapter(membersAdapter);
         membersAdapter.addAll(group.getGroupMembers());
+
+/*
+        for (int i=0; i< lv.getCount(); i++){
+            if (lv.getChildAt(i) == null){
+                Log.d("debug", "list not initial");
+            }
+            //setPartsListener(lv.getChildAt(i));
+            //setArrowsListener();
+        }
+*/
+
 
 
 
@@ -127,14 +140,30 @@ public class ExpenseInput extends AppCompatActivity {
 
     }
 
+    public void onStart(){
+        super.onStart();
+        for (int i=0; i< lv.getCount(); i++){
+            if (lv.getChildAt(i) == null){
+                Log.d("debug", "list not initial");
+            }
+            else{
+                Log.d("debug", "pos " + i);
+            }
+            //setPartsListener(lv.getChildAt(i));
+            //setArrowsListener();
+        }
+
+    }
+
+
 
     public void saveExpense(View v) {
 
 
-        Map<String,Object> map = createContributorsMap();
+/*        Map<String,Object> map = createContributorsMap();
         for(String key : map.keySet()){
             Log.d("Debug", "key: " + key + " Price: " + map.get(key));
-        }
+        }*/
 
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
 
@@ -173,6 +202,10 @@ public class ExpenseInput extends AppCompatActivity {
             allOk = false;
         }
 
+        if(sumParts()==0){
+            allOk = false;
+        }
+
 
 
         if (allOk){
@@ -180,6 +213,7 @@ public class ExpenseInput extends AppCompatActivity {
             Log.d("Debug", group_id);
 
             Purchase p = new Purchase();
+            p.setAuthor_id(author);
             p.setAuthorName(author);
             p.setTotalAmount(Double.parseDouble(amount));
             p.setCausal(expense);
@@ -188,7 +222,10 @@ public class ExpenseInput extends AppCompatActivity {
             p.setLastModify(System.currentTimeMillis());
             p.setUser_name(user.getName());
             p.setAuthor_id(user.getUid());
-            p.setContributors(createContributorsMap());
+            /*p.setContributors(createPurchaseContributorsList());*/
+            List<PurchaseContributor> l = createPurchaseContributorsList();
+
+            //Log.d("Debug", "dim " + p.getContributors().size());
 
 
             if (this.imageOutFile == null)
@@ -200,7 +237,16 @@ public class ExpenseInput extends AppCompatActivity {
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
             hm.put("lastModify", lastModify);
+            p.setPurchase_id(pid);
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
+
+            String key;
+            for (PurchaseContributor pc: l){
+                key = myRef.child(group_id).child("purchases").child(pid).child("contributors").push().getKey();
+                pc.setContributor_id(key);
+                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(key).setValue(pc);
+            }
+
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
             users.child(user.getUid())
                     .child("groups")
@@ -319,23 +365,6 @@ public class ExpenseInput extends AppCompatActivity {
         }
     }
 
-    private void drawDialogBoxEqual(String title, float amount) {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        builder.setTitle(title);
-        String str="";
-        for (int i =0; i<group.getGroupMembers().size();i++){
-            Log.d("Debug", "insideFor");
-            str += group.getGroupMembers().get(i).getName() + "\t" + Float.toString(amount/group.getGroupMembers().size()) + "€\n";
-        }
-        builder.setMessage(str);
-        builder.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
-        android.support.v7.app.AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
     private void setEditTextAmountListener(){
         amountField = (EditText) findViewById(R.id.ie_et_amount);
         amountField.addTextChangedListener(new TextWatcher() {
@@ -351,18 +380,21 @@ public class ExpenseInput extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                TextView et;
+                TextView tv;
                 View v;
                 float fraction;
                 for (int i =0; i<lv.getCount(); i++){
                     v = lv.getChildAt(i);
-                    et = (TextView) v.findViewById(R.id.item_amount);
+                    tv = (TextView) v.findViewById(R.id.item_amount);
                     if(editable.toString().isEmpty()){
-                        et.setText("0");
+                        membersAdapter.setTotAmount((float)0);
+                        tv.setText("0");
                     }
                     else {
+                        //fraction = Float.parseFloat(editable.toString()) * Integer.parseInt(et.getText().toString())/ sumParts();
+                        membersAdapter.setTotAmount(Float.parseFloat(editable.toString()));
                         fraction = Float.parseFloat(editable.toString()) / sumParts();
-                        et.setText(new DecimalFormat("##.##").format(fraction));
+                        tv.setText(new DecimalFormat("##.##").format(fraction));
                     }
                 }
 
@@ -370,23 +402,47 @@ public class ExpenseInput extends AppCompatActivity {
         });
     }
 
+
+
     private int sumParts(){
-        return group.getGroupMembers().size();
+        View v;
+        EditText et;
+        int parts = 0;
+        for (int i=0; i<lv.getCount(); i++){
+            v = lv.getChildAt(i);
+            et = (EditText) v.findViewById(R.id.item_part);
+            parts += Integer.parseInt(et.getText().toString());
+        }
+        return parts;
     }
 
-    private Map<String, Object> createContributorsMap() {
-        Map<String, Object> map = new HashMap<>();
+    private List<PurchaseContributor> createPurchaseContributorsList() {
+        List<PurchaseContributor> l = new ArrayList<>();
         TextView et_amount;
         TextView et_id;
+        TextView et_userName;
         View vv;
         for (int ii = 0; ii < lv.getCount(); ii++) {
             vv = lv.getChildAt(ii);
             et_amount = (TextView) vv.findViewById(R.id.item_amount);
             et_id = (TextView) vv.findViewById(R.id.item_user_id);
-            map.put(et_id.getText().toString(), Double.parseDouble(et_amount.getText().toString()));
+            et_userName = (TextView) vv.findViewById(R.id.item_member);
+            PurchaseContributor pc = new PurchaseContributor();
+            pc.setUser_id(et_id.getText().toString().trim());
+            pc.setUser_name(et_userName.getText().toString().trim());
+            Double amount = Double.parseDouble(et_amount.getText().toString());
+            pc.setAmount(amount);
+            if (et_amount.getText().toString().equals("0")){
+                pc.setPayed(true);
+            }
+            else{
+                pc.setPayed(false);
+            }
+            l.add(pc);
 
         }
-        return map;
+        return l;
     }
+
 }
 
