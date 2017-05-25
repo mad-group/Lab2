@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.flags.impl.FlagProviderImpl;
 import com.google.firebase.auth.GetTokenResult;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -79,7 +80,6 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
             }
         });
 
-        final View finalConvertView = convertView;
         part.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -104,7 +104,6 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
                     allParts += Integer.parseInt(localParts.getText().toString());
                 }
                 float fraction;
-                float myAmount;
                 float localTotAmount = totAmount;
                 TextView localAmount;
                 for (int i=0; i< parent.getChildCount(); i++){
@@ -112,17 +111,14 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
                     localParts = (EditText)v.findViewById(R.id.item_part);
                     localAmount = (TextView) v.findViewById(R.id.item_amount);
                     int myParts = Integer.parseInt(localParts.getText().toString());
-                    Log.d("debug", "local parts" + myParts);
 
                     if (allParts == 0) {
                         localAmount.setText("0");
                     }
                     else{
-                        //myAmount =  Float.parseFloat(amount.getText().toString());
-                        //localTotAmount = myAmount * (allParts - 1)/ myParts;
-
                         fraction = localTotAmount * myParts / allParts;
-                        localAmount.setText(Float.toString(fraction));
+                        DecimalFormat df = new DecimalFormat("##.##");
+                        localAmount.setText(df.format(fraction));
                     }
 
                 }
@@ -130,15 +126,6 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
 
             }
         });
-
-
-
-
-
-
-
-
-
 
         return convertView;
     }

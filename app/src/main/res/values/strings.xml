@@ -238,8 +238,8 @@
     <string name="title_activity_zzz_test">zzz_test</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
-    <string name="owes_to">owes to</string>
-    <string name="payed_to">payed to</string>
+    <string name="owes_to"> owes to </string>
+    <string name="payed_to"> payed to </string>
 
 
 </resources>

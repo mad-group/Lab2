@@ -98,11 +98,14 @@ public class PurchaseContributors extends AppCompatActivity {
         if (!pc.getUser_id().equals(purchase.getAuthorName())) {
             //Log.d("debug", "pc_id: " + pc.getUser_id() + "p_auth_id: "+purchase.getAuthorName());
             View linearLayout = findViewById(R.id.ll_scroll_3);
+            DecimalFormat df = new DecimalFormat("##.##");
             final TextView tv = new TextView(this);
             if (!pc.getPayed())
-                tv.setText(pc.getUser_name() + getString(R.string.owes_to) + purchase.getUser_name() + " " + pc.getAmount() + "€");
+                tv.setText(pc.getUser_name() +" "+getString(R.string.owes_to) +" "+purchase.getUser_name() + " " +
+                        df.format(pc.getAmount()) + "€");
             else
-                tv.setText(pc.getUser_name() + getString(R.string.payed_to) + purchase.getUser_name() + " " + pc.getAmount() + "€");
+                tv.setText(pc.getUser_name() +" "+ getString(R.string.payed_to)+ " " + purchase.getUser_name() + " "
+                        + df.format(pc.getAmount()) + "€");
             tv.setTextSize((float) 25);
             tv.setTextColor(Color.parseColor("#000000"));
             tv.setClickable(true);
