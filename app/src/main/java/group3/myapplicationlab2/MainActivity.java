@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(MainActivity.this, "Clicked group: " + String.valueOf(position), Toast. LENGTH_SHORT).show();
-                Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
+                Intent i=new Intent(MainActivity.this, GroupActivityExpenseCard.class);
                 i.putExtra("user_id", user.getUid());
                 i.putExtra("group_name", user.getGroups().get(position).getName());
                 i.putExtra("list_pos", Integer.toString(position));

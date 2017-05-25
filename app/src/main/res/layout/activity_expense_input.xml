@@ -105,7 +105,6 @@
                             android:id="@+id/ie_tv_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/text_time"
                             android:drawableLeft="@mipmap/ic_calendar"
                             android:focusableInTouchMode="false"
                             android:hint="@string/whenHint"

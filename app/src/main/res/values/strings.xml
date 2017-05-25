@@ -145,6 +145,7 @@
     <string name="stats_no_members">You are alone in this group!</string>
     <string name="stats_no_members_text">Is impossible to compute debits and credits if you are alone in the groups.</string>
     <string name="insert_expense">Insert new expense</string>
+    <string name="title_activity_group_expense_card">GroupActivityExpenseCard</string>
 
 
 </resources>
