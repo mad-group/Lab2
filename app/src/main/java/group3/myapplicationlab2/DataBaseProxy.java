@@ -11,12 +11,11 @@ import java.io.Serializable;
  * Created by anr.putina on 25/05/17.
  */
 
-public class DataBaseProxy implements Serializable {
+public class DataBaseProxy{
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference referenceGroups = firebaseDatabase.getReference("Groups");
     private DatabaseReference referenceUser = firebaseDatabase.getReference("Users");
-
     private final String membersFieldInGroups = "members2";
 
     public String insertGroup(Group group){
@@ -32,4 +31,9 @@ public class DataBaseProxy implements Serializable {
                         .setValue(groupMember);
         return;
     }
+
+    public DatabaseReference getReferenceGroups(){
+        return referenceGroups;
+    }
+
 }

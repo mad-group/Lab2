@@ -43,10 +43,15 @@ public class JoinGroupActivity extends AppCompatActivity {
 
     private User user;
 
+    private DataBaseProxy dataBaseProxy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_group);
+
+        dataBaseProxy = new DataBaseProxy();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -85,10 +90,11 @@ public class JoinGroupActivity extends AppCompatActivity {
                                 if (!dataSnapshot.hasChild(auth.getCurrentUser().getUid())){
 
                                     GroupMember groupMember = new GroupMember();
-                                    groupMember.setName(user.getName());
-                                    groupMember.setEmail(user.getEmail());
+                                    groupMember.groupMemberConstructor(user.getName(), user.getEmail());
 
-                                    mDatabase.child("members2").child(auth.getCurrentUser().getUid()).setValue(groupMember);
+                                    dataBaseProxy.insertMemberInGroup(groupID.getText().toString(), user.getUid(), groupMember);
+
+                                    //mDatabase.child("members2").child(auth.getCurrentUser().getUid()).setValue(groupMember);
 
                                     if (user.getGroups() != null){
                                         currentGroupPreview = user.getGroups();
@@ -98,6 +104,16 @@ public class JoinGroupActivity extends AppCompatActivity {
                                     }
 
                                     GroupPreview groupPreview = new GroupPreview();
+
+                                    /*groupPreview.GroupPreviewConstructor(
+                                            group.getName(),
+                                            group.getId(),
+                                            group.getDescription(),
+                                            group.getLastModifyTimeStamp(),
+                                            "GroupCreation",
+                                            user.getUid()
+                                    );*/
+
                                     groupPreview.setName(group.getName());
                                     groupPreview.setDescription(group.getDescription());
                                     groupPreview.setId(groupID.getText().toString());
@@ -161,7 +177,9 @@ public class JoinGroupActivity extends AppCompatActivity {
                     }
                 };
 
-                mDatabase.addListenerForSingleValueEvent(GroupListener);
+                dataBaseProxy.getReferenceGroups()
+                        .child(groupID.getText().toString())
+                        .addListenerForSingleValueEvent(GroupListener);
 
             }
         });
