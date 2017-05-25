@@ -86,6 +86,7 @@ public class PurchaseContributors extends AppCompatActivity {
         pcList = purchase.getContributors();
 
 
+
         for (int i = 0; i< pcList.size(); i++){
             drawNewCotnributor(pcList.get(i));
         }
@@ -109,10 +110,11 @@ public class PurchaseContributors extends AppCompatActivity {
 
     private void drawNewCotnributor(PurchaseContributor pc_){
         final PurchaseContributor pc = pc_;
-        if (!pc.getUser_id().equals(user.getUid()) && !pc.getPayed()) {
+        if (!pc.getUser_id().equals(purchase.getAuthorName()) && !pc.getPayed()) {
+            //Log.d("debug", "pc_id: " + pc.getUser_id() + "p_auth_id: "+purchase.getAuthorName());
             View linearLayout = findViewById(R.id.ll_scroll_3);
             final TextView tv = new TextView(this);
-            tv.setText(pc.getUser_name() + " owes to " + user.getName() + " " + pc.getAmount() + "€");
+            tv.setText(pc.getUser_name() + " owes to " + purchase.getUser_name() + " " + pc.getAmount() + "€");
             tv.setTextSize((float) 25);
             tv.setTextColor(Color.parseColor("#000000"));
             tv.setClickable(true);
@@ -135,6 +137,7 @@ public class PurchaseContributors extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (user.getUid().equals(purchase.getAuthorName())) {
+                        //Log.d("Debug","dialog p_author_id" +  purchase.getAuthorName());
                         String text = pc.getUser_name() + " is paying to you " + pc.getAmount() + "€?";
                         drawLeavingDialogBox("Debt extinguishing", text, pc);
 
@@ -174,14 +177,39 @@ public class PurchaseContributors extends AppCompatActivity {
                         .child("contributors")
                         .child(pc.getContributor_id()).child("payed").setValue("true");
 
+                int index =0;
+                int falseCounter=0;
+                int authorIndex =0;
+                String authorContributorId="";
                 for (PurchaseContributor element : pcList){
-                    if (element.getContributor_id().equals(pc.getContributor_id())){
-                        pcList.remove(element);
-                        pcList.add(pc);
-                        Log.d("Debug", "nell'if");
-                        break;
+                    Log.d("debug", "nel for");
+                    if (element.getPayed()==false){
+
+                        falseCounter = falseCounter +1;
+                        authorIndex = index;
+                        authorContributorId = element.getContributor_id();
                     }
+                    index = index+1;
                 }
+
+                Log.d("debug", "fc: " + falseCounter);
+                Log.d("debug", "ai: " + authorIndex);
+                Log.d("debug", "aci: " + authorContributorId);
+
+                if (falseCounter == 1) {
+                    Log.d("debug", "nellif");
+                    PurchaseContributor pcAuthor = pcList.remove(authorIndex);
+                    pc.setPayed(true);
+                    pcList.add(pcAuthor);
+
+                    mGroupReference
+                            .child(getIntent().getStringExtra("group_id"))
+                            .child("purchases")
+                            .child(purchase.getPurchase_id())
+                            .child("contributors")
+                            .child(authorContributorId).child("payed").setValue("true");
+                }
+
 
                 //method to clean the textview
                 View linearLayout = findViewById(R.id.ll_scroll_3);

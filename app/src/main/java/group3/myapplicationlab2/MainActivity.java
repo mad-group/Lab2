@@ -134,39 +134,6 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
-
-        //Value event listener for realtime data update
-        /*mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Log.d("Debug", postSnapshot.getValue(""));
-                    //Getting the data from snapshot
-                    //Group group = postSnapshot.getValue(Group.class);
-
-                    //Log.d("Debug", group.getName());
-                    //Adding it to a string
-                    //String string = "Name: "+person.getName()+"\nAddress: "+person.getAddress()+"\n\n";
-
-                    //Displaying it on textview
-                    //textViewPersons.setText(string);
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });*/
-
-        //final ArrayList<Group> arrayOfGroups = new ArrayList<Group>();
-        //final GroupAdapter adapter = new GroupAdapter(this, arrayOfGroups);
-
-        //ListView listView = (ListView) findViewById(R.id.group_list);
-        //listView.setAdapter(adapter);
-        //adapter.clear();
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -175,6 +142,8 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("user_id", user.getUid());
                 i.putExtra("group_name", user.getGroups().get(position).getName());
                 i.putExtra("list_pos", Integer.toString(position));
+                Toast.makeText(getApplicationContext(),"position " + pos, Toast.LENGTH_SHORT).show();
+
                 i.putExtra("group_id", user.getGroups().get(position).getId());
                 i.putExtra("user", user);
 
@@ -209,6 +178,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        user_info.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                adapter.clear();
+
+                user = dataSnapshot.getValue(User.class);
+                if (user.getGroups() != null){
+                    //Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+                    adapter.clear();
+                    for (int i=0; i<user.getGroups().size(); i++){
+                        adapter.add(user.getGroups().get(i));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("FAIL USER INFO");
+            }
+        });
+
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
@@ -228,10 +224,10 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("user_id", user.getUid());
                 startActivityForResult(i, MODIFY_GROUP);
                 return true;
-            case R.id.leave:
+/*            case R.id.leave:
                 final String uid = user.getUid();
                 drawLeavingDialogBox(user.getGroups().get(info.position).getId(), uid, info.position);
-                return true;
+                return true;*/
             case R.id.add_members:
                 DatabaseReference pin = FirebaseDatabase.getInstance().getReference("Groups")
                         .child(user.getGroups().get(info.position).getId())

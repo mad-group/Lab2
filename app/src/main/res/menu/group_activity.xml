@@ -7,5 +7,8 @@
         android:title="Group Stats"
         app:showAsAction="never" />
 
+    <item android:id="@+id/leave"
+        android:title="Leave Group" />
+
 
 </menu>

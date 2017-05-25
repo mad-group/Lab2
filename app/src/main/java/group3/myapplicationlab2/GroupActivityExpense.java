@@ -66,7 +66,10 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private Group group;
     private User user;
-    ListView listView;
+    private ListView listView;
+
+    private int groupListPosition;
+
 
 
 
@@ -76,7 +79,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         setContentView(R.layout.activity_group_expense);
         gid = getIntent().getStringExtra("group_id");
         user = (User)getIntent().getSerializableExtra("user");
-
 
         final DatabaseReference mGroupReference =  FirebaseDatabase.getInstance()
                                                     .getReference("Groups")
@@ -144,6 +146,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.group_activity, menu);
+
         return true;
     }
 
@@ -176,6 +179,12 @@ public class GroupActivityExpense extends AppCompatActivity {
                 startActivity(i);
                 return true;
             }
+        }
+
+        if (id == R.id.leave){
+            final String uid = user.getUid();
+            drawLeavingDialogBox(group.getDescription(), user.getUid(), getIntent().getStringExtra("list_pos"));
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -264,6 +273,52 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
         });
     }
+
+    private void drawLeavingDialogBox(String gid, String uid, final String position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.grpup_leaving_text)).setTitle(getString(R.string.leaving_group_title));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (userHasDebits(user.getUid())==false){
+                    //deleteUserFromGroup(position);
+                    deleteUserFromGroup(position);
+                    finish();
+                }
+
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    private Boolean userHasDebits(String user_id){
+        List<Purchase> list = group.getPurchases();
+        for (Purchase p: list){
+            for(PurchaseContributor pc : p.getContributors()){
+                if(pc.getUser_id().equals(user.getUid()) && pc.getPayed()==false) {
+                    Log.d("debug", "aaaaaaaaaa");
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    private void deleteUserFromGroup(String position){
+        DatabaseReference user_groups;
+        user_groups = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("groups");
+        user_groups.child(position).removeValue();
+        if (user.getGroups() != null)
+            user.getGroups().remove(position);
+    }
+
 
 }
 
