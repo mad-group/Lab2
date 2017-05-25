@@ -237,6 +237,8 @@ public class ExpenseInput extends AppCompatActivity {
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
             hm.put("lastModify", lastModify);
+            hm.put("lastEvent", "expenseInput");
+            hm.put("lastAuthor", user.getUid());
             p.setPurchase_id(pid);
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
 
@@ -261,8 +263,7 @@ public class ExpenseInput extends AppCompatActivity {
             setResult(RESULT_OK, i);
             finish();
         }
-
-
+        
     }
     @SuppressWarnings("deprecation")
     public void dataPicker(View v){

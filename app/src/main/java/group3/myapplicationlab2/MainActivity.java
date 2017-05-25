@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
+
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         auth = FirebaseAuth.getInstance();
         // this listener will be called when there is change in firebase user session
@@ -125,6 +127,10 @@ public class MainActivity extends AppCompatActivity
                 user_email.setText(user.getEmail());
                 TextView user_name = (TextView)header.findViewById(R.id.username);
                 user_name.setText(user.getName());
+
+                Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
+                serviceIntent.putExtra("user", user);
+                startService(serviceIntent);
             }
 
             @Override
@@ -147,10 +153,6 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("group_id", user.getGroups().get(position).getId());
                 i.putExtra("user", user);
 
-
-/*                Log.d("Debug", "pos: " + position +
-                        " group_id: " + user.getGroups().get(position).getId() +
-                        " group_na: " + user.getGroups().get(position).getName());*/
                 startActivityForResult(i,10);
             }
         });
@@ -255,8 +257,6 @@ public class MainActivity extends AppCompatActivity
                         System.out.println("FAIL PIN INFO");
                     }
                 });
-
-
 
                 return true;
             default:

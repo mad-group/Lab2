@@ -138,8 +138,6 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         registerListenerOnListView();
 
-
-
     }
 
     @Override
