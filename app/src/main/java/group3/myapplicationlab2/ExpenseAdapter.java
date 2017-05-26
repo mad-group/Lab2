@@ -44,6 +44,7 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         expense.setText(purchase.getCausal());
         expDate.setText(purchase.getDate());
 
+
         if (purchase.getPathImage()!=null && !purchase.getPathImage().equals("nopath")) {
             File imgFile = new File(purchase.getPathImage());
             if(imgFile.exists()) {

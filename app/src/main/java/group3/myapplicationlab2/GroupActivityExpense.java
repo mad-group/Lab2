@@ -97,6 +97,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     Collections.sort(group.getPurchases());
                     Collections.reverse(group.getPurchases());
                     expenseAdapter.addAll(group.getPurchases());
+                    Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
                     //paintListViewBackground();
 
                 }
@@ -108,7 +109,7 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
 
         };
-        mGroupReference.addValueEventListener(GroupListener);
+        mGroupReference.addListenerForSingleValueEvent(GroupListener);
 
         ArrayList<Purchase> spese = new ArrayList<Purchase>();
         expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese);
@@ -137,6 +138,8 @@ public class GroupActivityExpense extends AppCompatActivity {
         });
 
         registerListenerOnListView();
+
+
 
     }
 
@@ -196,9 +199,9 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
                 group.getPurchases().add(new_purchase);
                 expenseAdapter.clear();
-                //paintListViewBackground();
                 Collections.sort(group.getPurchases());
                 Collections.reverse(group.getPurchases());
+                Log.d("Debug", "size gpr OAR" + group.getPurchases().size());
                 expenseAdapter.addAll(group.getPurchases());
             }
         }
@@ -239,10 +242,12 @@ public class GroupActivityExpense extends AppCompatActivity {
                 i.putExtra("group", group);
                 i.putExtra("group_id", gid);
                 i.putExtra("user",user);
+                Log.d("Debug", "----------");
                 for (Purchase purchase : group.getPurchases()){
+                    Log.d("Debug", "size pc: " + purchase.getContributors().size());
                     if (purchase.getPurchase_id().equals(p.getPurchase_id())) {
                         i.putExtra("purchase", purchase);
-                        Log.d("Debug", "size: " + purchase.getContributors().size());
+
                     }
                 }
                 i.putExtra("pos", position);

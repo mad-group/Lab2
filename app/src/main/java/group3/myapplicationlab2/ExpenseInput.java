@@ -209,6 +209,7 @@ public class ExpenseInput extends AppCompatActivity {
             p.setAuthor_id(user.getUid());
             List<PurchaseContributor> l = createPurchaseContributorsList();
 
+
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");
             else
@@ -224,11 +225,15 @@ public class ExpenseInput extends AppCompatActivity {
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
 
             String key;
-            for (PurchaseContributor pc: l){
+
+            for (int indexList=0; indexList<l.size(); indexList++){
                 key = myRef.child(group_id).child("purchases").child(pid).child("contributors").push().getKey();
-                pc.setContributor_id(key);
-                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(key).setValue(pc);
+                l.get(indexList).setContributor_id(key);
+                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(key).setValue(l.get(indexList));
             }
+            p.setContributors(l);
+
+
 
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
             users.child(user.getUid())
@@ -268,6 +273,7 @@ public class ExpenseInput extends AppCompatActivity {
             Intent i = new Intent();
             Log.d("debug", getIntent().getStringExtra("list_pos"));
             i.putExtra("new_purchase", p);
+            //Log.d("Debug", "pc dim " + p.getContributors().size());
             setResult(RESULT_OK, i);
             finish();
         }
