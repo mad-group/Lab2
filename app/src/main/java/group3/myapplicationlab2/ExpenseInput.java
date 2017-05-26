@@ -234,11 +234,10 @@ public class ExpenseInput extends AppCompatActivity {
             p.setContributors(l);
 
 
-
             myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
             users.child(user.getUid())
-                    .child("groups")
-                    .child(getIntent().getStringExtra("list_pos"))
+                    .child("groupsHash")
+                    .child(group.getId())
                     .updateChildren(hm);
 
 

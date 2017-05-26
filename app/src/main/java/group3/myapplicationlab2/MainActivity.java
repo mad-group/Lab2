@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     private  DatabaseReference user_groups;
     private DatabaseReference user_info;
     private GroupPreviewAdapter adapter;
+    private GroupPreviewAdapterHashMap groupPreviewAdapterHashMap;
 
     private List<GroupPreview> currentGroupPreview;
 
@@ -69,12 +71,16 @@ public class MainActivity extends AppCompatActivity
 
     private String pin_str;
     private int pos;
+
+    private DataBaseProxy dataBaseProxy;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
+
+        dataBaseProxy = new DataBaseProxy();
 
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         auth = FirebaseAuth.getInstance();
@@ -94,11 +100,22 @@ public class MainActivity extends AppCompatActivity
         auth.addAuthStateListener(authListener);
         setContentView(R.layout.activity_main);
 
+        //OLD ADAPTER
         final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
         adapter = new GroupPreviewAdapter(this, groupPreviews);
         final ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
+
+        //NEW ADAPTER
+        //HashMap<String, GroupPreview> groupPreviewHashMap = new HashMap<String, GroupPreview>();
+        //GroupPreview groupPreview = new GroupPreview();
+        //groupPreview.GroupPreviewConstructor("Nome", "id", "description", 124155135, "Evento", "Author");
+        //groupPreviewHashMap.put("QUALCOSA", groupPreview);
+
+        /*groupPreviewAdapterHashMap = new GroupPreviewAdapterHashMap(groupPreviewHashMap);
+        final ListView listView = (ListView) findViewById(R.id.group_list);
+        listView.setAdapter(groupPreviewAdapterHashMap);*/
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
@@ -110,13 +127,20 @@ public class MainActivity extends AppCompatActivity
 
                 adapter.clear();
                 user = dataSnapshot.getValue(User.class);
-                if (user.getGroups() != null){
-                    //Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+                if (user.getGroupsHash()!=null){
+                    Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
                     adapter.clear();
                     for (int i=0; i<user.getGroups().size(); i++){
                         adapter.add(user.getGroups().get(i));
                     }
                 }
+
+                //HASHMAP v2
+                /*user = dataSnapshot.getValue(User.class);
+                if (user.getGroupsHash()!=null){
+                    groupPreviewAdapterHashMap.add(user.getGroupsHash());
+                    groupPreviewAdapterHashMap.notifyDataSetChanged();
+                }*/
 
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                 navigationView.setNavigationItemSelectedListener(MainActivity.this);
@@ -179,7 +203,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();
-        user_info.addValueEventListener(new ValueEventListener() {
+
+        /*user_info.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -199,7 +224,7 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("FAIL USER INFO");
             }
-        });
+        });*/
 
     }
 
@@ -264,6 +289,7 @@ public class MainActivity extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.d("GROUP", "GROUP CREATED");
         if (requestCode == CREATE_GROUP) {
             if(resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
@@ -280,7 +306,7 @@ public class MainActivity extends AppCompatActivity
 
                 currentGroupPreview.add(groupPreview);
                 Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                user_info.child("groups").setValue(currentGroupPreview);
+                //user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
 
             }
@@ -296,10 +322,36 @@ public class MainActivity extends AppCompatActivity
                     //Log.d("debug", "after" + user.getGroups().get(i).getName());
                     adapter.add(user.getGroups().get(i));
                 }
-                user_info.child("groups").setValue(currentGroupPreview);
+                //user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
             }
         }
+
+        //VERSION 2 HASHMAP
+        /*if (requestCode == CREATE_GROUP) {
+            if(resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
+
+                String groupPreviewKey = (String) data.getStringExtra("groupPreviewKey");
+                GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
+
+                //Add GroupPreview in User
+                user.insertGroupPreviewInHashMap(groupPreviewKey, groupPreview);
+
+                HashMap<String, GroupPreview> groupPreviewHashMap = new HashMap<String, GroupPreview>();
+                groupPreviewHashMap.put(groupPreviewKey, groupPreview);
+
+                groupPreviewAdapterHashMap.add(groupPreviewHashMap);
+                groupPreviewAdapterHashMap.notifyDataSetChanged();
+
+                for (Map.Entry<String,GroupPreview> entry : user.getGroupsHash().entrySet()) {
+                    String key = entry.getKey();
+                    GroupPreview groupPreview1 = entry.getValue();
+                    Log.d("NAME", groupPreview1.getName());
+                    Log.d("ID", groupPreview1.getId());
+                }
+            }
+        }*/
     }
 
     @Override
