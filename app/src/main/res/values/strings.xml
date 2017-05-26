@@ -243,6 +243,7 @@
     <string name="yes">Yes</string>
     <string name="owes_to"> owes to </string>
     <string name="payed_to"> payed to </string>
+    <string name="title_activity_group_expense_with_card">GroupActivityExpenseWithCard</string>
 
 
 </resources>

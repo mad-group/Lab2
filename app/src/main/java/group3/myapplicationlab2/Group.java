@@ -61,7 +61,7 @@ public class Group implements Serializable {
                 Map <String, Object> purchase = (Map<String, Object>)ob;
                 Purchase p = new Purchase();
                 p.setAuthorName(purchase.get("authorName").toString());
-                p.setAuthorName(purchase.get("author_id").toString());
+                p.setAuthor_id(purchase.get("author_id").toString());
                 p.setUser_name(purchase.get("user_name").toString());
                 p.setCausal(purchase.get("causal").toString());
                 p.setDateMillis(Long.parseLong(purchase.get("dateMillis").toString()));

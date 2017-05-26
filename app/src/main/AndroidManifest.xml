@@ -65,9 +65,12 @@
             android:label="@string/title_activity_purchase_contributors"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".GroupPreviewService">
-        </service>
+        <service android:name=".GroupPreviewService"></service>
 
+        <activity
+            android:name=".GroupActivityExpenseWithCard"
+            android:label="@string/title_activity_group_expense_with_card"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

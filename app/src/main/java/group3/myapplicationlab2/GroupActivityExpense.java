@@ -63,7 +63,6 @@ public class GroupActivityExpense extends AppCompatActivity {
     ExpenseAdapter expenseAdapter;
     Locale l = Locale.ENGLISH;
     private String gid;
-
     private Group group;
     private User user;
     private ListView listView;
@@ -136,11 +135,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 startActivityForResult(i,1);
             }
         });
-
         registerListenerOnListView();
-
-
-
     }
 
     @Override
