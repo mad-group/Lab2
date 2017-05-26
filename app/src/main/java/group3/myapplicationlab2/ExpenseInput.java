@@ -206,8 +206,6 @@ public class ExpenseInput extends AppCompatActivity {
             allOk = false;
         }
 
-
-
         if (allOk){
             String group_id = group.getId();
             Log.d("Debug", group_id);
@@ -270,7 +268,7 @@ public class ExpenseInput extends AppCompatActivity {
             notification.setEventType("expenseInput");
             notification.setGroupName(group.getName());
             notification.setGroupId(group.getId());
-            notification.setId(new Integer(new Random().nextInt()));
+            notification.setId(new Integer(10));
 
             // SEND NOTIFICATION
             for (GroupMember groupMember: group.getGroupMembers()){
