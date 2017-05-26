@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("user_id", user.getUid());
                 i.putExtra("group_name", user.getGroups().get(position).getName());
                 i.putExtra("list_pos", Integer.toString(position));
-                Toast.makeText(getApplicationContext(),"position " + pos, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"position " + pos, Toast.LENGTH_SHORT).show();
 
                 i.putExtra("group_id", user.getGroups().get(position).getId());
                 i.putExtra("user", user);
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("GROUP", "GROUP CREATED");
         if (requestCode == CREATE_GROUP) {
             if(resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
 
                 GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
                 adapter.insert(groupPreview,0);
@@ -336,14 +336,12 @@ public class MainActivity extends AppCompatActivity
             if (user.getGroups() != null) {
                 currentGroupPreview = user.getGroups();
                 for (int j = 0; j < user.getGroups().size(); j++)
-                    //Log.d("debug", "first" + user.getGroups().get(j).getName());
                 Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
                 adapter.clear();
                 for (int i = 0; i<currentGroupPreview.size(); i++) {
                     //Log.d("debug", "after" + user.getGroups().get(i).getName());
                     adapter.add(user.getGroups().get(i));
                 }
-                //user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
             }
         }
@@ -436,7 +434,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int id) {
                 if (!userHasDebits(user.getUid())){
                     //deleteUserFromGroup(position);
-                    Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
 
                 }
             }
