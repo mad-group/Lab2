@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -73,12 +74,12 @@ public class ExpenseInput extends AppCompatActivity {
     private int year, month, day;
     private EditText dateField;
     private EditText amountField;
+    private EditText expenseField;
     private ImageView mImageView;
     private ListView lv;
 
     private static final int PICK_IMAGE_ID = 234;
     private File imageOutFile = null;
-    private String author_key;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("Groups");
@@ -97,8 +98,8 @@ public class ExpenseInput extends AppCompatActivity {
 
         setTitle(group.getName() + " - New expense");
 
-        //print current date as default value in Date editText
         dateField = (EditText) findViewById(R.id.ie_tv_date);
+        expenseField = (EditText) findViewById(R.id.ie_et_expense);
 
         year = myCalendar.get(Calendar.YEAR);
         month = myCalendar.get(Calendar.MONTH);
@@ -107,13 +108,11 @@ public class ExpenseInput extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
 
-        author_key = user.getUid();
-
         setEditTextAmountListener();
 
         lv = (ListView)findViewById(R.id.list_participants_expense);
         ArrayList<GroupMember> groupMembers = new ArrayList<>();
-        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers,0);
+        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0);
         lv.setAdapter(membersAdapter);
         membersAdapter.addAll(group.getGroupMembers());
 
@@ -135,11 +134,9 @@ public class ExpenseInput extends AppCompatActivity {
 
     public void saveExpense(View v) {
 
-        final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
-
-        String author = author_key;
-        String expense = expenseField.getText().toString();
-        String amount = amountField.getText().toString();
+        String author = user.getUid();
+        String expense = expenseField.getText().toString().trim();
+        String amount = amountField.getText().toString().trim();
         String date = dateField.getText().toString();
 
         Date myd = new Date();
@@ -176,7 +173,6 @@ public class ExpenseInput extends AppCompatActivity {
 
         if (allOk){
             String group_id = group.getId();
-            Log.d("Debug", group_id);
 
             Purchase p = new Purchase();
             p.setAuthor_id(author);
@@ -189,7 +185,6 @@ public class ExpenseInput extends AppCompatActivity {
             p.setUser_name(user.getName());
             p.setAuthor_id(user.getUid());
             List<PurchaseContributor> l = createPurchaseContributorsList();
-
 
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");
@@ -227,7 +222,7 @@ public class ExpenseInput extends AppCompatActivity {
             notification.setEventType("expenseInput");
             notification.setGroupName(group.getName());
             notification.setGroupId(group.getId());
-            notification.setId(new Integer(10));
+            notification.setId(10);
 
             // SEND NOTIFICATION
             for (GroupMember groupMember: group.getGroupMembers()){
@@ -236,14 +231,15 @@ public class ExpenseInput extends AppCompatActivity {
                             .child("push")
                             .push()
                             .setValue(notification);
+                    SystemClock.sleep(20);
                 }
             }
             // END NOTIFICATION
 
             context = v.getContext();
+
             Intent i = new Intent();
             i.putExtra("new_purchase", p);
-            //Log.d("Debug", "pc dim " + p.getContributors().size());
             setResult(RESULT_OK, i);
             finish();
         }

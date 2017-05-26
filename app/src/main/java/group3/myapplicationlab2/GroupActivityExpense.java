@@ -97,7 +97,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     Collections.sort(group.getPurchases());
                     Collections.reverse(group.getPurchases());
                     expenseAdapter.addAll(group.getPurchases());
-                    Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
+                    //Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
                     //paintListViewBackground();
 
                 }
@@ -127,7 +127,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
                 i.putExtra("group", group);
                 i.putExtra("user", user);
-                
+
                 startActivityForResult(i,1);
             }
         });
