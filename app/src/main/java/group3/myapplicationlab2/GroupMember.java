@@ -14,6 +14,12 @@ public class GroupMember implements Serializable {
     private Double payment= new Double(0);
     private String user_id;
 
+    public void GroupMemberConstructor(String name, String email, String user_id){
+        this.name = name;
+        this.email = email;
+        this.user_id = user_id;
+    }
+
     public String getName() {
         return name;
     }

@@ -61,6 +61,6 @@ public class Notification {
     }
 
     public void setId(Integer id) {
-        Id = id;
+        this.Id = id;
     }
 }

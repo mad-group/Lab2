@@ -97,7 +97,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     Collections.sort(group.getPurchases());
                     Collections.reverse(group.getPurchases());
                     expenseAdapter.addAll(group.getPurchases());
-                    Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
+                    //Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
                     //paintListViewBackground();
 
                     if (group.getPurchases().size()<1){
@@ -130,15 +130,10 @@ public class GroupActivityExpense extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
-                group.setId(getIntent().getStringExtra("group_id"));
                 i.putExtra("group", group);
                 i.putExtra("user", user);
-                i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
 
-                Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
-                        " group_id: " + getIntent().getStringExtra("group_id"));
                 startActivityForResult(i,1);
             }
         });
@@ -167,15 +162,53 @@ public class GroupActivityExpense extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.group_Stats) {
 
+            Log.d("DEBUG GROUP MEMBERS", group.getGroupMembers().toString());
+            Log.d("DEBUG SIZE", String.valueOf(group.getGroupMembers().size()));
+            Log.d("DEGUB PURCHASES", String.valueOf(group.getPurchases().size()));
+
             if (group.getPurchases().size() == 0){
-                drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
-                        getString(R.string.stats_no_pruchases_text));
+                //drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
+                //        getString(R.string.stats_no_pruchases_text));
+                Log.d("DENTRO IF", "IF");
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(GroupActivityExpense.this);
+                builder1.setMessage("There aren't purchases.");
+                builder1.setCancelable(true);
+
+                builder1.setNegativeButton(
+                        "Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
 
             }
             else if(group.getGroupMembers() == null || group.getGroupMembers().size()<2){
 
-                drawLeavingDialogBox(getString(R.string.stats_no_members),
-                        getString(R.string.stats_no_members_text));
+                Log.d("DENTRO IF", "IF2");
+
+                //drawLeavingDialogBox(getString(R.string.stats_no_members),
+                //        getString(R.string.stats_no_members_text));
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(GroupActivityExpense.this);
+                builder1.setMessage("You are alone in the group");
+                builder1.setCancelable(true);
+
+                builder1.setNegativeButton(
+                        "Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
             }
             else {
                 group.resetPaymentProportion();
@@ -184,8 +217,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                 i.putExtra("group", group);
                 i.putExtra("user", user);
                 startActivity(i);
-                return true;
             }
+            return true;
         }
 
         if (id == R.id.leave){
@@ -207,7 +240,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 expenseAdapter.clear();
                 Collections.sort(group.getPurchases());
                 Collections.reverse(group.getPurchases());
-                Log.d("Debug", "size gpr OAR" + group.getPurchases().size());
+                //d("Debug", "size gpr OAR" + group.getPurchases().size());
                 expenseAdapter.addAll(group.getPurchases());
             }
         }
@@ -291,7 +324,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         for (Purchase p: list){
             for(PurchaseContributor pc : p.getContributors()){
                 if(pc.getUser_id().equals(user.getUid()) && pc.getPayed()==false) {
-                    Log.d("debug", "aaaaaaaaaa");
                     return true;
                 }
 

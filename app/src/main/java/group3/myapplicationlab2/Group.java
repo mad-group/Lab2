@@ -39,6 +39,7 @@ public class Group implements Serializable {
         this.setMembers((ArrayList<String>) objectHashMap.get("members"));
         this.setLastAuthor(objectHashMap.get("lastAuthor").toString());
         this.setLastEvent(objectHashMap.get("lastEvent").toString());
+        this.setId(objectHashMap.get("id").toString());
 
         List<GroupMember> groupMembers = new ArrayList<GroupMember>();
         if (objectHashMap.get("members2") != null){
