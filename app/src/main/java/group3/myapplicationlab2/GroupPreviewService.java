@@ -57,6 +57,9 @@ public class GroupPreviewService extends Service{
                         if (lastEvent.equals("changeName")){
                             message = "A group changed name in ";
                         }
+                        if (lastEvent.equals("newMember")){
+                            message = "A new member joined the group ";
+                        }
 
                         NotificationCompat.Builder mBuilder =
                                 new NotificationCompat.Builder(GroupPreviewService.this)
