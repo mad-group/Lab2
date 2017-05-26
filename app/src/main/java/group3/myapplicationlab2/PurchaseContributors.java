@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -84,11 +85,11 @@ public class PurchaseContributors extends AppCompatActivity {
         date.setText(formatter.format(d).toString());
 
         pcList = purchase.getContributors();
+        Toast.makeText(getApplicationContext(), "aaa "+pcList.size(), Toast.LENGTH_SHORT).show();
 
 
-
-        for (int i = 0; i< pcList.size(); i++){
-            drawNewCotnributor(pcList.get(i));
+        for (int i = 0; i< purchase.getContributors().size(); i++){
+            drawNewCotnributor(purchase.getContributors().get(i));
         }
 
     }

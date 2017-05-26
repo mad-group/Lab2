@@ -108,7 +108,7 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
 
         };
-        mGroupReference.addListenerForSingleValueEvent(GroupListener);
+        mGroupReference.addValueEventListener(GroupListener);
 
         ArrayList<Purchase> spese = new ArrayList<Purchase>();
         expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese);
@@ -214,14 +214,6 @@ public class GroupActivityExpense extends AppCompatActivity {
     }
 
     private void drawLeavingDialogBox(String title, String text) {
-/*        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(text).setTitle(title);
-        builder.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                return;
-            }
-        });
-        builder.create().show();*/
         AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(text);
@@ -239,34 +231,22 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     }
 
-    private void paintListViewBackground(){
-        List<Purchase> list = group.getPurchases();
-        for(int i=0; i < list.size(); i++) {
-            Log.d("Debug", list.get(i).getAuthorName() + " - " + user.getEmail());
-            if ( list.get(i).getAuthorName().equals(user.getEmail())){
-                listView.setBackgroundColor(getResources().getColor(R.color.colorListBG1));
-                expenseAdapter.add(list.get(i));
-            }else{
-                listView.setBackgroundColor(getResources().getColor(R.color.colorListBG2));
-                expenseAdapter.add(list.get(i));
-            }
-
-        }
-        Log.d("Debug", "---------------------------");
-    }
-
     public void registerListenerOnListView(){
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = listView.getItemAtPosition(position);
                 Purchase p = (Purchase)o;
                 Intent i = new Intent(getApplicationContext(), PurchaseContributors.class);
-                //Log.d("Debug", "dim " + p.getContributors().size());
 
                 i.putExtra("group", group);
                 i.putExtra("group_id", gid);
                 i.putExtra("user",user);
-                i.putExtra("purchase",p);
+                for (Purchase purchase : group.getPurchases()){
+                    if (purchase.getPurchase_id().equals(p.getPurchase_id())) {
+                        i.putExtra("purchase", purchase);
+                        Log.d("Debug", "size: " + purchase.getContributors().size());
+                    }
+                }
                 i.putExtra("pos", position);
                 startActivityForResult(i, PURCHASE_CONTRIBUTOR);
 

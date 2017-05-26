@@ -117,19 +117,6 @@ public class ExpenseInput extends AppCompatActivity {
         lv.setAdapter(membersAdapter);
         membersAdapter.addAll(group.getGroupMembers());
 
-/*
-        for (int i=0; i< lv.getCount(); i++){
-            if (lv.getChildAt(i) == null){
-                Log.d("debug", "list not initial");
-            }
-            //setPartsListener(lv.getChildAt(i));
-            //setArrowsListener();
-        }
-*/
-
-
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_save);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,11 +209,7 @@ public class ExpenseInput extends AppCompatActivity {
             p.setLastModify(System.currentTimeMillis());
             p.setUser_name(user.getName());
             p.setAuthor_id(user.getUid());
-            /*p.setContributors(createPurchaseContributorsList());*/
             List<PurchaseContributor> l = createPurchaseContributorsList();
-
-            //Log.d("Debug", "dim " + p.getContributors().size());
-
 
             if (this.imageOutFile == null)
                 p.setPathImage("nopath");
