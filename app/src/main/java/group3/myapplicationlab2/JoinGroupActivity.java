@@ -102,6 +102,9 @@ public class JoinGroupActivity extends AppCompatActivity {
                                     groupPreview.setName(group.getName());
                                     groupPreview.setDescription(group.getDescription());
                                     groupPreview.setId(groupID.getText().toString());
+                                    groupPreview.setLastAuthor(group.getLastAuthor());
+                                    groupPreview.setLastEvent(group.getLastEvent());
+                                    groupPreview.setLastModify(group.getLastModifyTimeStamp());
 
                                     currentGroupPreview.add(groupPreview);
                                     user_info.child("groups").setValue(currentGroupPreview);

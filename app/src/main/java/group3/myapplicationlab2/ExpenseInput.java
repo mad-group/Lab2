@@ -237,6 +237,8 @@ public class ExpenseInput extends AppCompatActivity {
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
             hm.put("lastModify", lastModify);
+            hm.put("lastEvent", "expenseInput");
+            hm.put("lastAuthor", user.getUid());
             p.setPurchase_id(pid);
             myRef.child(group_id).child("purchases").child(pid).setValue(p);
 
@@ -254,6 +256,33 @@ public class ExpenseInput extends AppCompatActivity {
                     .updateChildren(hm);
 
 
+            /*GroupPreview groupPreview = new GroupPreview();
+            groupPreview.setLastModify(lastModify);
+            groupPreview.setName(group.getName());
+            groupPreview.setDescription(group.getDescription());
+            groupPreview.setId(group.getId());
+            groupPreview.setLastAuthor(user.getUid());
+            groupPreview.setLastEvent("expenseInput");*/
+
+            Notification notification = new Notification();
+            notification.setAuthorName(user.getName());
+            notification.setAuthorId(user.getUid());
+            notification.setEventType("expenseInput");
+            notification.setGroupName(group.getName());
+            notification.setGroupId(group.getId());
+            notification.setId(new Integer(new Random().nextInt()));
+
+            // SEND NOTIFICATION
+            for (GroupMember groupMember: group.getGroupMembers()){
+                if (!groupMember.getUser_id().equals(user.getUid())){
+                    users.child(groupMember.getUser_id())
+                            .child("push")
+                            .push()
+                            .setValue(notification);
+                }
+            }
+            // END NOTIFICATION
+
             context = v.getContext();
             Intent i = new Intent();
             Log.d("debug", getIntent().getStringExtra("list_pos"));
@@ -261,7 +290,6 @@ public class ExpenseInput extends AppCompatActivity {
             setResult(RESULT_OK, i);
             finish();
         }
-
 
     }
     @SuppressWarnings("deprecation")

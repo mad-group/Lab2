@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 public class SignupActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword, inputName;
@@ -110,6 +112,7 @@ public class SignupActivity extends AppCompatActivity {
                                     current_user.child("name").setValue(name);
                                     current_user.child("email").setValue(auth.getCurrentUser().getEmail());
                                     current_user.child("uid").setValue(auth.getCurrentUser().getUid());
+
                                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                     finish();
                                 }
