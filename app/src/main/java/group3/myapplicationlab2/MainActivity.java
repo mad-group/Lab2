@@ -69,8 +69,7 @@ public class MainActivity extends AppCompatActivity
 
     private String pin_str;
     private int pos;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,12 +104,11 @@ public class MainActivity extends AppCompatActivity
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
         user_groups = user_info.child("groups");
 
-        user_info.addValueEventListener(new ValueEventListener() {
+        user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 adapter.clear();
-
                 user = dataSnapshot.getValue(User.class);
                 if (user.getGroups() != null){
                     //Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
@@ -138,7 +136,6 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("FAIL USER INFO");
             }
         });
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

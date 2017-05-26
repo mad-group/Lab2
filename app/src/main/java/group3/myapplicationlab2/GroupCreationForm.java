@@ -182,16 +182,14 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         if (prova) {
             FirebaseAuth auth = FirebaseAuth.getInstance();
 
-            //List<String> l = new ArrayList<String>();
-            //List<String> lp = new ArrayList<String>();
-            //l.add(auth.getCurrentUser().getEmail());
-            //newGroup.setMembers(l);
             this.currentUser = auth.getCurrentUser().getEmail();
 
             String id = myRef.push().getKey();
 
             Log.d("PRIMO", id);
             //myRef.push().setValue(newGroup);
+            newGroup.setLastEvent("GroupCreation");
+            newGroup.setLastAuthor(user.getUid());
             myRef.child(id).setValue(newGroup);
 
 
@@ -244,6 +242,8 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                 groupPreview.setId(newGroup.getId());
                 groupPreview.setDescription(newGroup.getDescription());
                 groupPreview.setLastModify(System.currentTimeMillis());
+                groupPreview.setLastAuthor(newGroup.getLastAuthor());
+                groupPreview.setLastEvent(newGroup.getLastEvent());
 
                 Intent i = new Intent();
                 i.putExtra("new_groupPreview", groupPreview);
@@ -263,77 +263,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         //showMessage(getString(R.string.google_play_services_error));
         Toast.makeText(getApplicationContext(), "failed conn", Toast.LENGTH_SHORT).show();
-    }
-
-    public void sendInvitation(View v){
-
-       /* if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
-            //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
-            onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
-        else
-            Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();*/
-
-
-/*        //members is a list of mail
-        if (members.size()<1){
-            String err = getResources().getString(R.string.no_user_insert);
-            newParticipant.setError(err);
-            prova = false;
-        }else{
-            newGroup.setMembers(members);
-            //Toast.makeText(getApplicationContext(), "invitation here", Toast.LENGTH_SHORT).show();
-        }*/
-
-        //for(int i =0; i< members.size(); i++)
-        //    Toast.makeText(getApplicationContext(), members.get(i), Toast.LENGTH_LONG).show();
-
-       /* if (prova)
-
-            //for ()
-            myList_notregistered.clear();
-            for (String i : members){
-
-                if (!(users.contains(i))){
-                    myList_notregistered.add(i);
-                }
-                else{
-                    continue;
-                }
-            }
-            Log.d("Deb", myList_notregistered.get(0));
-
-            if (myList_notregistered.size()>0){
-
-
-                ArrayList<String> arrayOfGEmail = new ArrayList<String>(myList_notregistered);
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayOfGEmail);
-
-                new AlertDialog.Builder(this)
-                        .setTitle("Do you want to invite these users?")
-                        .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                onInviteClicked("Il signore", "PUTTANA LA MADONNA" );
-                                adapter.clear();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                                adapter.clear();
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }*/
-
-
-
     }
 
 }

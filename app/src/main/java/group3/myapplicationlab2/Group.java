@@ -19,11 +19,14 @@ public class Group implements Serializable {
     private FirebaseDatabase db;
     private String pin;
     private long lastModifyTimeStamp;
+    private String lastEvent;
+    private String lastAuthor;
     private Double total_amount;
     private List<Double> aggPurchases;
     private List<Double> myDebts;
     private List<GroupMember> groupMembers;
     private List<String> userKeys;
+
 
     public Group() {
     }
@@ -34,6 +37,8 @@ public class Group implements Serializable {
         this.setDescription(objectHashMap.get("description").toString());
         this.setPin(objectHashMap.get("pin").toString());
         this.setMembers((ArrayList<String>) objectHashMap.get("members"));
+        this.setLastAuthor(objectHashMap.get("lastAuthor").toString());
+        this.setLastEvent(objectHashMap.get("lastEvent").toString());
 
         List<GroupMember> groupMembers = new ArrayList<GroupMember>();
         if (objectHashMap.get("members2") != null){
@@ -235,4 +240,19 @@ public class Group implements Serializable {
         this.groupMembers = groupMembers;
     }
 
+    public String getLastEvent() {
+        return lastEvent;
+    }
+
+    public void setLastEvent(String lastEvent) {
+        this.lastEvent = lastEvent;
+    }
+
+    public String getLastAuthor() {
+        return lastAuthor;
+    }
+
+    public void setLastAuthor(String lastAuthor) {
+        this.lastAuthor = lastAuthor;
+    }
 }
