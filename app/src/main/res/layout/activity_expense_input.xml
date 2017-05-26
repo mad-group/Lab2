@@ -45,7 +45,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/what"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/ie_et_expense"
@@ -75,7 +76,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/ie_et_expense"
                             android:text="@string/how_much"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textColor="@color/colorText"
+                            android:textStyle="bold"/>
 
                         <EditText
                             android:id="@+id/ie_et_amount"
@@ -99,7 +101,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/ie_et_amount"
                             android:text="@string/when"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textColor="@color/colorText"
+                            android:textStyle="bold"/>
 
                         <EditText
                             android:id="@+id/ie_tv_date"
@@ -120,7 +123,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/linear_layout_id"
                     android:text="@string/photo"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold"/>
 
                 <ImageButton
                     android:id="@+id/ie_ib_camera"
