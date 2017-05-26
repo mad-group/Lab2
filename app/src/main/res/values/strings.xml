@@ -145,6 +145,9 @@
     <string name="stats_no_members">You are alone in this group!</string>
     <string name="stats_no_members_text">Is impossible to compute debits and credits if you are alone in the groups.</string>
     <string name="insert_expense">Insert new expense</string>
+    <string name="owes_you">Owes you</string>
+    <string name="you_owe">You owe him</string>
+    <string name="were_even">We are even!</string>
     <string name="title_activity_purchase_contributors">purchase_contributors</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

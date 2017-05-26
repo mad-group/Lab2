@@ -1,7 +1,10 @@
 package group3.myapplicationlab2;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -9,11 +12,11 @@ import java.util.List;
  */
 
 public class User implements Serializable {
-    //private String ID;
     private String name;
     private String email;
     private String uid;
     private List<GroupPreview> groups;
+    private HashMap<String, Notification> notificationHashMap;
 
     public void setEmail(String email){
         this.email = email;
@@ -40,5 +43,13 @@ public class User implements Serializable {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public HashMap<String, Notification> getNotificationHashMap() {
+        return notificationHashMap;
+    }
+
+    public void setNotificationHashMap(HashMap<String, Notification> notificationHashMap) {
+        this.notificationHashMap = notificationHashMap;
     }
 }

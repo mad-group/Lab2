@@ -64,6 +64,10 @@
             android:name=".PurchaseContributors"
             android:label="@string/title_activity_purchase_contributors"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service android:name=".GroupPreviewService">
+        </service>
+
     </application>
 
 </manifest>
