@@ -135,13 +135,11 @@ public class MainActivity extends AppCompatActivity
                         adapter.add(user.getGroups().get(i));
                     }
                 }
-
                 else {
-
                     findViewById(R.id.content_with_groups).setVisibility(View.GONE);
                     findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
-
                 }
+
                 //HASHMAP v2
                 /*user = dataSnapshot.getValue(User.class);
                 if (user.getGroupsHash()!=null){
@@ -301,6 +299,9 @@ public class MainActivity extends AppCompatActivity
             if(resultCode == RESULT_OK) {
                 //Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
 
+                findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
+                findViewById(R.id.content_without_groups).setVisibility(View.GONE);
+
                 GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
                 adapter.insert(groupPreview,0);
 
@@ -321,6 +322,9 @@ public class MainActivity extends AppCompatActivity
         else if (requestCode == JOIN_GROUP){
             if (resultCode == RESULT_OK) {
 
+                findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
+                findViewById(R.id.content_without_groups).setVisibility(View.GONE);
+
                 GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
                 adapter.insert(groupPreview,0);
 
@@ -333,7 +337,6 @@ public class MainActivity extends AppCompatActivity
 
                 currentGroupPreview.add(groupPreview);
                 Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                //user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
 
             }
