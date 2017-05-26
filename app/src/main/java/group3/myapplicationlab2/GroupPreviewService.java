@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -19,8 +18,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
-import java.util.Random;
 
 /**
  * Created by anr.putina on 25/05/17.
@@ -59,6 +56,9 @@ public class GroupPreviewService extends Service{
                         }
                         if (lastEvent.equals("changeName")){
                             message = "A group changed name in ";
+                        }
+                        if (lastEvent.equals("newMember")){
+                            message = "A new member joined the group ";
                         }
 
                         NotificationCompat.Builder mBuilder =

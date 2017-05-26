@@ -241,8 +241,15 @@
     <string name="title_activity_zzz_test">zzz_test</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
-    <string name="owes_to"> owes to </string>
+    <string name="owes_to"> owes </string>
     <string name="payed_to"> payed to </string>
 
+    <string name="welcomeMsg"> You have not added any groups yet. </string>
+    <string name="add_one"> Add one! </string>
+
+    <string name="no_expenses_yet"> It seems like you have not any expenses recorded yet. </string>
+    <string name="author_name">Author</string>
+    <string name="date_value">Date</string>
+    <string name="payers_names">Payers</string>
 
 </resources>

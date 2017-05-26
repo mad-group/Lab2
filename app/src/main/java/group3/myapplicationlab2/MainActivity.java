@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,15 +62,19 @@ public class MainActivity extends AppCompatActivity
     private  DatabaseReference user_groups;
     private DatabaseReference user_info;
     private GroupPreviewAdapter adapter;
+    private GroupPreviewAdapterHashMap groupPreviewAdapterHashMap;
 
     private List<GroupPreview> currentGroupPreview;
 
     private final int CREATE_GROUP = 1;
     private static final int MODIFY_GROUP = 2;
     private static final int REQUEST_INVITE =0;
+    private static final int JOIN_GROUP = 3;
 
     private String pin_str;
     private int pos;
+
+    private DataBaseProxy dataBaseProxy;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,8 @@ public class MainActivity extends AppCompatActivity
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
         Toast.makeText(MainActivity.this, "app ok", Toast. LENGTH_SHORT).show();
 
+
+        dataBaseProxy = new DataBaseProxy();
 
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         auth = FirebaseAuth.getInstance();
@@ -96,11 +103,22 @@ public class MainActivity extends AppCompatActivity
         auth.addAuthStateListener(authListener);
         setContentView(R.layout.activity_main);
 
+        //OLD ADAPTER
         final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
         adapter = new GroupPreviewAdapter(this, groupPreviews);
         final ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
+
+        //NEW ADAPTER
+        //HashMap<String, GroupPreview> groupPreviewHashMap = new HashMap<String, GroupPreview>();
+        //GroupPreview groupPreview = new GroupPreview();
+        //groupPreview.GroupPreviewConstructor("Nome", "id", "description", 124155135, "Evento", "Author");
+        //groupPreviewHashMap.put("QUALCOSA", groupPreview);
+
+        /*groupPreviewAdapterHashMap = new GroupPreviewAdapterHashMap(groupPreviewHashMap);
+        final ListView listView = (ListView) findViewById(R.id.group_list);
+        listView.setAdapter(groupPreviewAdapterHashMap);*/
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
@@ -112,13 +130,24 @@ public class MainActivity extends AppCompatActivity
 
                 adapter.clear();
                 user = dataSnapshot.getValue(User.class);
-                if (user.getGroups() != null){
-                    //Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+                if (user.getGroupsHash()!=null){
+                    Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
                     adapter.clear();
                     for (int i=0; i<user.getGroups().size(); i++){
                         adapter.add(user.getGroups().get(i));
                     }
                 }
+                else {
+                    findViewById(R.id.content_with_groups).setVisibility(View.GONE);
+                    findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
+                }
+
+                //HASHMAP v2
+                /*user = dataSnapshot.getValue(User.class);
+                if (user.getGroupsHash()!=null){
+                    groupPreviewAdapterHashMap.add(user.getGroupsHash());
+                    groupPreviewAdapterHashMap.notifyDataSetChanged();
+                }*/
 
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                 navigationView.setNavigationItemSelectedListener(MainActivity.this);
@@ -147,7 +176,7 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra("user_id", user.getUid());
                 i.putExtra("group_name", user.getGroups().get(position).getName());
                 i.putExtra("list_pos", Integer.toString(position));
-                Toast.makeText(getApplicationContext(),"position " + pos, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"position " + pos, Toast.LENGTH_SHORT).show();
 
                 i.putExtra("group_id", user.getGroups().get(position).getId());
                 i.putExtra("user", user);
@@ -181,7 +210,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();
-        user_info.addValueEventListener(new ValueEventListener() {
+
+        /*user_info.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -201,7 +231,7 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("FAIL USER INFO");
             }
-        });
+        });*/
 
     }
 
@@ -266,9 +296,13 @@ public class MainActivity extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.d("GROUP", "GROUP CREATED");
         if (requestCode == CREATE_GROUP) {
             if(resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
+
+                findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
+                findViewById(R.id.content_without_groups).setVisibility(View.GONE);
 
                 GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
                 adapter.insert(groupPreview,0);
@@ -282,7 +316,29 @@ public class MainActivity extends AppCompatActivity
 
                 currentGroupPreview.add(groupPreview);
                 Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                user_info.child("groups").setValue(currentGroupPreview);
+                //user_info.child("groups").setValue(currentGroupPreview);
+                user.setGroups(currentGroupPreview);
+
+            }
+        }
+        else if (requestCode == JOIN_GROUP){
+            if (resultCode == RESULT_OK) {
+
+                findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
+                findViewById(R.id.content_without_groups).setVisibility(View.GONE);
+
+                GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
+                adapter.insert(groupPreview,0);
+
+                if (user.getGroups() != null){
+                    currentGroupPreview = user.getGroups();
+                }
+                else{
+                    currentGroupPreview = new ArrayList<GroupPreview>();
+                }
+
+                currentGroupPreview.add(groupPreview);
+                Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
                 user.setGroups(currentGroupPreview);
 
             }
@@ -291,17 +347,41 @@ public class MainActivity extends AppCompatActivity
             if (user.getGroups() != null) {
                 currentGroupPreview = user.getGroups();
                 for (int j = 0; j < user.getGroups().size(); j++)
-                    //Log.d("debug", "first" + user.getGroups().get(j).getName());
                 Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
                 adapter.clear();
                 for (int i = 0; i<currentGroupPreview.size(); i++) {
                     //Log.d("debug", "after" + user.getGroups().get(i).getName());
                     adapter.add(user.getGroups().get(i));
                 }
-                user_info.child("groups").setValue(currentGroupPreview);
                 user.setGroups(currentGroupPreview);
             }
         }
+
+        //VERSION 2 HASHMAP
+        /*if (requestCode == CREATE_GROUP) {
+            if(resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
+
+                String groupPreviewKey = (String) data.getStringExtra("groupPreviewKey");
+                GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
+
+                //Add GroupPreview in User
+                user.insertGroupPreviewInHashMap(groupPreviewKey, groupPreview);
+
+                HashMap<String, GroupPreview> groupPreviewHashMap = new HashMap<String, GroupPreview>();
+                groupPreviewHashMap.put(groupPreviewKey, groupPreview);
+
+                groupPreviewAdapterHashMap.add(groupPreviewHashMap);
+                groupPreviewAdapterHashMap.notifyDataSetChanged();
+
+                for (Map.Entry<String,GroupPreview> entry : user.getGroupsHash().entrySet()) {
+                    String key = entry.getKey();
+                    GroupPreview groupPreview1 = entry.getValue();
+                    Log.d("NAME", groupPreview1.getName());
+                    Log.d("ID", groupPreview1.getId());
+                }
+            }
+        }*/
     }
 
     @Override
@@ -345,7 +425,8 @@ public class MainActivity extends AppCompatActivity
 
             Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
             i.putExtra("user", user);
-            startActivity(i);
+            //startActivity(i);
+            startActivityForResult(i, JOIN_GROUP);
 
         } else if (id == R.id.logout) {
             auth.signOut();
@@ -364,7 +445,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int id) {
                 if (!userHasDebits(user.getUid())){
                     //deleteUserFromGroup(position);
-                    Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
 
                 }
             }

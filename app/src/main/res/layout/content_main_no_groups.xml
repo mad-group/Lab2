@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="group3.myapplicationlab2.MainActivity"
+    tools:showIn="@layout/app_bar_main"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fab_add_group"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:layout_weight="8">
+
+        <ImageView
+            android:id="@+id/welcome_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_addgroup"
+            />
+
+        <TextView
+            android:id="@+id/welcome_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/welcomeMsg" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/add_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_one"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/arrow_dx_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@mipmap/ic_arrow_dx_add_one"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
+
+</android.support.v7.widget.LinearLayoutCompat>

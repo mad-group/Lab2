@@ -85,7 +85,7 @@ public class PurchaseContributors extends AppCompatActivity {
         date.setText(formatter.format(d).toString());
 
         pcList = purchase.getContributors();
-        Toast.makeText(getApplicationContext(), "aaa "+pcList.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "aaa "+pcList.size(), Toast.LENGTH_SHORT).show();
 
 
         for (int i = 0; i< purchase.getContributors().size(); i++){

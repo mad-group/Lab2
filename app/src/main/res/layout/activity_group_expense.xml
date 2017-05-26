@@ -21,7 +21,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_group_activity_expense" />
+    <include
+        android:id="@+id/content_with_purchases"
+        layout="@layout/content_group_activity_expense"
+        android:visibility="visible"/>
+
+    <include
+        android:id="@+id/content_without_purchases"
+        layout="@layout/content_group_activity_no_expense"
+        android:visibility="gone"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"
@@ -30,7 +38,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorFabCustom"
         android:tint="@color/colorIcon"
         />
 

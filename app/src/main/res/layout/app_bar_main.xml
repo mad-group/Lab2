@@ -20,7 +20,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include
+        android:id="@+id/content_with_groups"
+        layout="@layout/content_main"
+        android:visibility="visible"/>
+
+    <include
+        android:id="@+id/content_without_groups"
+        layout="@layout/content_main_no_groups"
+        android:visibility="gone"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_group"
@@ -29,7 +37,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_new_group"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorFabCustom"
         android:tint="@color/colorIcon">
 
     </android.support.design.widget.FloatingActionButton>
