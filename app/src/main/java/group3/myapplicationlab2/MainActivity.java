@@ -3,6 +3,7 @@ package group3.myapplicationlab2;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
@@ -73,8 +74,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
+        Toast.makeText(MainActivity.this, "app ok", Toast. LENGTH_SHORT).show();
+
 
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         auth = FirebaseAuth.getInstance();
