@@ -124,15 +124,10 @@ public class GroupActivityExpense extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
-                group.setId(getIntent().getStringExtra("group_id"));
                 i.putExtra("group", group);
                 i.putExtra("user", user);
-                i.putExtra("list_pos", getIntent().getStringExtra("list_pos"));
-
-                Log.d("Debug", "pos: " + getIntent().getStringExtra("list_pos") +
-                        " group_id: " + getIntent().getStringExtra("group_id"));
+                
                 startActivityForResult(i,1);
             }
         });
