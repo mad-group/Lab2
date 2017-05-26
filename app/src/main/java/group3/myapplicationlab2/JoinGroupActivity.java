@@ -1,6 +1,7 @@
 package group3.myapplicationlab2;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -43,12 +44,18 @@ public class JoinGroupActivity extends AppCompatActivity {
 
     private User user;
 
+    private DataBaseProxy dataBaseProxy;
+
+    private GroupPreview groupPreviewResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        dataBaseProxy = new DataBaseProxy();
 
         groupID = (EditText)findViewById(R.id.Group_Id);
         groupPassword = (EditText)findViewById(R.id.Group_password);
@@ -71,7 +78,6 @@ public class JoinGroupActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         if (dataSnapshot.exists()){
-                            //Getting the data from database snapshot
 
                             Map<String, Object> objectMap = (HashMap<String, Object>)
                                     dataSnapshot.getValue();
@@ -89,64 +95,29 @@ public class JoinGroupActivity extends AppCompatActivity {
                                     groupMember.setEmail(user.getEmail());
                                     groupMember.setUser_id(user.getUid());
 
-                                    mDatabase.child("members2").child(auth.getCurrentUser().getUid()).setValue(groupMember);
+                                    mDatabase.child("members2").child(user.getUid()).setValue(groupMember);
 
-                                    if (user.getGroups() != null){
-                                        currentGroupPreview = user.getGroups();
-                                    }
-                                    else{
-                                        currentGroupPreview = new ArrayList<GroupPreview>();
-                                    }
+                                    groupPreviewResult = new GroupPreview();
+                                    groupPreviewResult.GroupPreviewConstructor(
+                                            group.getName(),
+                                            groupID.getText().toString(),
+                                            group.getDescription(),
+                                            System.currentTimeMillis(),
+                                            "GroupJoin",
+                                            user.getUid()
+                                    );
 
-                                    GroupPreview groupPreview = new GroupPreview();
-                                    groupPreview.setName(group.getName());
-                                    groupPreview.setDescription(group.getDescription());
-                                    groupPreview.setId(groupID.getText().toString());
-                                    groupPreview.setLastAuthor(group.getLastAuthor());
-                                    groupPreview.setLastEvent(group.getLastEvent());
-                                    groupPreview.setLastModify(group.getLastModifyTimeStamp());
 
-                                    currentGroupPreview.add(groupPreview);
-                                    user_info.child("groups").setValue(currentGroupPreview);
-
-                                    user.setGroups(currentGroupPreview);
+                                    dataBaseProxy.insertGroupPreview(groupPreviewResult, user.getUid(), groupID.getText().toString());
                                 }
 
+                                Intent i = new Intent();
+                                i.putExtra("new_groupPreview", groupPreviewResult);
+                                setResult(RESULT_OK, i);
                                 finish();
+
                             }
 
-
-                            /*if (groupPassword.getText().toString().equals(group.getPin())){
-                                List<String> members = group.getMembers();
-                                auth = FirebaseAuth.getInstance();
-
-                                if (!members.contains(auth.getCurrentUser().getEmail())){
-                                    members.add(auth.getCurrentUser().getEmail());
-                                    //Log.d("Debug", members.get(1));
-                                    mDatabase.child("members").setValue(members);
-
-                                    if (user.getGroups() != null){
-                                        currentGroupPreview = user.getGroups();
-                                    }
-                                    else{
-                                        currentGroupPreview = new ArrayList<GroupPreview>();
-                                    }
-
-                                    GroupPreview groupPreview = new GroupPreview();
-                                    groupPreview.setName(group.getName());
-                                    groupPreview.setDescription(group.getDescription());
-                                    groupPreview.setId(groupID.getText().toString());
-
-                                    currentGroupPreview.add(groupPreview);
-                                    user_info.child("groups").setValue(currentGroupPreview);
-
-                                    user.setGroups(currentGroupPreview);
-
-                                }
-
-
-                                finish();
-                            }*/
                             else{
                                 Toast.makeText(JoinGroupActivity.this, "Incorrect GroupID or Password", Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);

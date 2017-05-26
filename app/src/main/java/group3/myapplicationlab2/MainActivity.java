@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     private final int CREATE_GROUP = 1;
     private static final int MODIFY_GROUP = 2;
     private static final int REQUEST_INVITE =0;
+    private static final int JOIN_GROUP = 3;
 
     private String pin_str;
     private int pos;
@@ -311,6 +312,26 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
+        else if (requestCode == JOIN_GROUP){
+            if (resultCode == RESULT_OK) {
+
+                GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
+                adapter.insert(groupPreview,0);
+
+                if (user.getGroups() != null){
+                    currentGroupPreview = user.getGroups();
+                }
+                else{
+                    currentGroupPreview = new ArrayList<GroupPreview>();
+                }
+
+                currentGroupPreview.add(groupPreview);
+                Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
+                //user_info.child("groups").setValue(currentGroupPreview);
+                user.setGroups(currentGroupPreview);
+
+            }
+        }
         else {
             if (user.getGroups() != null) {
                 currentGroupPreview = user.getGroups();
@@ -395,7 +416,8 @@ public class MainActivity extends AppCompatActivity
 
             Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
             i.putExtra("user", user);
-            startActivity(i);
+            //startActivity(i);
+            startActivityForResult(i, JOIN_GROUP);
 
         } else if (id == R.id.logout) {
             auth.signOut();
