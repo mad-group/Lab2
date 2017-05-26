@@ -237,7 +237,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 findViewById(R.id.content_with_purchases).setVisibility(View.VISIBLE);
                 findViewById(R.id.content_without_purchases).setVisibility(View.GONE);
-                
+
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
                 Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
                 group.getPurchases().add(new_purchase);
