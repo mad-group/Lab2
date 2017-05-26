@@ -21,7 +21,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_group_activity_expense" />
+    <include
+        android:id="@+id/id1"
+        layout="@layout/content_group_activity_expense"
+        android:visibility="visible"/>
+
+    <include
+        android:id="@+id/id2"
+        layout="@layout/content_group_activity_no_expense"
+        android:visibility="gone"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"

@@ -118,6 +118,12 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
 
+                else {
+
+                    findViewById(R.id.content_with_groups).setVisibility(View.GONE);
+                    findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
+
+                }
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                 navigationView.setNavigationItemSelectedListener(MainActivity.this);
                 View header=navigationView.getHeaderView(0);
