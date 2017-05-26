@@ -6,58 +6,89 @@
     android:layout_height="match_parent"
     tools:context="group3.myapplicationlab2.GroupModification">
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/mod_group_creation"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/activity_top_margin"
+        android:paddingLeft="@dimen/activity_left_margin"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/groupName"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"
+
+            />
         <EditText
             android:id="@+id/mod_new_group"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:cursorVisible="true"
             android:textCursorDrawable="@null"
             android:hint="@string/groupNameHint"
-            android:inputType="textCapSentences|textAutoCorrect"/>
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:paddingTop="20dp"
+            />
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/groupSubject"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"
+
+            />
         <EditText
             android:id="@+id/mod_group_description"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textCursorDrawable="@null"
             android:cursorVisible="true"
             android:hint="@string/groupSubjectHint"
             android:inputType="textCapSentences|textAutoCorrect"
             android:layout_marginBottom="0dp"
             android:paddingTop="20dp"/>
-        <EditText
-            android:id="@+id/mod_group_pin"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/groupPinHint"
-            android:layout_marginBottom="20dp"
-            android:paddingTop="20dp"/>
 
         <TextView
             android:paddingTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/radiogroup_title"/>
-        <Spinner
-            android:id="@+id/spinner"
+            android:layout_height="wrap_content"
+            android:text="@string/groupPin"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"
+            />
+        <EditText
+            android:id="@+id/mod_group_pin"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:prompt="@string/splitting_criterion_prompt"
-            android:entries="@array/splitting_criteria"
-            android:layout_marginBottom="20dp">
-        </Spinner>
+            android:layout_height="wrap_content"
+            android:hint="@string/groupPinHint"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:layout_marginBottom="10dp"
+            android:paddingTop="20dp"/>
+
+        <!--        <TextView
+                    android:paddingTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radiogroup_title"
+                    android:textColor="@color/colorPrimaryDark"
+                    />
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:prompt="@string/splitting_criterion_prompt"
+                        android:entries="@array/splitting_criteria"
+                        android:layout_marginBottom="20dp"
+                        android:paddingTop="20dp">
+                    </Spinner>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,5 +104,7 @@
                 />
         </LinearLayout>
 
-    </android.support.v7.widget.LinearLayoutCompat>
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
