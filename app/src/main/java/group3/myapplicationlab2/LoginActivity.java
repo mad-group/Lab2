@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         setLostFocus(btnReset);
 
 
+
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 

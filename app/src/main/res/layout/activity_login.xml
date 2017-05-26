@@ -37,7 +37,8 @@
                 android:hint="@string/hint_email"
                 android:inputType="textEmailAddress"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white" />
+                android:textColorHint="@android:color/white"
+                android:cursorVisible="true"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -52,7 +53,8 @@
                 android:hint="@string/hint_password"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white" />
+                android:textColorHint="@android:color/white"
+                android:cursorVisible="true"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Login Button -->
@@ -74,7 +76,7 @@
             android:background="@null"
             android:text="@string/btn_forgot_password"
             android:textAllCaps="false"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/colorIcon" />
 
         <!-- Link to Login Screen -->
 

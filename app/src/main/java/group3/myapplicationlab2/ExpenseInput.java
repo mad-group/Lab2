@@ -57,6 +57,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -375,7 +376,9 @@ public class ExpenseInput extends AppCompatActivity {
                         //fraction = Float.parseFloat(editable.toString()) * Integer.parseInt(et.getText().toString())/ sumParts();
                         membersAdapter.setTotAmount(Float.parseFloat(editable.toString()));
                         fraction = Float.parseFloat(editable.toString()) / sumParts();
-                        tv.setText(new DecimalFormat("##.##").format(fraction));
+                        NumberFormat format = NumberFormat.getInstance(Locale.US);
+                        //String floatString = Float.toString(fraction);
+                        tv.setText(format.format(fraction));
                     }
                 }
 
