@@ -129,37 +129,18 @@ public class ExpenseInput extends AppCompatActivity {
 
     public void onStart(){
         super.onStart();
-        for (int i=0; i< lv.getCount(); i++){
-            if (lv.getChildAt(i) == null){
-                Log.d("debug", "list not initial");
-            }
-            else{
-                Log.d("debug", "pos " + i);
-            }
-            //setPartsListener(lv.getChildAt(i));
-            //setArrowsListener();
-        }
-
     }
 
 
 
     public void saveExpense(View v) {
 
-
-/*        Map<String,Object> map = createContributorsMap();
-        for(String key : map.keySet()){
-            Log.d("Debug", "key: " + key + " Price: " + map.get(key));
-        }*/
-
         final EditText expenseField = (EditText) findViewById(R.id.ie_et_expense);
 
-       // String author = authorField.getText().toString();
         String author = author_key;
         String expense = expenseField.getText().toString();
         String amount = amountField.getText().toString();
         String date = dateField.getText().toString();
-
 
         Date myd = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
@@ -240,15 +221,6 @@ public class ExpenseInput extends AppCompatActivity {
                     .child(group.getId())
                     .updateChildren(hm);
 
-
-            /*GroupPreview groupPreview = new GroupPreview();
-            groupPreview.setLastModify(lastModify);
-            groupPreview.setName(group.getName());
-            groupPreview.setDescription(group.getDescription());
-            groupPreview.setId(group.getId());
-            groupPreview.setLastAuthor(user.getUid());
-            groupPreview.setLastEvent("expenseInput");*/
-
             Notification notification = new Notification();
             notification.setAuthorName(user.getName());
             notification.setAuthorId(user.getUid());
@@ -270,7 +242,6 @@ public class ExpenseInput extends AppCompatActivity {
 
             context = v.getContext();
             Intent i = new Intent();
-            Log.d("debug", getIntent().getStringExtra("list_pos"));
             i.putExtra("new_purchase", p);
             //Log.d("Debug", "pc dim " + p.getContributors().size());
             setResult(RESULT_OK, i);

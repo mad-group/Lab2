@@ -143,7 +143,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
             this.currentUser = auth.getCurrentUser().getEmail();
 
-
             //INSERT GROUP IN DB
             newGroup.setLastEvent("GroupCreation");
             newGroup.setLastAuthor(user.getUid());

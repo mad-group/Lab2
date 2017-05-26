@@ -17,6 +17,7 @@ public class DataBaseProxy {
 
     public String insertGroup(Group group){
         String groupId = referenceGroups.push().getKey();
+        group.setId(groupId);
         referenceGroups.child(groupId).setValue(group);
         return groupId;
     }
