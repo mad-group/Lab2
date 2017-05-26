@@ -22,12 +22,12 @@
     </android.support.design.widget.AppBarLayout>
 
     <include
-        android:id="@+id/id1"
+        android:id="@+id/content_with_purchases"
         layout="@layout/content_group_activity_expense"
         android:visibility="visible"/>
 
     <include
-        android:id="@+id/id2"
+        android:id="@+id/content_without_purchases"
         layout="@layout/content_group_activity_no_expense"
         android:visibility="gone"/>
 

@@ -100,7 +100,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
                     //paintListViewBackground();
 
-                    if group.getPurchases().size()>0{
+                    if (group.getPurchases().size()<1){
                         findViewById(R.id.content_with_purchases).setVisibility(View.GONE);
                         findViewById(R.id.content_without_purchases).setVisibility(View.VISIBLE);
                     }

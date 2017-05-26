@@ -19,18 +19,18 @@
         android:layout_weight="8">
 
         <ImageView
-            android:id="@+id/welcome_icon"
+            android:id="@+id/ic_add_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_add_expense"
             />
 
         <TextView
-            android:id="@+id/welcome_msg"
+            android:id="@+id/no_expenses_yet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/welcomeMsg" />
+            android:text="@string/no_expenses_yet" />
     </LinearLayout>
 
     <LinearLayout
