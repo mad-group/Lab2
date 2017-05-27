@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -101,14 +102,20 @@ public class PurchaseContributors extends AppCompatActivity {
             View linearLayout = findViewById(R.id.ll_scroll_3);
             DecimalFormat df = new DecimalFormat("##.##");
             final TextView tv = new TextView(this);
-            if (!pc.getPayed())
-                tv.setText(pc.getUser_name() +" "+getString(R.string.owes_to) +" "+purchase.getUser_name() + " " +
+            if (!pc.getPayed()) {
+                tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.btn_logut_bg));
+                tv.setText(pc.getUser_name() + " " + getString(R.string.owes_to) + " " + purchase.getUser_name() + " " +
                         df.format(pc.getAmount()) + "€");
-            else
-                tv.setText(pc.getUser_name() +" "+ getString(R.string.payed_to)+ " " + purchase.getUser_name() + " "
-                        + df.format(pc.getAmount()) + "€");
+            }
+            else {
+                tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                tv.setText(pc.getUser_name() + " " + getString(R.string.payed_to) + " " + purchase.getUser_name() + " " +
+                        df.format(pc.getAmount()) + "€");
+
+
+            }
             tv.setTextSize((float) 25);
-            tv.setTextColor(Color.parseColor("#000000"));
+            //tv.setTextColor(Color.parseColor("#000000"));
             tv.setClickable(true);
             int[] attrs = new int[]{android.R.attr.selectableItemBackground /* index 0 */};
             TypedArray ta = obtainStyledAttributes(attrs);
@@ -128,7 +135,8 @@ public class PurchaseContributors extends AppCompatActivity {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (user.getUid().equals(purchase.getAuthorName())) {
+                    if (user.getUid().equals(purchase.getAuthorName()) &&
+                            tv.getText().toString().contains(getResources().getString(R.string.owes_to))) {
                         //Log.d("Debug","dialog p_author_id" +  purchase.getAuthorName());
                         String text = pc.getUser_name() + " is paying to you " + pc.getAmount() + "€?";
                         drawLeavingDialogBox("Debt extinguishing", text, pc);
