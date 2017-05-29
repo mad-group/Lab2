@@ -30,6 +30,7 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     private String author_id;
     private String purchase_id;
     private List<PurchaseContributor> contributors;
+    private String encodedString;
     //private int partition_id; //the id of partion methods
     //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
     //private String purchase_id;
@@ -103,4 +104,8 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     public String getPurchase_id() {return purchase_id;}
     public void setPurchase_id(String pid) {purchase_id=pid;}
 
+    public void setEncodedString(String encodedString) {
+        this.encodedString = encodedString;
+    }
+    public String getEncodedString() {return this.encodedString;}
 }

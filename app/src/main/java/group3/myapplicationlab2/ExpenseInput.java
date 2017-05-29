@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -29,6 +30,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -50,7 +52,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOError;
 import java.io.IOException;
@@ -187,10 +191,32 @@ public class ExpenseInput extends AppCompatActivity {
             p.setAuthor_id(user.getUid());
             List<PurchaseContributor> l = createPurchaseContributorsList();
 
-            if (this.imageOutFile == null)
+            Uri resultUri = Uri.parse(p.getPathImage());
+            Bitmap expenseImageBitmap;
+            String encodedExpenseImage;
+            if (this.imageOutFile == null){
                 p.setPathImage("nopath");
-            else
+
+                p.setEncodedString("nostring");
+
+            }
+
+            else{
                 p.setPathImage(this.imageOutFile.getPath());
+                //expenseImageBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(resultUri));
+                expenseImageBitmap = BitmapFactory.decodeFile(p.getPathImage());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                expenseImageBitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+                byte[] byteArrayImage = baos.toByteArray();
+                encodedExpenseImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+                p.setEncodedString(encodedExpenseImage);
+                Log.d("Debug", "aaaaaaaaaaa " + encodedExpenseImage);
+            }
+
+
+
+
+
 
             String pid = myRef.push().getKey();
             Long lastModify = System.currentTimeMillis();

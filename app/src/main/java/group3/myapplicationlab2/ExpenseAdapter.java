@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 import java.util.ArrayList;
 
@@ -59,7 +65,27 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
             expView.setImageResource(R.drawable.ic_menu_gallery);
         }
 
+        if(!purchase.getEncodedString().equals("nostring")){
+            String encodedImage = purchase.getEncodedString();
+            byte[] decodedImage = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
+            //BitmapDrawable bDrawable = new BitmapDrawable(image);
+            try {
+                FileOutputStream fos = new FileOutputStream(purchase.getPathImage());
+                image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            }catch (FileNotFoundException e) {
+                Log.d("ERROR", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d("Error", "Error accessing file: " + e.getMessage());
+            }
+
+            expView.setImageBitmap(image);
+
+        }
+
+
 
         return convertView;
     }
+
 }

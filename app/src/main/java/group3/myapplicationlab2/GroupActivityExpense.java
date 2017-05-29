@@ -283,7 +283,6 @@ public class GroupActivityExpense extends AppCompatActivity {
                 }
                 i.putExtra("pos", position);
                 startActivityForResult(i, PURCHASE_CONTRIBUTOR);
-
             }
         });
     }

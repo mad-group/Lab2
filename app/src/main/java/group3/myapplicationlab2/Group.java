@@ -68,6 +68,7 @@ public class Group implements Serializable {
                 p.setDateMillis(Long.parseLong(purchase.get("dateMillis").toString()));
                 p.setGroup_id(purchase.get("group_id").toString());
                 p.setPathImage(purchase.get("pathImage").toString());
+                p.setEncodedString(purchase.get("encodedString").toString());
                 p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
                 p.setPurchase_id(purchase.get("purchase_id").toString());
 
