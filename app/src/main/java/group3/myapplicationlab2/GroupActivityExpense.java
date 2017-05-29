@@ -245,7 +245,11 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Collections.sort(group.getPurchases());
                 Collections.reverse(group.getPurchases());
                 //d("Debug", "size gpr OAR" + group.getPurchases().size());
-                expenseAdapter.addAll(group.getPurchases());
+                /*expenseAdapter.addAll(group.getPurchases());*/
+                for (int i =0; i<group.getPurchases().size(); i++){
+                    Log.d("Debug", "path: " + group.getPurchases().get(i).getPathImage());
+                    expenseAdapter.add(group.getPurchases().get(i));
+                }
             }
         }
         if (requestCode == PURCHASE_CONTRIBUTOR){
@@ -268,11 +272,13 @@ public class GroupActivityExpense extends AppCompatActivity {
                 i.putExtra("group_id", gid);
                 i.putExtra("user",user);
                 Log.d("Debug", "----------");
+/*                for (Purchase purchase : group.getPurchases()){
+                    Log.d("Debug", "size pc: " + purchase.getPathImage());
+                }*/
                 for (Purchase purchase : group.getPurchases()){
-                    Log.d("Debug", "size pc: " + purchase.getContributors().size());
                     if (purchase.getPurchase_id().equals(p.getPurchase_id())) {
                         i.putExtra("purchase", purchase);
-
+                        Log.d("Debug", "size pc: " + purchase.getPathImage());
                     }
                 }
                 i.putExtra("pos", position);
@@ -304,6 +310,8 @@ public class GroupActivityExpense extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
 
     }
 

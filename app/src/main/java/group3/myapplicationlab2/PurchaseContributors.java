@@ -3,9 +3,13 @@ package group3.myapplicationlab2;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -66,13 +70,18 @@ public class PurchaseContributors extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.scroll_toolbar);
         setSupportActionBar(toolbar);
 
-
-
         group = (Group) getIntent().getSerializableExtra("group");
         user = (User) getIntent().getSerializableExtra("user");
         purchase = (Purchase) getIntent().getSerializableExtra("purchase");
 
+        if(!purchase.getPathImage().equals("nopath")){
+            CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+            Bitmap myBitmap = BitmapFactory.decodeFile(purchase.getPathImage());
+            Drawable checkImage = new BitmapDrawable(myBitmap);
+            collapsingToolbar.setBackground(checkImage);
+        }
         setTitle(purchase.getCausal());
+
 
         author = (TextView) findViewById(R.id.scroll_tv_author);
         author.setText(purchase.getUser_name());
@@ -87,7 +96,6 @@ public class PurchaseContributors extends AppCompatActivity {
 
         pcList = purchase.getContributors();
         //Toast.makeText(getApplicationContext(), "aaa "+pcList.size(), Toast.LENGTH_SHORT).show();
-
 
         for (int i = 0; i< purchase.getContributors().size(); i++){
             drawNewCotnributor(purchase.getContributors().get(i));

@@ -45,12 +45,18 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         expDate.setText(purchase.getDate());
 
 
-        if (purchase.getPathImage()!=null && !purchase.getPathImage().equals("nopath")) {
+        if (!purchase.getPathImage().equals("nopath")) {
             File imgFile = new File(purchase.getPathImage());
             if(imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 expView.setImageBitmap(myBitmap);
             }
+            else {
+                expView.setImageResource(R.drawable.ic_menu_gallery);
+            }
+        }
+        else{
+            expView.setImageResource(R.drawable.ic_menu_gallery);
         }
 
 
