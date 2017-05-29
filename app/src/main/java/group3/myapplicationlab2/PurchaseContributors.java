@@ -17,6 +17,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -32,6 +33,9 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -75,10 +79,29 @@ public class PurchaseContributors extends AppCompatActivity {
         purchase = (Purchase) getIntent().getSerializableExtra("purchase");
 
         if(!purchase.getPathImage().equals("nopath")){
+
             CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
             Bitmap myBitmap = BitmapFactory.decodeFile(purchase.getPathImage());
             Drawable checkImage = new BitmapDrawable(myBitmap);
             collapsingToolbar.setBackground(checkImage);
+        }
+
+        if(!purchase.getEncodedString().equals("nostring")) {
+            String encodedImage = purchase.getEncodedString();
+            byte[] decodedImage = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
+            CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+ /*           Bitmap myBitmap = BitmapFactory.decodeFile(purchase.getPathImage());*/
+            Drawable checkImage = new BitmapDrawable(image);
+            collapsingToolbar.setBackground(checkImage);
+            try {
+                FileOutputStream fos = new FileOutputStream(purchase.getPathImage());
+                image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            } catch (FileNotFoundException e) {
+                Log.d("ERROR", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d("Error", "Error accessing file: " + e.getMessage());
+            }
         }
         setTitle(purchase.getCausal());
 
