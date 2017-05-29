@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    public static final int GROUP_CLICKED = 10;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
 
@@ -80,8 +81,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
-        Toast.makeText(MainActivity.this, "app ok", Toast. LENGTH_SHORT).show();
-
 
         dataBaseProxy = new DataBaseProxy();
 
@@ -175,13 +174,11 @@ public class MainActivity extends AppCompatActivity
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
                 i.putExtra("user_id", user.getUid());
                 i.putExtra("group_name", user.getGroups().get(position).getName());
-                i.putExtra("list_pos", Integer.toString(position));
-                //Toast.makeText(getApplicationContext(),"position " + pos, Toast.LENGTH_SHORT).show();
-
+                i.putExtra("position", Integer.toString(position));
                 i.putExtra("group_id", user.getGroups().get(position).getId());
                 i.putExtra("user", user);
 
-                startActivityForResult(i,10);
+                startActivityForResult(i, GROUP_CLICKED);
             }
         });
 
@@ -343,6 +340,14 @@ public class MainActivity extends AppCompatActivity
 
             }
         }
+        else if (requestCode == GROUP_CLICKED){
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
+                user = (User)data.getSerializableExtra("modified_user");
+                reDrawGroupList();
+            }
+
+        }
         else {
             if (user.getGroups() != null) {
                 currentGroupPreview = user.getGroups();
@@ -438,48 +443,28 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void drawLeavingDialogBox(String gid, String uid, final int position){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.grpup_leaving_text)).setTitle(getString(R.string.leaving_group_title));
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (!userHasDebits(user.getUid())){
-                    //deleteUserFromGroup(position);
-                    //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
-
-                }
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-
-    private Boolean userHasDebits(String user_id){
-        for(int i =0; i< currentGroupPreview.size(); i++){
-            groups_ids.add(currentGroupPreview.get(i).getId());
-        }
-        return false;
-    }
-
-    private void deleteUserFromGroup(int position){
-        user_groups.child(Integer.toString(position)).removeValue();
-        if (currentGroupPreview != null)
-            currentGroupPreview.remove(position);
-        else
-            currentGroupPreview = new ArrayList<>();
+    private void reDrawGroupList(){
         adapter.clear();
-        for(int i=0; i< currentGroupPreview.size(); i++){
-            adapter.add(currentGroupPreview.get(i));
+        for(int i=0; i< user.getGroups().size(); i++){
+            adapter.add(user.getGroups().get(i));
         }
-        user_groups.setValue(currentGroupPreview);
+        user_groups.setValue(user.getGroups());
+        /*qui alla fine potrebbero non esserci più gruppi,occorrebbe risettare l'immagine No grpups*/
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -223,7 +223,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         if (id == R.id.leave){
             final String uid = user.getUid();
-            drawLeavingDialogBox(group.getDescription(), user.getUid(), getIntent().getStringExtra("list_pos"));
+            drawLeavingDialogBox(group.getDescription(), user.getUid());
             return true;
         }
 
@@ -257,24 +257,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         }
     }
 
-    private void drawLeavingDialogBox(String title, String text) {
-        AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(text);
-
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
-                getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-
-                return;
-
-            } });
-        alertDialog.show();
-
-    }
-
     public void registerListenerOnListView(){
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -300,15 +282,17 @@ public class GroupActivityExpense extends AppCompatActivity {
         });
     }
 
-    private void drawLeavingDialogBox(String gid, String uid, final String position){
+    private void drawLeavingDialogBox(String gid, String uid){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.grpup_leaving_text)).setTitle(getString(R.string.leaving_group_title));
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (userHasDebits(user.getUid())==false){
-                    //deleteUserFromGroup(position);
-                    deleteUserFromGroup(position);
-                    finish();
+                        deleteUserFromGroup();
+                        Intent i = new Intent();
+                        i.putExtra("modified_user", user);
+                        setResult(RESULT_OK, i);
+                        finish();
                 }
 
             }
@@ -325,6 +309,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private Boolean userHasDebits(String user_id){
         List<Purchase> list = group.getPurchases();
+        Toast.makeText(GroupActivityExpense.this, "dim: "+list.size(), Toast. LENGTH_SHORT).show();
         for (Purchase p: list){
             for(PurchaseContributor pc : p.getContributors()){
                 if(pc.getUser_id().equals(user.getUid()) && pc.getPayed()==false) {
@@ -336,12 +321,23 @@ public class GroupActivityExpense extends AppCompatActivity {
         return false;
     }
 
-    private void deleteUserFromGroup(String position){
+    private void deleteUserFromGroup(){
+
+        /*Removing fromu group Preview*/
         DatabaseReference user_groups;
-        user_groups = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("groups");
-        user_groups.child(position).removeValue();
-        if (user.getGroups() != null)
-            user.getGroups().remove(position);
+        user_groups = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child(user.getUid())
+                .child("groupsHash");
+        user_groups.child(group.getId()).removeValue();
+
+
+        /*removing from user groups variable*/
+        if (user.getGroups().size()>0) {
+            user.getGroups().remove(Integer.parseInt(getIntent().getStringExtra("position")));
+        }
+
+        /*Removing from user from groups*/
         DatabaseReference groupsQuery = FirebaseDatabase.getInstance().getReference()
                 .child("Groups")
                 .child(group.getId())

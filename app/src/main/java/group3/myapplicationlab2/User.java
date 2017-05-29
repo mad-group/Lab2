@@ -58,9 +58,7 @@ public class User implements Serializable {
         this.notificationHashMap = notificationHashMap;
     }
 
-    public HashMap<String, GroupPreview> getGroupsHash() {
-        return groupsHash;
-    }
+
 
     public void setGroupsHash(HashMap<String, GroupPreview> groupsHash) {
         this.groupsHash = groupsHash;
@@ -77,6 +75,9 @@ public class User implements Serializable {
 
         this.setGroups(newGroupPreviewList);
 
+    }
+    public HashMap<String, GroupPreview> getGroupsHash() {
+        return groupsHash;
     }
 
     public void insertGroupPreviewInHashMap(String groupPreviewId, GroupPreview groupPreview){

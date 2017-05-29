@@ -27,7 +27,6 @@ public class GroupPreviewAdapter extends ArrayAdapter<GroupPreview> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         // Get the data item for this position
         GroupPreview group = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -38,7 +37,6 @@ public class GroupPreviewAdapter extends ArrayAdapter<GroupPreview> {
         // Lookup view for data population
         TextView groupName = (TextView) convertView.findViewById(R.id.group_item_name);
         TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
-
         groupName.setText(group.getName());
         groupDescription.setText(group.getDescription());
 
