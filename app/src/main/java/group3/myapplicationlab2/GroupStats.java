@@ -31,6 +31,8 @@ public class GroupStats extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_stats);
+
+
         final Random r = new Random();
 
         group = (Group) getIntent().getSerializableExtra("group");
@@ -98,8 +100,19 @@ public class GroupStats extends AppCompatActivity {
         list = (ListView)findViewById(R.id.group_balance);
         list.setAdapter(memberArrayAdapter);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_stats);
         setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("group_name"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        toolbar.setTitle(group.getName()+" - Statistics");
     }
 
     private void drawLeavingDialogBox(String title, String text) {

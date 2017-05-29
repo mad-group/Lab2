@@ -40,6 +40,19 @@ public class GroupModification extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_modification);
 
+/*        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("group_name"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View view) {
+                                                     finish();
+                                                 }
+                                             });*/
+
+
 
         group_desc = getIntent().getStringExtra("group_desc");
         group_id = getIntent().getStringExtra("group_id");

@@ -55,7 +55,8 @@
                     android:drawableLeft="@mipmap/ic_shop_bag"
                     android:hint="@string/whatHint"
                     android:inputType="textPersonName"
-                    android:paddingTop="20dp" />
+                    android:paddingTop="20dp"
+                    android:cursorVisible="true"/>
 
                 <LinearLayout
                     android:id="@+id/linear_layout_id"
@@ -77,7 +78,8 @@
                             android:layout_below="@+id/ie_et_expense"
                             android:text="@string/how_much"
                             android:textColor="@color/colorText"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            />
 
                         <EditText
                             android:id="@+id/ie_et_amount"
@@ -86,7 +88,9 @@
                             android:layout_below="@+id/text_cost"
                             android:drawableLeft="@mipmap/ic_euro"
                             android:hint="@string/how_muchHint"
-                            android:inputType="numberDecimal" />
+                            android:inputType="numberDecimal"
+                            android:cursorVisible="true"
+                            android:imeOptions="actionDone" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -102,7 +106,9 @@
                             android:layout_below="@+id/ie_et_amount"
                             android:text="@string/when"
                             android:textColor="@color/colorText"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:textCursorDrawable="@drawable/color_cursor"
+                            />
 
                         <EditText
                             android:id="@+id/ie_tv_date"

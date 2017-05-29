@@ -73,6 +73,17 @@ public class PurchaseContributors extends AppCompatActivity {
         nsv.setSmoothScrollingEnabled(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.scroll_toolbar);
         setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("group_name"));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 
         group = (Group) getIntent().getSerializableExtra("group");
         user = (User) getIntent().getSerializableExtra("user");
@@ -103,7 +114,8 @@ public class PurchaseContributors extends AppCompatActivity {
                 Log.d("Error", "Error accessing file: " + e.getMessage());
             }
         }
-        setTitle(purchase.getCausal());
+        toolbar.setTitle(purchase.getCausal());
+
 
 
         author = (TextView) findViewById(R.id.scroll_tv_author);

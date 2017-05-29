@@ -7,7 +7,7 @@
     tools:context="group3.myapplicationlab2.GroupModification">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:paddingTop="@dimen/activity_top_margin"
         android:paddingLeft="@dimen/activity_left_margin"
         android:layout_height="wrap_content"

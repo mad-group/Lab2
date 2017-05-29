@@ -1,5 +1,6 @@
 package group3.myapplicationlab2;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -26,12 +27,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ContentFrameLayout;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -98,6 +101,7 @@ public class ExpenseInput extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_input);
+
         user = (User)getIntent().getSerializableExtra("user");
         group = (Group)getIntent().getSerializableExtra("group");
 
@@ -105,6 +109,10 @@ public class ExpenseInput extends AppCompatActivity {
 
         dateField = (EditText) findViewById(R.id.ie_tv_date);
         expenseField = (EditText) findViewById(R.id.ie_et_expense);
+        amountField = (EditText) findViewById(R.id.ie_et_amount);
+        hideKeyboard(dateField);
+        hideKeyboard(expenseField);
+        hideKeyboard(amountField);
 
         year = myCalendar.get(Calendar.YEAR);
         month = myCalendar.get(Calendar.MONTH);
@@ -130,11 +138,6 @@ public class ExpenseInput extends AppCompatActivity {
         });
 
     }
-
-    public void onStart(){
-        super.onStart();
-    }
-
 
 
     public void saveExpense(View v) {
@@ -374,7 +377,6 @@ public class ExpenseInput extends AppCompatActivity {
     }
 
     private void setEditTextAmountListener(){
-        amountField = (EditText) findViewById(R.id.ie_et_amount);
         amountField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -452,6 +454,22 @@ public class ExpenseInput extends AppCompatActivity {
 
         }
         return l;
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void setLostFocus(View v){
+        v.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus ) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
     }
 
 }
