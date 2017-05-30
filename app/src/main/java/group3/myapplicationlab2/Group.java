@@ -83,7 +83,7 @@ public class Group implements Serializable {
                         pc.setUser_id(pcFromMap.get("user_id").toString());
                         pc.setAmount(Double.parseDouble(pcFromMap.get("amount").toString()));
                         pc.setUser_name(pcFromMap.get("user_name").toString());
-                        pc.setContributor_id(pcFromMap.get("contributor_id").toString());
+                        //pc.setContributor_id(pcFromMap.get("contributor_id").toString());
                         pc_list.add(pc);
                     }
                     p.setContributors(pc_list);

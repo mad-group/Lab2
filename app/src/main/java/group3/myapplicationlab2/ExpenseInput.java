@@ -228,8 +228,8 @@ public class ExpenseInput extends AppCompatActivity {
             String key;
 
             for (int indexList=0; indexList<l.size(); indexList++){
-                l.get(indexList).setContributor_id(user.getName());
-                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(user.getName()).setValue(l.get(indexList));
+                /*l.get(indexList).setContributor_id(user.getUid());*/
+                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(l.get(indexList).getUser_id()).setValue(l.get(indexList));
             }
             p.setContributors(l);
 

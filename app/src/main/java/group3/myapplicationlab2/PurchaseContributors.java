@@ -218,7 +218,7 @@ public class PurchaseContributors extends AppCompatActivity {
                         .child("purchases")
                         .child(purchase.getPurchase_id())
                         .child("contributors")
-                        .child(pc.getContributor_id()).child("payed").setValue("true");
+                        .child(pc.getUser_id()).child("payed").setValue("true");
 
                 int index =0;
                 int falseCounter=0;
@@ -230,7 +230,7 @@ public class PurchaseContributors extends AppCompatActivity {
 
                         falseCounter = falseCounter +1;
                         authorIndex = index;
-                        authorContributorId = element.getContributor_id();
+                        authorContributorId = element.getUser_id();
                     }
                     index = index+1;
                 }
@@ -266,5 +266,7 @@ public class PurchaseContributors extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 }
