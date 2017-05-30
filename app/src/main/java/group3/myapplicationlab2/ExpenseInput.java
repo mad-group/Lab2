@@ -216,11 +216,6 @@ public class ExpenseInput extends AppCompatActivity {
                 Log.d("Debug", "aaaaaaaaaaa " + encodedExpenseImage);
             }
 
-
-
-
-
-
             String pid = myRef.push().getKey();
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
@@ -233,9 +228,8 @@ public class ExpenseInput extends AppCompatActivity {
             String key;
 
             for (int indexList=0; indexList<l.size(); indexList++){
-                key = myRef.child(group_id).child("purchases").child(pid).child("contributors").push().getKey();
-                l.get(indexList).setContributor_id(key);
-                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(key).setValue(l.get(indexList));
+                l.get(indexList).setContributor_id(user.getName());
+                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(user.getName()).setValue(l.get(indexList));
             }
             p.setContributors(l);
 
