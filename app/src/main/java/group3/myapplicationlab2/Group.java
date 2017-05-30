@@ -1,6 +1,8 @@
 package group3.myapplicationlab2;
 
 
+import android.util.Log;
+
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
@@ -166,6 +168,73 @@ public class Group implements Serializable {
             }
         }
     }
+
+    public void computePaymentProportionContributors(User user){
+        String myself = user.getUid();
+
+        for (int i=0; i<this.purchases.size(); i++){
+            Purchase purchase = this.purchases.get(i);
+            String owner = purchase.getAuthorName();
+
+            List<GroupMember> backup = this.groupMembers;
+            Boolean present = false;
+
+            for (PurchaseContributor purchaseContributor: purchase.getContributors()){
+                Log.d("NAME", purchaseContributor.getUser_id());
+                Log.d("SOLDI", String.valueOf(purchaseContributor.getAmount()));
+            }
+
+            if (purchase.getContributors().size()>1){
+
+                Log.d("UYES", "YES");
+
+                for (PurchaseContributor purchaseContributor: purchase.getContributors()){
+
+
+                    if (owner.equals(myself)){
+
+                        if (!purchaseContributor.getUser_id().equals(myself)){
+
+                            for (int ii=0; ii<this.groupMembers.size(); ii++){
+                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id())){
+                                    this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() + purchaseContributor.getAmount());
+                                }
+                            }
+
+                        }
+
+                    }
+                    else {
+
+                        if (!purchaseContributor.getUser_id().equals(myself)){
+                            for (int ii=0; ii<this.groupMembers.size(); ii++){
+                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id())){
+                                    this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() - purchaseContributor.getAmount());
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (purchaseContributor.getUser_id().equals(myself)){
+                        present = true;
+                    }
+
+                }
+
+                if (!present){
+                    this.groupMembers = backup;
+                }
+
+            }
+
+
+
+        }
+
+
+    }
+
 
     public void computeAggregateExpenses(User user){
 

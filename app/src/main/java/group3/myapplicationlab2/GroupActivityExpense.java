@@ -221,7 +221,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
             else {
                 group.resetPaymentProportion();
-                group.computePaymentProportion(user);
+                //group.computePaymentProportion(user);
+                group.computePaymentProportionContributors(user);
                 Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
                 i.putExtra("group", group);
                 i.putExtra("user", user);

@@ -87,7 +87,6 @@ public class Purchase implements Serializable, Comparable<Purchase> {
         return (int)(this.lastModify - purchase.getLastModify());
     }
 
-
     public String getUser_name() {
         return user_name;
     }
