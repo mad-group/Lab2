@@ -57,7 +57,8 @@
         <activity
             android:name=".GroupCreationForm"
             android:label="@string/title_activity_group_creation"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".JoinGroupActivity"
             android:label="@string/title_activity_join_group"

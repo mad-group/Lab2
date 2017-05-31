@@ -1,112 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="group3.myapplicationlab2.GroupCreationForm">
+    tools:context="group3.myapplicationlab2.MainActivity">
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:paddingTop="@dimen/activity_top_margin"
-        android:paddingLeft="@dimen/activity_left_margin"
         android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingTop="50dp"
+        tools:context="group3.myapplicationlab2.GroupCreationForm">
 
-        <TextView
-            android:paddingTop="10dp"
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
+            android:paddingTop="@dimen/activity_top_margin"
+            android:paddingLeft="@dimen/activity_left_margin"
             android:layout_height="wrap_content"
-            android:text="@string/groupName"
-            android:textColor="@color/colorText"
-            android:textStyle="bold"
-            />
-        <EditText
-            android:id="@+id/new_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:cursorVisible="true"
-            android:textCursorDrawable="@null"
-            android:hint="@string/groupNameHint"
-            android:inputType="textCapSentences|textAutoCorrect"
-            android:paddingTop="20dp"
-            />
-        <TextView
-            android:paddingTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/groupSubject"
-            android:textColor="@color/colorText"
-            android:textStyle="bold"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            />
-        <EditText
-            android:id="@+id/group_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textCursorDrawable="@null"
-            android:cursorVisible="true"
-            android:hint="@string/groupSubjectHint"
-            android:inputType="textCapSentences|textAutoCorrect"
-            android:layout_marginBottom="0dp"
-            android:paddingTop="20dp"/>
+            <TextView
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/groupName"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
+                />
+            <EditText
+                android:id="@+id/new_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="true"
+                android:textCursorDrawable="@null"
+                android:hint="@string/groupNameHint"
+                android:inputType="textCapSentences|textAutoCorrect"
+                android:paddingTop="20dp"
+                />
+            <TextView
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/groupSubject"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
 
-        <TextView
-            android:paddingTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/groupPin"
-            android:textColor="@color/colorText"
-            android:textStyle="bold"
+                />
+            <EditText
+                android:id="@+id/group_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textCursorDrawable="@null"
+                android:cursorVisible="true"
+                android:hint="@string/groupSubjectHint"
+                android:inputType="textCapSentences|textAutoCorrect"
+                android:layout_marginBottom="0dp"
+                android:paddingTop="20dp"/>
 
-            />
-        <EditText
-            android:id="@+id/group_pin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/groupPinHint"
-            android:inputType="textCapSentences|textAutoCorrect"
-            android:layout_marginBottom="10dp"
-            android:paddingTop="20dp"/>
+            <TextView
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/groupPin"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
 
-        <!--        <TextView
-                    android:paddingTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/radiogroup_title"
-                    android:textColor="@color/colorPrimaryDark"
-                    />
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="wrap_content"
+                />
+            <EditText
+                android:id="@+id/group_pin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/groupPinHint"
+                android:inputType="textCapSentences|textAutoCorrect"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="20dp"/>
+
+            <!--        <TextView
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:prompt="@string/splitting_criterion_prompt"
-                        android:entries="@array/splitting_criteria"
-                        android:layout_marginBottom="20dp"
-                        android:paddingTop="20dp">
-                    </Spinner>-->
+                        android:text="@string/radiogroup_title"
+                        android:textColor="@color/colorPrimaryDark"
+                        />
+                        <Spinner
+                            android:id="@+id/spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:prompt="@string/splitting_criterion_prompt"
+                            android:entries="@array/splitting_criteria"
+                            android:layout_marginBottom="20dp"
+                            android:paddingTop="20dp">
+                        </Spinner>-->
 
-    </android.support.v7.widget.LinearLayoutCompat>
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/new_part_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@mipmap/ic_arrow_dx"
+            app:backgroundTint="@color/colorFabCustom"
+            android:tint="@color/colorIcon">
+
+        </android.support.design.widget.FloatingActionButton>
+
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/new_part_btn"
+        android:id="@+id/fab_add_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@mipmap/ic_arrow_dx"
+        app:srcCompat="@drawable/ic_new_group"
         app:backgroundTint="@color/colorFabCustom"
         android:tint="@color/colorIcon">
 
     </android.support.design.widget.FloatingActionButton>
 
-
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
