@@ -257,5 +257,6 @@
     <string name="payers_names">Payers</string>
     <string name="new_group_message"><b>You are creating a new group</b>\n Please select a name and a password\n then go to the next step and invite friends.</string>
     <string name="modification_group_message"><b>You are modifying a group</b>\n Please modify the name and the password\n then tap <b>MODIFY GROUP</b> to save the changes.</string>
+    <string name="join_group_message"><b>You are joining a group</b>\n Please insert the group ID, the password\n then tap <b>Join</b> to start sharing expenses.</string>
 
 </resources>

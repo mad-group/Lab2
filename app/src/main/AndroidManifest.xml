@@ -33,7 +33,7 @@
 
         <activity
             android:name=".ExpenseInput"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".GroupStats"
@@ -44,7 +44,7 @@
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".LoginActivity"
@@ -61,30 +61,30 @@
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".GroupCreationForm"
             android:label="@string/title_activity_group_creation"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".JoinGroupActivity"
             android:label="@string/title_activity_join_group"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".GroupModification"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".PurchaseContributors"
             android:label="@string/title_activity_purchase_contributors"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateHidden"/>
 
         <service android:name=".GroupPreviewService">
         </service>

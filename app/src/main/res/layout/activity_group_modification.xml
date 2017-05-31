@@ -89,7 +89,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/add_participant"
                 android:onClick="modifyUser"
-                />
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
     </android.support.v7.widget.LinearLayoutCompat>
