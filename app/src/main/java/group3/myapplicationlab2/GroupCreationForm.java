@@ -64,7 +64,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
         // User input
         groupName = (EditText)findViewById(R.id.new_group);
-        groupDescription = (EditText)findViewById(R.id.group_description);
+        //groupDescription = (EditText)findViewById(R.id.group_description);
         groupPin = (EditText) findViewById(R.id.group_pin);
 
 

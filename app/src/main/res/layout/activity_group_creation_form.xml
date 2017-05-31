@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="group3.myapplicationlab2.MainActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        tools:context="group3.myapplicationlab2.GroupCreationForm">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,15 +23,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="50dp"
-        tools:context="group3.myapplicationlab2.GroupCreationForm">
-
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:paddingTop="@dimen/activity_top_margin"
@@ -36,82 +30,56 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
 
-            <TextView
-                android:paddingTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/groupName"
-                android:textColor="@color/colorText"
-                android:textStyle="bold"
-                />
-            <EditText
-                android:id="@+id/new_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:cursorVisible="true"
-                android:textCursorDrawable="@null"
-                android:hint="@string/groupNameHint"
-                android:inputType="textCapSentences|textAutoCorrect"
-                android:paddingTop="20dp"
-                />
-            <TextView
-                android:paddingTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/groupSubject"
-                android:textColor="@color/colorText"
-                android:textStyle="bold"
-
-                />
-            <EditText
-                android:id="@+id/group_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textCursorDrawable="@null"
-                android:cursorVisible="true"
-                android:hint="@string/groupSubjectHint"
-                android:inputType="textCapSentences|textAutoCorrect"
-                android:layout_marginBottom="0dp"
-                android:paddingTop="20dp"/>
-
-            <TextView
-                android:paddingTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/groupPin"
-                android:textColor="@color/colorText"
-                android:textStyle="bold"
-
-                />
-            <EditText
-                android:id="@+id/group_pin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/groupPinHint"
-                android:inputType="textCapSentences|textAutoCorrect"
+            <ImageView
+                android:layout_width="@dimen/logo_w_h"
+                android:layout_height="@dimen/logo_w_h"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
-                android:paddingTop="20dp"/>
+                android:src="@drawable/ic_new_group" />
 
-            <!--        <TextView
-                        android:paddingTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/radiogroup_title"
-                        android:textColor="@color/colorPrimaryDark"
-                        />
-                        <Spinner
-                            android:id="@+id/spinner"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:prompt="@string/splitting_criterion_prompt"
-                            android:entries="@array/splitting_criteria"
-                            android:layout_marginBottom="20dp"
-                            android:paddingTop="20dp">
-                        </Spinner>-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/new_group_message"
+                android:layout_marginBottom="30dp"
+                android:textAlignment="center"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/EditTextHint">
+
+                <EditText
+                    android:id="@+id/new_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/groupNameHint"
+                    android:inputType="textCapSentences|textAutoCorrect"
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:cursorVisible="true"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/EditTextHint">
+
+                <EditText
+                    android:id="@+id/group_pin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/groupPinHint"
+                    android:inputType="textCapSentences|textAutoCorrect"
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:cursorVisible="true"/>
+            </android.support.design.widget.TextInputLayout>
 
         </android.support.v7.widget.LinearLayoutCompat>
 
@@ -130,17 +98,3 @@
         </android.support.design.widget.FloatingActionButton>
 
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_new_group"
-        app:backgroundTint="@color/colorFabCustom"
-        android:tint="@color/colorIcon">
-
-    </android.support.design.widget.FloatingActionButton>
-
-</android.support.design.widget.CoordinatorLayout>

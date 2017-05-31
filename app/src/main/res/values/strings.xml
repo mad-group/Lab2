@@ -251,5 +251,6 @@
     <string name="author_name">Author</string>
     <string name="date_value">Date</string>
     <string name="payers_names">Payers</string>
+    <string name="new_group_message">You are creaging a new group  Please select a name and a password  then go to the next step and invite friends.</string>
 
 </resources>
