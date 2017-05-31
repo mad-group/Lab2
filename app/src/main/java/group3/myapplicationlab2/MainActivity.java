@@ -445,10 +445,23 @@ public class MainActivity extends AppCompatActivity
 
     private void reDrawGroupList(){
         adapter.clear();
+
+        if (user.getGroups().size()>0){
+            findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
+            findViewById(R.id.content_without_groups).setVisibility(View.GONE);
+        }
+        else{
+            findViewById(R.id.content_with_groups).setVisibility(View.GONE);
+            findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
+        }
+
         for(int i=0; i< user.getGroups().size(); i++){
             adapter.add(user.getGroups().get(i));
         }
         user_groups.setValue(user.getGroups());
+
+
+
         /*qui alla fine potrebbero non esserci più gruppi,occorrebbe risettare l'immagine No grpups*/
     }
 
