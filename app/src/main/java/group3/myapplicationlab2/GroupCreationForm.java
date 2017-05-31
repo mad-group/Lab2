@@ -38,7 +38,7 @@ import java.util.List;
 public class GroupCreationForm extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = GroupCreationForm.class.getSimpleName();
-    private EditText groupName, groupDescription, groupPin;
+    private EditText groupName, groupPin;
 
     private final int REQUEST_INVITE = 0;
 
@@ -64,7 +64,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
 
         // User input
         groupName = (EditText)findViewById(R.id.new_group);
-        //groupDescription = (EditText)findViewById(R.id.group_description);
         groupPin = (EditText) findViewById(R.id.group_pin);
 
 
@@ -132,14 +131,6 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             newGroup.setName(groupName.getText().toString());
         }
 
-        if (groupDescription.getText().toString().isEmpty()){
-            String err = getResources().getString(R.string.insert_group_descr);
-            groupDescription.setError(err);
-            prova = false;
-        }else {
-            newGroup.setDescription(groupDescription.getText().toString());
-        }
-
         if (groupPin.getText().toString().isEmpty() || groupPin.getText().toString().length() < 6){
             String err = getResources().getString(R.string.wrong_group_pin);
             groupPin.setError(err);
@@ -157,6 +148,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             this.currentUser = auth.getCurrentUser().getEmail();
 
             //INSERT GROUP IN DB
+            newGroup.setDescription("DefaultDescription");
             newGroup.setLastEvent("GroupCreation");
             newGroup.setLastAuthor(user.getUid());
             String groupId = dataBaseProxy.insertGroup(newGroup);

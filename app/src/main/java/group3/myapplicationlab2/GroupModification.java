@@ -26,7 +26,6 @@ import java.util.Objects;
 
 public class GroupModification extends AppCompatActivity {
     private String group_name;
-    private String group_desc;
     private String user_id;
     private String group_id;
     private EditText et_name;
@@ -40,21 +39,6 @@ public class GroupModification extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_modification);
 
-/*        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getIntent().getStringExtra("group_name"));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View view) {
-                                                     finish();
-                                                 }
-                                             });*/
-
-
-
-        group_desc = getIntent().getStringExtra("group_desc");
         group_id = getIntent().getStringExtra("group_id");
         group_name = getIntent().getStringExtra("group_name");
         user_id = getIntent().getStringExtra("user_id");
@@ -62,14 +46,22 @@ public class GroupModification extends AppCompatActivity {
         setTitle(group_name + " - Modify");
 
         et_name = (EditText) findViewById(R.id.mod_new_group);
-        et_desc = (EditText) findViewById(R.id.mod_group_description);
         et_pin = (EditText) findViewById(R.id.mod_group_pin);
-
         et_name.setText(group_name);
-        et_desc.setText(group_desc);
 
         Button bt = (Button) findViewById(R.id.mod_new_part_btn);
         bt.setText(R.string.bt_modify_group);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 

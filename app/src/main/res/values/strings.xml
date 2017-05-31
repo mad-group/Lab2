@@ -82,8 +82,10 @@
     <string name="radiogroup_title_expense">Choose a splitting criterion</string>
     <string name="groupName">Group name</string>
     <string name="groupNameHint">Type group name here...</string>
+    <string name="groupNameHintModify">Type new group name here...</string>
     <string name="groupSubject">Group subject</string>
     <string name="groupSubjectHint">Type the subject here...</string>
+    <string name="groupSubjectHintModify">Type new subject here...</string>
     <string name="radiogroup_title">Choose a default split criterion</string>
     <string name="equal_parts">Split equally</string>
     <string name="per_quotes">Split by quotes</string>
@@ -112,6 +114,8 @@
 
     <string name="groupPin">Group password</string>
     <string name="groupPinHint">Type group password here...</string>
+    <string name="groupPinHintModify">Type new group password here...</string>
+
     <string name="wrong_group_pin">The password must be of at least 6 characters</string>
     <string name="email_subject"> Money Sharing joining group invitation</string>
     <string name="invitation_failed">Invitation failed</string>
@@ -251,6 +255,7 @@
     <string name="author_name">Author</string>
     <string name="date_value">Date</string>
     <string name="payers_names">Payers</string>
-    <string name="new_group_message">You are creaging a new group\n Please select a name and a password\n then go to the next step and invite friends.</string>
+    <string name="new_group_message"><b>You are creating a new group</b>\n Please select a name and a password\n then go to the next step and invite friends.</string>
+    <string name="modification_group_message"><b>You are modifying a group</b>\n Please modify the name and the password\n then tap <b>MODIFY GROUP</b> to save the changes.</string>
 
 </resources>

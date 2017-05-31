@@ -20,58 +20,71 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".GroupActivityExpense"
             android:label="@string/title_activity_group_expense"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ExpenseInput" />
+
+        <activity
+            android:name=".ExpenseInput"
+            android:windowSoftInputMode="stateVisible"/>
+
         <activity
             android:name=".GroupStats"
             android:label="@string/title_activity_group_stats"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateVisible"/>
+
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateVisible" />
+
         <activity
             android:name=".GroupCreationForm"
             android:label="@string/title_activity_group_creation"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateVisible"/>
+
         <activity
             android:name=".JoinGroupActivity"
             android:label="@string/title_activity_join_group"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateVisible"/>
+
         <activity
             android:name=".GroupModification"
-            android:windowSoftInputMode="adjustResize"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateVisible" />
+
         <activity
             android:name=".PurchaseContributors"
             android:label="@string/title_activity_purchase_contributors"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateVisible"/>
 
         <service android:name=".GroupPreviewService">
         </service>
