@@ -33,6 +33,7 @@
 
         <activity
             android:name=".ExpenseInput"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
