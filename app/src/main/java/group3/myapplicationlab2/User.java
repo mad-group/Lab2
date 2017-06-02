@@ -21,6 +21,7 @@ public class User implements Serializable {
     private List<GroupPreview> groups;
     private HashMap<String, GroupPreview> groupsHash;
     private HashMap<String, Notification> notificationHashMap;
+    private String userImage="";
 
     public void setEmail(String email){
         this.email = email;
@@ -85,4 +86,11 @@ public class User implements Serializable {
         return;
     }
 
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
 }
