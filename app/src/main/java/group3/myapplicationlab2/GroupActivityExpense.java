@@ -119,7 +119,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         mGroupReference.addListenerForSingleValueEvent(GroupListener);
 
         ArrayList<Purchase> spese = new ArrayList<Purchase>();
-        expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese);
+        expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese, user.getUserImage());
         listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
 
