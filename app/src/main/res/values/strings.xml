@@ -259,6 +259,10 @@
     <string name="modification_group_message"><b>You are modifying a group</b>\n Please modify the name and the password\n then tap <b>MODIFY GROUP</b> to save the changes.</string>
     <string name="join_group_message"><b>You are joining a group</b>\n Please insert the group ID, the password\n then tap <b>Join</b> to start sharing expenses.</string>
     <string name="insert_expense_message"><b>You are adding an expense</b>\n Please <b>fill the 3 fields</b> down here,\n choose the <b>splitting</b> criterion and <b>attach\n a photo</b>, if necessary, before saving.</string>
+    <string name="user_has_debit_text">You can not leave the group. Please check the expenses and pay your debits!</string>
+    <string name="user_has_debits_title">Impossible to leave</string>
+    <string name="miss_name_mod">Please insert the new group name</string>
+    <string name="miss_pin_mod">The pin must have at least 6 characters</string>
 
 
 </resources>

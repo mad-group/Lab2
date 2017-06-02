@@ -207,29 +207,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();
-
-        /*user_info.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                adapter.clear();
-
-                user = dataSnapshot.getValue(User.class);
-                if (user.getGroups() != null){
-                    //Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
-                    adapter.clear();
-                    for (int i=0; i<user.getGroups().size(); i++){
-                        adapter.add(user.getGroups().get(i));
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("FAIL USER INFO");
-            }
-        });*/
-
     }
 
     @Override
@@ -246,10 +223,12 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.modify:
                 Intent i = new Intent(MainActivity.this, GroupModification.class);
-                i.putExtra("group_name", user.getGroups().get(info.position).getName());
+/*                i.putExtra("group_name", user.getGroups().get(info.position).getName());
                 i.putExtra("group_desc", user.getGroups().get(info.position).getDescription());
                 i.putExtra("group_id", user.getGroups().get(info.position).getId());
-                i.putExtra("user_id", user.getUid());
+                i.putExtra("user_id", user.getUid());*/
+                i.putExtra("user",user);
+                i.putExtra("position", Integer.toString(info.position));
                 startActivityForResult(i, MODIFY_GROUP);
                 return true;
 /*            case R.id.leave:
@@ -347,6 +326,11 @@ public class MainActivity extends AppCompatActivity
                 reDrawGroupList();
             }
 
+        }
+        else if (requestCode == MODIFY_GROUP){
+            if (resultCode == RESULT_OK){
+                reloadUser();
+            }
         }
         else {
             if (user.getGroups() != null) {
@@ -460,9 +444,52 @@ public class MainActivity extends AppCompatActivity
         }
         user_groups.setValue(user.getGroups());
 
+    }
 
+    private void reloadUser(){
+        user_info.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-        /*qui alla fine potrebbero non esserci più gruppi,occorrebbe risettare l'immagine No grpups*/
+                adapter.clear();
+                user = dataSnapshot.getValue(User.class);
+                if (user.getGroupsHash()!=null){
+                    Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+                    adapter.clear();
+                    for (int i=0; i<user.getGroups().size(); i++){
+                        adapter.add(user.getGroups().get(i));
+                    }
+                }
+                else {
+                    findViewById(R.id.content_with_groups).setVisibility(View.GONE);
+                    findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
+                }
+
+                //HASHMAP v2
+                /*user = dataSnapshot.getValue(User.class);
+                if (user.getGroupsHash()!=null){
+                    groupPreviewAdapterHashMap.add(user.getGroupsHash());
+                    groupPreviewAdapterHashMap.notifyDataSetChanged();
+                }*/
+
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navigationView.setNavigationItemSelectedListener(MainActivity.this);
+                View header=navigationView.getHeaderView(0);
+                TextView user_email = (TextView)header.findViewById(R.id.user_email);
+                user_email.setText(user.getEmail());
+                TextView user_name = (TextView)header.findViewById(R.id.username);
+                user_name.setText(user.getName());
+
+                Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
+                serviceIntent.putExtra("user", user);
+                startService(serviceIntent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("FAIL USER INFO");
+            }
+        });
     }
 
 }

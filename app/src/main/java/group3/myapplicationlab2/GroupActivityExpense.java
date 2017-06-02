@@ -298,7 +298,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     }
 
     private void drawLeavingDialogBox(String gid, String uid){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
         builder.setMessage(getString(R.string.grpup_leaving_text)).setTitle(getString(R.string.leaving_group_title));
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -308,6 +308,18 @@ public class GroupActivityExpense extends AppCompatActivity {
                         i.putExtra("modified_user", user);
                         setResult(RESULT_OK, i);
                         finish();
+                }
+                else{
+                    Log.d("Debug", "test");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+                    builder.setMessage(getString(R.string.user_has_debit_text)).setTitle(getString(R.string.user_has_debits_title));
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.show();
+                    dialog2.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
                 }
 
             }
@@ -326,7 +338,6 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private Boolean userHasDebits(String user_id){
         List<Purchase> list = group.getPurchases();
-        Toast.makeText(GroupActivityExpense.this, "dim: "+list.size(), Toast. LENGTH_SHORT).show();
         for (Purchase p: list){
             for(PurchaseContributor pc : p.getContributors()){
                 if(pc.getUser_id().equals(user.getUid()) && pc.getPayed()==false) {
