@@ -203,7 +203,9 @@ public class ExpenseInput extends AppCompatActivity {
             p.setLastModify(System.currentTimeMillis());
             p.setUser_name(user.getName());
             p.setAuthor_id(user.getUid());
+            p.setAuthorPersonalImage(user.getUserImage());
             List<PurchaseContributor> l = createPurchaseContributorsList();
+
 
             Uri resultUri = Uri.parse(p.getPathImage());
             Bitmap expenseImageBitmap;

@@ -31,6 +31,7 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     private String purchase_id;
     private List<PurchaseContributor> contributors;
     private String encodedString;
+    private String authorPersonalImage;
     //private int partition_id; //the id of partion methods
     //private SparseArray<Float> participants; //array having <int key, Float value> where int k is default
     //private String purchase_id;
@@ -107,4 +108,12 @@ public class Purchase implements Serializable, Comparable<Purchase> {
         this.encodedString = encodedString;
     }
     public String getEncodedString() {return this.encodedString;}
+
+    public String getAuthorPersonalImage() {
+        return authorPersonalImage;
+    }
+
+    public void setAuthorPersonalImage(String authorPersonalImage) {
+        this.authorPersonalImage = authorPersonalImage;
+    }
 }

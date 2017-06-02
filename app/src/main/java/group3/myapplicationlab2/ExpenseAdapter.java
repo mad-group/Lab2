@@ -65,8 +65,8 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
             expView.setImageResource(R.drawable.ic_menu_gallery);
         }
 
-        if(!purchase.getEncodedString().equals("nostring")){
-            String encodedImage = purchase.getEncodedString();
+        if(!purchase.getAuthorPersonalImage().isEmpty()){
+            String encodedImage = purchase.getAuthorPersonalImage();
             byte[] decodedImage = Base64.decode(encodedImage, Base64.DEFAULT);
             Bitmap image = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
             //BitmapDrawable bDrawable = new BitmapDrawable(image);

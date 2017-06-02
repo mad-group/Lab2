@@ -64,7 +64,7 @@ public class Group implements Serializable {
                 Map <String, Object> purchase = (Map<String, Object>)ob;
                 Purchase p = new Purchase();
                 p.setAuthorName(purchase.get("authorName").toString());
-                p.setAuthorName(purchase.get("author_id").toString());
+                p.setAuthor_id(purchase.get("author_id").toString());
                 p.setUser_name(purchase.get("user_name").toString());
                 p.setCausal(purchase.get("causal").toString());
                 p.setDateMillis(Long.parseLong(purchase.get("dateMillis").toString()));
@@ -73,6 +73,7 @@ public class Group implements Serializable {
                 p.setEncodedString(purchase.get("encodedString").toString());
                 p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
                 p.setPurchase_id(purchase.get("purchase_id").toString());
+                p.setAuthorPersonalImage(purchase.get("authorPersonalImage").toString());
 
                 List<PurchaseContributor> pc_list = new ArrayList<>();
                 pc_list.removeAll(pc_list);
