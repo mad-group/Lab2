@@ -13,7 +13,9 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:textColorHint">@color/colorPrimaryLight</item>
+        <item name="android:textColorHint">@color/colorPrimaryDark</item>
+
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
 
     </style>
 
@@ -28,6 +30,7 @@
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <item name="textColorError">@color/design_textinput_error_color_light</item>
     </style>
 
 </resources>
