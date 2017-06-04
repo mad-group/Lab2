@@ -10,11 +10,10 @@
     android:id="@+id/group_balance_item">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/balance_face"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="none"
-        android:src="@mipmap/ic_smile" />
+        android:ellipsize="none" />
 
     <LinearLayout
         android:layout_width="match_parent"

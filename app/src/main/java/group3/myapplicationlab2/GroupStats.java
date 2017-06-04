@@ -3,10 +3,12 @@ package group3.myapplicationlab2;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -65,31 +67,35 @@ public class GroupStats extends AppCompatActivity {
 
                 TextView debit_credit = (TextView)convertView.findViewById(R.id.expense_amount);
                 TextView debit_credit_text = (TextView)convertView.findViewById(R.id.debt_text);
-                ImageView mood =(ImageView) convertView.findViewById(R.id.imageView2);
+                ImageView mood =(ImageView) convertView.findViewById(R.id.balance_face);
 
                 Double debit = getItem(position).getPayment();
 
                 if (debit > 0){
                     debit_credit.setText("+" + String.format( "%.2f €", debit ));
-                    debit_credit.setTextColor(Color.parseColor("#51931b"));
+                    debit_credit.setTextColor(getColor(R.color.mood_fine));
                     debit_credit_text.setText(R.string.owes_you);
-                    mood.setBackgroundResource(R.mipmap.ic_smile);
-                    mood.setColorFilter(Color.parseColor("#51931b"));
+                    mood.setBackgroundResource(0);
+                    mood.setImageResource(R.mipmap.ic_smile);
+                    mood.setColorFilter(getContext().getResources().getColor(R.color.mood_fine));
                 }
                 else if (debit <0) {
                     debit_credit.setText(String.format( "%.2f €", debit ));
-                    debit_credit.setTextColor(Color.parseColor("#ff0000"));
+                    debit_credit.setTextColor(getColor(R.color.mood_sad));
                     debit_credit_text.setText(R.string.you_owe);
-                    mood.setBackgroundResource(R.mipmap.ic_sad);
-                    mood.setColorFilter(Color.parseColor("#ff0000"));
+                    mood.setBackgroundResource(0);
+                    mood.setImageResource(R.mipmap.ic_sad);
+                    mood.setColorFilter(getContext().getResources().getColor(R.color.mood_sad));
+
 
                 }
                 else {
                     debit_credit.setText(String.format( "%.2f €", debit ));
-                    debit_credit.setTextColor(Color.parseColor("#000000"));
+                    debit_credit.setTextColor(getColor(R.color.black));
                     debit_credit_text.setText(R.string.were_even);
-                    mood.setBackgroundResource(R.mipmap.ic_smile);
-                    mood.setColorFilter(Color.parseColor("#000000"));
+                    mood.setBackgroundResource(0);
+                    mood.setImageResource(R.mipmap.ic_smile);
+                    mood.setColorFilter(getContext().getResources().getColor(R.color.black));
 
                 }
                 return convertView;
