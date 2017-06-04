@@ -35,7 +35,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/groups_icon"
+            android:src="@mipmap/ic_group_pig"
             android:layout_weight="1"
             android:layout_gravity="center"/>
 
