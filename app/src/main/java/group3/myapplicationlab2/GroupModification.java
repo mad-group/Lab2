@@ -102,7 +102,7 @@ public class GroupModification extends AppCompatActivity {
 /*        Snackbar.make(view, Boolean.toString(allok), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();*/
 
-/*        if (hm.keySet().size()>0) {
+        if (hm.keySet().size()>0) {
                 //aggiorno dati nel gruppo
                 Long ts = System.currentTimeMillis();
                 hm.put("lastModifyTimeStamp", (Object)ts);
@@ -146,7 +146,7 @@ public class GroupModification extends AppCompatActivity {
 
                     }
                 });
-        }*/
+        }
     }
 }
 
