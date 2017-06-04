@@ -77,32 +77,40 @@ public class GroupModification extends AppCompatActivity {
 
     public void modifyUser(View view) {
         /*name validity*/
-        if(et_name.getText().toString().trim().length()>0){
+
+        if (et_name.getText().toString().trim().length()==0){
+            et_name.setError(getResources().getString(R.string.miss_name_mod), null);
+            et_name.requestFocus();
+        }
+        else if(et_pin.getText().toString().trim().length()<=5){
+            et_pin.setError(getResources().getString(R.string.miss_pin_mod), null);
+        }
+        else{
+            hm.put("name", et_name.getText().toString().trim());
+            hm.put("pin", et_pin.getText().toString().trim());
+        }
+
+        /*if(et_name.getText().toString().trim().length()>0){
             hm.put("name", et_name.getText().toString().trim());
         }
         else{
             String err = getResources().getString(R.string.miss_name_mod);
-            et_name.setError(err);
+            et_name.setError(err, null);
         }
 
-        /*pin validity*/
         if (et_pin.getText().toString().trim().length()<=5){
             String err2 = getResources().getString(R.string.miss_pin_mod);
-            et_pin.setError(err2);
+            et_pin.setError(err2, null);
         }
         else{
             hm.put("pin", et_pin.getText().toString().trim());
-        }
-
-/*        Log.d("debug", "-----------");
-        for (String k : hm.keySet()){
-            Log.d("debug", k +" "+ hm.get(k).toString());
         }*/
+
 
 /*        Snackbar.make(view, Boolean.toString(allok), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();*/
 
-        if (hm.keySet().size()>0) {
+        if (hm.keySet().size()>1) {
                 //aggiorno dati nel gruppo
                 Long ts = System.currentTimeMillis();
                 hm.put("lastModifyTimeStamp", (Object)ts);
@@ -112,13 +120,11 @@ public class GroupModification extends AppCompatActivity {
                 hm.remove("lastModifyTimeStamp");
                 hm.put("lastModify",ts);
 
-
                 //listener sui membri del gruppo, dove mi salvo le key di tutti i componenti
                 final DatabaseReference group_members = FirebaseDatabase.getInstance()
                         .getReference("Groups")
                         .child(group_id)
                         .child("members2");
-                Log.d("Debug", "aaa");
 
                 group_members.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -133,7 +139,7 @@ public class GroupModification extends AppCompatActivity {
                                     .child(group_id)
                                     .updateChildren(hm);
                             SystemClock.sleep(20);
-                            Log.d("Debug", "usr - " + key);
+                            //Log.d("Debug", "usr - " + key);
 
                         }
                         Intent i = new Intent();

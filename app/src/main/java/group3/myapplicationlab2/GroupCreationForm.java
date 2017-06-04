@@ -123,7 +123,25 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         // Called when ADD button is pressed
         newGroup = new Group();
         boolean prova = true;
+
         if (groupName.getText().toString().isEmpty()){
+            groupName.setError(getResources().getString(R.string.insert_group_name), null);
+            groupName.requestFocus();
+            prova = false;
+        }
+        else if (groupPin.getText().toString().isEmpty() || groupPin.getText().toString().length() < 6){
+            groupPin.setError(getResources().getString(R.string.wrong_group_pin), null);
+            groupPin.requestFocus();
+            prova=false;
+        }
+        else{
+            newGroup.setName(groupName.getText().toString());
+            newGroup.setPin(groupPin.getText().toString());
+            prova = true;
+        }
+
+
+        /*if (groupName.getText().toString().isEmpty()){
             String err = getResources().getString(R.string.insert_group_name);
             groupName.setError(err);
             prova = false;
@@ -138,7 +156,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         }
         else {
             newGroup.setPin(groupPin.getText().toString());
-        }
+        }*/
 
         //db insert of new group
         if (prova) {
@@ -164,13 +182,14 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             this.groupIdTmp = newGroup.getId();
             //Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
 
-        }
+            if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
+                //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
+                onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
+            else{
+                Toast.makeText(getApplicationContext(), R.string.error_group_creation, Toast.LENGTH_SHORT).show();
+            }
 
-        if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
-            //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
-            onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
-        else
-            Toast.makeText(getApplicationContext(), R.string.no_group_creation_and_inviting, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onInviteClicked(String groupName, String groupPin, String groupId) {

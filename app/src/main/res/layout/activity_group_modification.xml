@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:hint="@string/groupPinHintModify"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:cursorVisible="true"
                 android:textCursorDrawable="@null"/>
 
