@@ -16,6 +16,7 @@ public class Group implements Serializable {
     private String name;
     private String description;
     private String id;
+    private Integer numeric_id;
     private List<String> members;
     private List<Purchase> purchases;
     private FirebaseDatabase db;
@@ -42,6 +43,7 @@ public class Group implements Serializable {
         this.setLastAuthor(objectHashMap.get("lastAuthor").toString());
         this.setLastEvent(objectHashMap.get("lastEvent").toString());
         this.setId(objectHashMap.get("id").toString());
+        this.setNumeric_id(new Integer(objectHashMap.get("numeric_id").toString()));
 
         List<GroupMember> groupMembers = new ArrayList<GroupMember>();
         if (objectHashMap.get("members2") != null){
@@ -326,5 +328,13 @@ public class Group implements Serializable {
 
     public void setLastAuthor(String lastAuthor) {
         this.lastAuthor = lastAuthor;
+    }
+
+    public Integer getNumeric_id() {
+        return numeric_id;
+    }
+
+    public void setNumeric_id(Integer numeric_id) {
+        this.numeric_id = numeric_id;
     }
 }

@@ -68,7 +68,9 @@ public class GroupPreviewService extends Service{
                                         .setContentText(message+notification.getGroupName())
                                         .setAutoCancel(true)
                                         .setVibrate(new long[] { 100, 500})
-                                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                                        .setGroup(notification.getGroupId())
+                                        .setGroupSummary(true);
 
                         // Creates an explicit intent for an Activity in your app
                         Intent resultIntent = new Intent(GroupPreviewService.this, GroupActivityExpense.class);

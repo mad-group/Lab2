@@ -34,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class GroupCreationForm extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
@@ -169,6 +171,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             newGroup.setDescription("DefaultDescription");
             newGroup.setLastEvent("GroupCreation");
             newGroup.setLastAuthor(user.getUid());
+            newGroup.setNumeric_id(new Random().nextInt(1000007));
             String groupId = dataBaseProxy.insertGroup(newGroup);
 
             //INSERT MEMBER IN GROUP CREATED BEFORE

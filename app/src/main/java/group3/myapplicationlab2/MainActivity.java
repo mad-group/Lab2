@@ -102,7 +102,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
 
         dataBaseProxy = new DataBaseProxy();
 

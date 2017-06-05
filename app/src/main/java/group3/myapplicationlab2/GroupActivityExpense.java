@@ -80,7 +80,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
-
+        
         gid = getIntent().getStringExtra("group_id");
         user = (User)getIntent().getSerializableExtra("user");
 

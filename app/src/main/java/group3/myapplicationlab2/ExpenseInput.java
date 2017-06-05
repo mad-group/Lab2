@@ -259,7 +259,7 @@ public class ExpenseInput extends AppCompatActivity {
             notification.setEventType("expenseInput");
             notification.setGroupName(group.getName());
             notification.setGroupId(group.getId());
-            notification.setId(new Random().nextInt());
+            notification.setId(group.getNumeric_id());
 
             // SEND NOTIFICATION
             for (GroupMember groupMember: group.getGroupMembers()){
