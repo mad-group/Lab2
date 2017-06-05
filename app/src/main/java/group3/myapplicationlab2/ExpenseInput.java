@@ -36,6 +36,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
@@ -90,8 +91,8 @@ public class ExpenseInput extends AppCompatActivity {
     private File imageOutFile = null;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = database.getReference("Groups");
-    private DatabaseReference users = database.getReference("Users");
+    private DatabaseReference myRef = database.getReference(Constant.REFERENCEGROUPS);
+    private DatabaseReference users = database.getReference(Constant.REFERENCEUSERS);
 
     private User user;
     private Group group;
@@ -102,8 +103,8 @@ public class ExpenseInput extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_input);
 
-        user = (User)getIntent().getSerializableExtra("user");
-        group = (Group)getIntent().getSerializableExtra("group");
+        user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
+        group = (Group)getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
 
         setTitle(group.getName() + " - New expense");
 
@@ -153,6 +154,9 @@ public class ExpenseInput extends AppCompatActivity {
 
     public void saveExpense(View v) {
 
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
         String author = user.getUid();
         String expense = expenseField.getText().toString().trim();
         String amount = amountField.getText().toString().trim();
@@ -168,10 +172,29 @@ public class ExpenseInput extends AppCompatActivity {
         }
 
         boolean allOk = true;
-        if(author == null || author.isEmpty()){
-            //Toast.makeText(getApplicationContext(), R.string.miss_author, Toast.LENGTH_SHORT).show();
-/*            String err = getResources().getString(R.string.miss_author);
-            author.setError(err);*/
+
+
+        if (author == null || author.isEmpty()){
+            allOk = false;
+        }
+        else if (expense == null || expense.isEmpty()){
+            expenseField.setError(getResources().getString(R.string.miss_expense));
+            expenseField.requestFocus();
+            allOk = false;
+        }
+        else if (amount == null || amount.isEmpty()){
+            amountField.setError(getResources().getString(R.string.miss_amount));
+            amountField.requestFocus();
+            allOk = false;
+        }
+        else if (sumParts() == 0){
+            allOk = false;
+        }
+        else {
+            allOk = true;
+        }
+
+        /*if(author == null || author.isEmpty()){
             allOk = false;
         }
         if(expense == null || expense.isEmpty()){
@@ -188,7 +211,7 @@ public class ExpenseInput extends AppCompatActivity {
 
         if(sumParts()==0){
             allOk = false;
-        }
+        }*/
 
         if (allOk){
             String group_id = group.getId();
@@ -211,9 +234,9 @@ public class ExpenseInput extends AppCompatActivity {
             Bitmap expenseImageBitmap;
             String encodedExpenseImage;
             if (this.imageOutFile == null){
-                p.setPathImage("nopath");
+                p.setPathImage(Constant.IMAGENOPATH);
 
-                p.setEncodedString("nostring");
+                p.setEncodedString(Constant.STRINGNOSTRING);
 
             }
 
@@ -226,37 +249,37 @@ public class ExpenseInput extends AppCompatActivity {
                 byte[] byteArrayImage = baos.toByteArray();
                 encodedExpenseImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
                 p.setEncodedString(encodedExpenseImage);
-                Log.d("Debug", "aaaaaaaaaaa " + encodedExpenseImage);
+                //Log.d("Debug", "aaaaaaaaaaa " + encodedExpenseImage);
             }
 
             String pid = myRef.push().getKey();
             Long lastModify = System.currentTimeMillis();
             HashMap<String,Object> hm = new HashMap<>();
-            hm.put("lastModify", lastModify);
-            hm.put("lastEvent", "expenseInput");
-            hm.put("lastAuthor", user.getUid());
+            hm.put(Constant.GROUPLASTMODIFY, lastModify);
+            hm.put(Constant.GROUPSLASTEVENT, Constant.PUSHNEWEXPENSE);
+            hm.put(Constant.GROUPSLASTAUTHOR, user.getUid());
             p.setPurchase_id(pid);
-            myRef.child(group_id).child("purchases").child(pid).setValue(p);
+            myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
 
             String key;
 
             for (int indexList=0; indexList<l.size(); indexList++){
                 /*l.get(indexList).setContributor_id(user.getUid());*/
-                myRef.child(group_id).child("purchases").child(pid).child("contributors").child(l.get(indexList).getUser_id()).setValue(l.get(indexList));
+                myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).child(Constant.REFERENCEGROUPSCONTRIBUTORS).child(l.get(indexList).getUser_id()).setValue(l.get(indexList));
             }
             p.setContributors(l);
 
 
-            myRef.child(group_id).child("lastModifyTimeStamp").setValue(lastModify);
+            myRef.child(group_id).child(Constant.GROUPLASTMODIFYTIMESTAMP).setValue(lastModify);
             users.child(user.getUid())
-                    .child("groupsHash")
+                    .child(Constant.REFERENCEGROUPSHASH)
                     .child(group.getId())
                     .updateChildren(hm);
 
             Notification notification = new Notification();
             notification.setAuthorName(user.getName());
             notification.setAuthorId(user.getUid());
-            notification.setEventType("expenseInput");
+            notification.setEventType(Constant.PUSHNEWEXPENSE);
             notification.setGroupName(group.getName());
             notification.setGroupId(group.getId());
             notification.setId(group.getNumeric_id());
@@ -265,7 +288,7 @@ public class ExpenseInput extends AppCompatActivity {
             for (GroupMember groupMember: group.getGroupMembers()){
                 if (!groupMember.getUser_id().equals(user.getUid())){
                     users.child(groupMember.getUser_id())
-                            .child("push")
+                            .child(Constant.PUSH)
                             .push()
                             .setValue(notification);
                     SystemClock.sleep(20);
@@ -276,7 +299,7 @@ public class ExpenseInput extends AppCompatActivity {
             context = v.getContext();
 
             Intent i = new Intent();
-            i.putExtra("new_purchase", p);
+            i.putExtra(Constant.GROUPNEWPURCHASE, p);
             setResult(RESULT_OK, i);
             finish();
         }

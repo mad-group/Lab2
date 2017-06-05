@@ -69,10 +69,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     private User user;
     private ListView listView;
 
-    private int groupListPosition;
-
     ArrayList<Purchase> spese;
-
     ChildEventListener childEventListener;
 
 
@@ -80,12 +77,12 @@ public class GroupActivityExpense extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
-        
-        gid = getIntent().getStringExtra("group_id");
-        user = (User)getIntent().getSerializableExtra("user");
+
+        gid = getIntent().getStringExtra(Constant.ACTIVITYGROUPID);
+        user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
 
         final DatabaseReference mGroupReference =  FirebaseDatabase.getInstance()
-                                                    .getReference("Groups")
+                                                    .getReference(Constant.REFERENCEGROUPS)
                                                     .child(gid);
 
         final ValueEventListener GroupListener = new ValueEventListener() {
@@ -110,7 +107,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                         findViewById(R.id.content_without_purchases).setVisibility(View.VISIBLE);
                     }
 
-                    mGroupReference.child("purchases").addChildEventListener(childEventListener);
+                    mGroupReference.child(Constant.REFERENCEGROUPSPURCHASE).addChildEventListener(childEventListener);
 
                 }
 
@@ -199,7 +196,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getIntent().getStringExtra("group_name"));
+        getSupportActionBar().setTitle(getIntent().getStringExtra(Constant.ACTIVITYGROUPNAME));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -214,8 +211,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(GroupActivityExpense.this, ExpenseInput.class);
-                i.putExtra("group", group);
-                i.putExtra("user", user);
+                i.putExtra(Constant.ACTIVITYGROUP, group);
+                i.putExtra(Constant.ACTIVITYUSER, user);
 
                 startActivityForResult(i,1);
             }
@@ -291,8 +288,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                 //group.computePaymentProportion(user);
                 group.computePaymentProportionContributors(user);
                 Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
-                i.putExtra("group", group);
-                i.putExtra("user", user);
+                i.putExtra(Constant.ACTIVITYGROUP, group);
+                i.putExtra(Constant.ACTIVITYUSER, user);
                 startActivity(i);
             }
             return true;
@@ -345,17 +342,14 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Purchase p = (Purchase)o;
                 Intent i = new Intent(getApplicationContext(), PurchaseContributors.class);
 
-                i.putExtra("group", group);
-                i.putExtra("group_id", gid);
-                i.putExtra("user",user);
-                Log.d("Debug", "----------");
-/*                for (Purchase purchase : group.getPurchases()){
-                    Log.d("Debug", "size pc: " + purchase.getPathImage());
-                }*/
+                i.putExtra(Constant.ACTIVITYGROUP, group);
+                i.putExtra(Constant.ACTIVITYGROUPID, gid);
+                i.putExtra(Constant.ACTIVITYUSER,user);
+
+
                 for (Purchase purchase : group.getPurchases()){
                     if (purchase.getPurchase_id().equals(p.getPurchase_id())) {
-                        i.putExtra("purchase", purchase);
-                        Log.d("Debug", "size pc: " + purchase.getPathImage());
+                        i.putExtra(Constant.ACTIVITYPURCHASE, purchase);
                     }
                 }
                 i.putExtra("pos", position);
@@ -372,12 +366,11 @@ public class GroupActivityExpense extends AppCompatActivity {
                 if (userHasDebits(user.getUid())==false){
                         deleteUserFromGroup();
                         Intent i = new Intent();
-                        i.putExtra("modified_user", user);
+                        i.putExtra(Constant.ACTIVITYUSERMODIFIED, user);
                         setResult(RESULT_OK, i);
                         finish();
                 }
                 else{
-                    Log.d("Debug", "test");
                     AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
                     builder.setMessage(getString(R.string.user_has_debit_text)).setTitle(getString(R.string.user_has_debits_title));
                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -421,9 +414,9 @@ public class GroupActivityExpense extends AppCompatActivity {
         /*Removing fromu group Preview*/
         DatabaseReference user_groups;
         user_groups = FirebaseDatabase.getInstance().getReference()
-                .child("Users")
+                .child(Constant.REFERENCEUSERS)
                 .child(user.getUid())
-                .child("groupsHash");
+                .child(Constant.REFERENCEGROUPSHASH);
         user_groups.child(group.getId()).removeValue();
 
 
@@ -434,14 +427,12 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         /*Removing from user from groups*/
         DatabaseReference groupsQuery = FirebaseDatabase.getInstance().getReference()
-                .child("Groups")
+                .child(Constant.REFERENCEGROUPS)
                 .child(group.getId())
-                .child("members2")
+                .child(Constant.REFERENCEGROUPSMEMBERS)
                 .child(user.getUid());
         groupsQuery.removeValue();
     }
-
-
 }
 
 
