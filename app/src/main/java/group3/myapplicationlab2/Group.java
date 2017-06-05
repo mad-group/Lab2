@@ -197,7 +197,7 @@ public class Group implements Serializable {
                         if (!purchaseContributor.getUser_id().equals(myself)){
 
                             for (int ii=0; ii<this.groupMembers.size(); ii++){
-                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id())){
+                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id()) && !purchaseContributor.getPayed()){
                                     this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() + purchaseContributor.getAmount());
                                 }
                             }
@@ -209,7 +209,7 @@ public class Group implements Serializable {
 
                         if (!purchaseContributor.getUser_id().equals(myself)){
                             for (int ii=0; ii<this.groupMembers.size(); ii++){
-                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id())){
+                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id()) && !purchaseContributor.getPayed()){
                                     this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() - purchaseContributor.getAmount());
                                 }
                             }

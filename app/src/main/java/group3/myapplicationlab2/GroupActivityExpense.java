@@ -135,7 +135,6 @@ public class GroupActivityExpense extends AppCompatActivity {
                 spese.add(0, purchase);
                 group.setPurchases(spese);
                 expenseAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -153,7 +152,6 @@ public class GroupActivityExpense extends AppCompatActivity {
                         position = ii;
                         spese.remove(position);
                     }
-
                 }
 
                 spese.add(0, purchase);
