@@ -48,6 +48,40 @@ public class Purchase implements Serializable, Comparable<Purchase> {
     }
 */
 
+    public void PurchaseConstructor(Map<String, Object> objectHashMap){
+
+        this.setAuthorName(objectHashMap.get("authorName").toString());
+        this.setAuthor_id(objectHashMap.get("author_id").toString());
+        this.setUser_name(objectHashMap.get("user_name").toString());
+        this.setCausal(objectHashMap.get("causal").toString());
+        this.setDateMillis(Long.parseLong(objectHashMap.get("dateMillis").toString()));
+        this.setGroup_id(objectHashMap.get("group_id").toString());
+        this.setPathImage(objectHashMap.get("pathImage").toString());
+        this.setEncodedString(objectHashMap.get("encodedString").toString());
+        this.setTotalAmount(Double.parseDouble(objectHashMap.get("totalAmount").toString()));
+        this.setPurchase_id(objectHashMap.get("purchase_id").toString());
+        this.setAuthorPersonalImage(objectHashMap.get("authorPersonalImage").toString());
+
+        List<PurchaseContributor> pc_list = new ArrayList<>();
+        pc_list.removeAll(pc_list);
+        if (objectHashMap.get("contributors")!=null){
+            Map<String, Object> mapPC = (HashMap<String, Object>) objectHashMap.get("contributors");
+            for (Object ob2 : mapPC.values()){
+                PurchaseContributor pc = new PurchaseContributor();
+                Map<String,Object> pcFromMap =  (Map<String,Object>) ob2;
+                pc.setPayed(Boolean.parseBoolean(pcFromMap.get("payed").toString()));
+                pc.setUser_id(pcFromMap.get("user_id").toString());
+                pc.setAmount(Double.parseDouble(pcFromMap.get("amount").toString()));
+                pc.setUser_name(pcFromMap.get("user_name").toString());
+                //pc.setContributor_id(pcFromMap.get("contributor_id").toString());
+                pc_list.add(pc);
+            }
+            this.setContributors(pc_list);
+        }
+
+        return;
+    }
+
     public String getAuthorName(){return this.author_name;}
     public void setAuthorName(String an){this.author_name = an;}
 

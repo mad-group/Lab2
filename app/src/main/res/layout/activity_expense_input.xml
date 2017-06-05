@@ -48,6 +48,7 @@
             android:paddingTop="50dp"
             tools:context="group3.myapplicationlab2.ExpenseInput">
 
+
             <ImageView
                 android:layout_width="@dimen/logo_w_h"
                 android:layout_height="@dimen/logo_w_h"
@@ -217,5 +218,6 @@
 
         </LinearLayout>
     </ScrollView>
+
 
 </android.support.design.widget.CoordinatorLayout>

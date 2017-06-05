@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -70,7 +71,9 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     private int groupListPosition;
 
+    ArrayList<Purchase> spese;
 
+    ChildEventListener childEventListener;
 
 
     @Override
@@ -97,7 +100,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                     group.GroupConstructor(objectMap);
                     Collections.sort(group.getPurchases());
                     Collections.reverse(group.getPurchases());
-                    expenseAdapter.addAll(group.getPurchases());
+                    //expenseAdapter.addAll(group.getPurchases());
+
                     //Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
                     //paintListViewBackground();
 
@@ -105,6 +109,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                         findViewById(R.id.content_with_purchases).setVisibility(View.GONE);
                         findViewById(R.id.content_without_purchases).setVisibility(View.VISIBLE);
                     }
+
+                    mGroupReference.child("purchases").addChildEventListener(childEventListener);
 
                 }
 
@@ -118,7 +124,77 @@ public class GroupActivityExpense extends AppCompatActivity {
         };
         mGroupReference.addListenerForSingleValueEvent(GroupListener);
 
-        ArrayList<Purchase> spese = new ArrayList<Purchase>();
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Map<String, Object> objectMap = (HashMap<String, Object>) dataSnapshot.getValue();
+                Purchase purchase = new Purchase();
+                purchase.PurchaseConstructor(objectMap);
+
+                spese.add(0, purchase);
+                group.setPurchases(spese);
+                expenseAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+                Map<String, Object> objectMap = (HashMap<String, Object>) dataSnapshot.getValue();
+                Purchase purchase = new Purchase();
+                purchase.PurchaseConstructor(objectMap);
+
+                int position;
+                for (int ii=0; ii<spese.size(); ii++){
+
+                    if (spese.get(ii).getPurchase_id().equals(purchase.getPurchase_id())){
+                        position = ii;
+                        spese.remove(position);
+                    }
+
+                }
+
+                spese.add(0, purchase);
+                group.setPurchases(spese);
+                expenseAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                Map<String, Object> objectMap = (HashMap<String, Object>) dataSnapshot.getValue();
+                Purchase purchase = new Purchase();
+                purchase.PurchaseConstructor(objectMap);
+
+                int position;
+                for (int ii=0; ii<spese.size(); ii++){
+
+                    if (spese.get(ii).getPurchase_id().equals(purchase.getPurchase_id())){
+                        position = ii;
+                        spese.remove(position);
+                    }
+
+                }
+                group.setPurchases(spese);
+                expenseAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        spese = new ArrayList<Purchase>();
         expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese, user.getUserImage());
         listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
@@ -171,14 +247,9 @@ public class GroupActivityExpense extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.group_Stats) {
 
-            Log.d("DEBUG GROUP MEMBERS", group.getGroupMembers().toString());
-            Log.d("DEBUG SIZE", String.valueOf(group.getGroupMembers().size()));
-            Log.d("DEGUB PURCHASES", String.valueOf(group.getPurchases().size()));
-
             if (group.getPurchases().size() == 0){
                 //drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
                 //        getString(R.string.stats_no_pruchases_text));
-                Log.d("DENTRO IF", "IF");
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(GroupActivityExpense.this);
                 builder1.setMessage("There aren't purchases.");
@@ -197,8 +268,6 @@ public class GroupActivityExpense extends AppCompatActivity {
 
             }
             else if(group.getGroupMembers() == null || group.getGroupMembers().size()<2){
-
-                Log.d("DENTRO IF", "IF2");
 
                 //drawLeavingDialogBox(getString(R.string.stats_no_members),
                 //        getString(R.string.stats_no_members_text));
@@ -249,17 +318,18 @@ public class GroupActivityExpense extends AppCompatActivity {
                 findViewById(R.id.content_without_purchases).setVisibility(View.GONE);
 
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
-                Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
-                group.getPurchases().add(new_purchase);
-                expenseAdapter.clear();
-                Collections.sort(group.getPurchases());
-                Collections.reverse(group.getPurchases());
+
+                //Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
+                //group.getPurchases().add(new_purchase);
+                //expenseAdapter.clear();
+                //Collections.sort(group.getPurchases());
+                //Collections.reverse(group.getPurchases());
                 //d("Debug", "size gpr OAR" + group.getPurchases().size());
                 /*expenseAdapter.addAll(group.getPurchases());*/
-                for (int i =0; i<group.getPurchases().size(); i++){
-                    Log.d("Debug", "path: " + group.getPurchases().get(i).getPathImage());
-                    expenseAdapter.add(group.getPurchases().get(i));
-                }
+                //for (int i =0; i<group.getPurchases().size(); i++){
+                //    Log.d("Debug", "path: " + group.getPurchases().get(i).getPathImage());
+                //    expenseAdapter.add(group.getPurchases().get(i));
+                //}
             }
         }
         if (requestCode == PURCHASE_CONTRIBUTOR){
@@ -267,7 +337,6 @@ public class GroupActivityExpense extends AppCompatActivity {
                 int i = data.getIntExtra("pos",-1);
                 group.getPurchases().get(i).setContributors((List<PurchaseContributor>)data.getSerializableExtra("pcList"));
             }
-
         }
     }
 
