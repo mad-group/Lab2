@@ -1,5 +1,6 @@
 package group3.myapplicationlab2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,13 +10,16 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -28,12 +32,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +47,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,6 +76,8 @@ public class MainActivity extends AppCompatActivity
     private DatabaseReference user_groups;
     private DatabaseReference user_info;
     private GroupPreviewAdapter adapter;
+    private StorageReference user_image;
+
 
     private List<GroupPreview> currentGroupPreview;
 
@@ -79,13 +92,15 @@ public class MainActivity extends AppCompatActivity
     private File imageOutFile;
     private  ImageView personalPhoto;
 
+    private Util util;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
+        util = new Util (getApplicationContext());
         auth = FirebaseAuth.getInstance();
         // this listener will be called when there is change in firebase user session
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
@@ -110,9 +125,24 @@ public class MainActivity extends AppCompatActivity
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(MainActivity.this);
+        final View header=navigationView.getHeaderView(0);
+        personalPhoto = (ImageView) header.findViewById(R.id.imageViewCamera);
+        personalPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePersonalImage();
+            }
+        });
+
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEUSERS);
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
         user_groups = user_info.child(Constant.REFERENCEGROUPS);
+        user_image = FirebaseStorage.getInstance().getReference("UsersImage");
+
 
         user_info.addValueEventListener(new ValueEventListener() {
             @Override
@@ -132,27 +162,22 @@ public class MainActivity extends AppCompatActivity
                     findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
                 }
 
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                navigationView.setNavigationItemSelectedListener(MainActivity.this);
-                View header=navigationView.getHeaderView(0);
+                Bitmap image = util.downloadImage(user.getUserPathImage());
+                if (image != null)
+                    personalPhoto.setImageBitmap(util.getCroppedBitmap(image,200,200));
+                final TextView userNameTv = (TextView) findViewById(R.id.username);
+                userNameTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        changeUserName(user);
+                    }
+                });
+
                 TextView user_email = (TextView)header.findViewById(R.id.user_email);
                 user_email.setText(user.getEmail());
                 TextView user_name = (TextView)header.findViewById(R.id.username);
                 user_name.setText(user.getName());
 
-                personalPhoto = (ImageView) header.findViewById(R.id.imageViewCamera);
-                personalPhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        takePersonalImage();
-                    }
-                });
-                if (!user.getUserImage().isEmpty()){
-                    String encodedImage = user.getUserImage();
-                    byte[] decodedImage = Base64.decode(encodedImage, Base64.DEFAULT);
-                    Bitmap image = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
-                    personalPhoto.setImageBitmap( getCroppedBitmap(image));
-                }
 
                 Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
                 serviceIntent.putExtra(Constant.ACTIVITYUSER, user);
@@ -202,6 +227,22 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void changeUserName(User user) {
+        final EditText editText = new EditText(MainActivity.this);
+        editText.setText(user.getName());
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(getString(R.string.scan_Modify_username));
+        builder.setView(editText);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -221,18 +262,12 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.modify:
                 Intent i = new Intent(MainActivity.this, GroupModification.class);
-/*                i.putExtra("group_name", user.getGroups().get(info.position).getName());
-                i.putExtra("group_desc", user.getGroups().get(info.position).getDescription());
-                i.putExtra("group_id", user.getGroups().get(info.position).getId());
-                i.putExtra("user_id", user.getUid());*/
+
                 i.putExtra(Constant.ACTIVITYUSER,user);
                 i.putExtra(Constant.ACTIVITYPOSITION, Integer.toString(info.position));
                 startActivityForResult(i, MODIFY_GROUP);
                 return true;
-/*            case R.id.leave:
-                final String uid = user.getUid();
-                drawLeavingDialogBox(user.getGroups().get(info.position).getId(), uid, info.position);
-                return true;*/
+
             case R.id.add_members:
                 DatabaseReference pin = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
                         .child(user.getGroups().get(info.position).getId())
@@ -327,37 +362,42 @@ public class MainActivity extends AppCompatActivity
             }
         }
         else if (requestCode == PICK_IMAGE_ID){
-            Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-/*            ImageView myImage = (ImageView) findViewById(R.id.ie_iv_from_camera);
-            myImage.setImageBitmap(bitmap);*/
-
-            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "MoneyTracker");
-            mediaStorageDir.mkdirs();
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
             try {
+                /*After to take a new photo, set it as personal image*/
+                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                final File mediaFile = util.fileProfileImageCreator(user.getUid());
                 FileOutputStream out = new FileOutputStream(mediaFile);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                personalPhoto.setImageBitmap(bitmap);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
-                byte[] byteArrayImage = baos.toByteArray();
-                String encodedExpenseImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
-                user_info.child("userImage").setValue(encodedExpenseImage);
-                user.setUserImage(encodedExpenseImage);
                 out.flush();
                 out.close();
+                personalPhoto.setImageBitmap(util.getCroppedBitmap(bitmap,200,200));
+
+                /*saving photo for for uploading*/
+                byte[] byteArrayImage = util.bitmap2byte(bitmap);
+
+                UploadTask uploadTask = user_image.child(user.getUid()).putBytes(byteArrayImage);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Log.d("URI", downloadUrl.toString());
+
+                        user.setUserPathImage(downloadUrl.toString());
+                        user_info.child("userPathImage").setValue(downloadUrl.toString());
+                        /*user_image_link.child(user.getUid()).setValue(downloadUrl);*/
+
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            this.imageOutFile = mediaFile;
+            //this.imageOutFile = mediaFile;
         }
         else {
             if (user.getGroups() != null) {
                 currentGroupPreview = user.getGroups();
                 for (int j = 0; j < user.getGroups().size(); j++)
-                Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
+                    Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
                 adapter.clear();
                 for (int i = 0; i<currentGroupPreview.size(); i++) {
                     //Log.d("debug", "after" + user.getGroups().get(i).getName());
@@ -512,25 +552,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public Bitmap getCroppedBitmap(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
+/*    private void drawQRDialogBox(Bitmap bitmap, String groupName){
+        ImageView imageView = new ImageView(MainActivity.this);
+        imageView.setImageBitmap(bitmap);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(groupName + " - " +  getString(R.string.scan_QR_title));
+        builder.setView(imageView);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
 
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
 
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-        //return _bmp;
-        return output;
-    }
+    }*/
 }

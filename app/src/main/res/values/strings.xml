@@ -264,6 +264,7 @@
     <string name="miss_name_mod">Please insert the new group name</string>
     <string name="miss_pin_mod">The pin must have at least 6 characters</string>
     <string name="error_group_creation">An error occurred, please retry.</string>
+    <string name="scan_Modify_username">Insert new username</string>
 
 
 </resources>
