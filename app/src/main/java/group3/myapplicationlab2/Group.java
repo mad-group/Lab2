@@ -75,7 +75,7 @@ public class Group implements Serializable {
                 p.setEncodedString(purchase.get("encodedString").toString());
                 p.setTotalAmount(Double.parseDouble(purchase.get("totalAmount").toString()));
                 p.setPurchase_id(purchase.get("purchase_id").toString());
-                p.setAuthorPersonalImage(purchase.get("authorPersonalImage").toString());
+                //p.setAuthorPersonalImage(purchase.get("authorPersonalImage").toString());
 
                 List<PurchaseContributor> pc_list = new ArrayList<>();
                 pc_list.removeAll(pc_list);

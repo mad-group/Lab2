@@ -72,11 +72,14 @@ public class GroupActivityExpense extends AppCompatActivity {
     ArrayList<Purchase> spese;
     ChildEventListener childEventListener;
 
+    private Util util;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
+        util = new Util(getApplicationContext());
 
         gid = getIntent().getStringExtra(Constant.ACTIVITYGROUPID);
         user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
@@ -97,10 +100,39 @@ public class GroupActivityExpense extends AppCompatActivity {
                     group.GroupConstructor(objectMap);
                     Collections.sort(group.getPurchases());
                     Collections.reverse(group.getPurchases());
-                    //expenseAdapter.addAll(group.getPurchases());
+                    final HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+                    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+                    usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (int i =0; i< group.getGroupMembers().size(); i++){
+                                String key = group.getGroupMembers().get(i).getUser_id();
+                                String uri = dataSnapshot.child(key).child("userPathImage").getValue(String.class);
+                                Bitmap downloadBtmp = util.downloadImage(uri);
+                                if (downloadBtmp != null)
+                                    images.put(key, util.downloadImage(uri));
+                                else{
+                                    images.put(key, BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                                            R.drawable.ic_add_user));
+                                }
+                                
+                            }
 
-                    //Log.d("Debug", "purchs dim onCreate " +  group.getPurchases().size() );
-                    //paintListViewBackground();
+                            Collections.sort(group.getPurchases());
+                            Collections.reverse(group.getPurchases());
+                            expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, new ArrayList<Purchase>(), user);
+                            expenseAdapter.setImages(images);
+
+                            expenseAdapter.addAll(group.getPurchases());
+                            listView = (ListView) findViewById(R.id.expense_list);
+                            listView.setAdapter(expenseAdapter);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     if (group.getPurchases().size()<1){
                         findViewById(R.id.content_with_purchases).setVisibility(View.GONE);
@@ -190,7 +222,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         };
 
         spese = new ArrayList<Purchase>();
-        expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese, user.getUserImage());
+        expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese, user);
         listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
 
@@ -314,17 +346,6 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
 
-                //Purchase new_purchase = (Purchase)data.getSerializableExtra("new_purchase");
-                //group.getPurchases().add(new_purchase);
-                //expenseAdapter.clear();
-                //Collections.sort(group.getPurchases());
-                //Collections.reverse(group.getPurchases());
-                //d("Debug", "size gpr OAR" + group.getPurchases().size());
-                /*expenseAdapter.addAll(group.getPurchases());*/
-                //for (int i =0; i<group.getPurchases().size(); i++){
-                //    Log.d("Debug", "path: " + group.getPurchases().get(i).getPathImage());
-                //    expenseAdapter.add(group.getPurchases().get(i));
-                //}
             }
         }
         if (requestCode == PURCHASE_CONTRIBUTOR){

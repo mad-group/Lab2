@@ -13,12 +13,11 @@
     android:orientation="horizontal"
     >
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:paddingRight="10dp"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/ic_menu_gallery" />
+        android:id="@+id/imageViewLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu_gallery"
+        android:layout_weight="0.1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,37 +25,30 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:paddingBottom="10dp"
-        android:paddingLeft="10dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_weight="0.9">
 
-<!--        <TextView
-            android:id="@+id/expense_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/expense_item_text_padding"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="@dimen/expense_item_text_padding"
-            android:text="Author  "
-            android:textSize="20dp" />-->
 
         <TextView
             android:id="@+id/expense_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/expense_item_text_padding"
-            android:layout_gravity="center_horizontal"
             android:paddingBottom="@dimen/expense_item_text_padding"
+            android:textColor="@color/black"
             android:text="Expense "
-            android:textSize="20dp" />
-<!--
+            android:textSize="30dp" />
+
         <TextView
             android:id="@+id/expense_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/expense_item_text_padding"
             android:paddingBottom="@dimen/expense_item_text_padding"
-            android:layout_gravity="center_horizontal"
-            android:text="Amount"
-            android:textSize="20dp" />-->
+            android:text="Amount "
+            android:textColor="@color/black"
+            android:textSize="25dp" />
 
         <TextView
             android:id="@+id/expense_date"
@@ -64,9 +56,16 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/expense_item_text_padding"
             android:paddingBottom="@dimen/expense_item_text_padding"
-            android:layout_gravity="center_horizontal"
             android:text="Date "
-            android:textSize="20dp" />
+            android:textColor="@color/black"
+            android:textSize="15dp" />
     </LinearLayout>
+    <ImageView
+        android:id="@+id/imageViewRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_menu_gallery"
+        android:layout_weight="0.1"/>
 
 </LinearLayout>

@@ -60,7 +60,7 @@ public class Purchase implements Serializable, Comparable<Purchase> {
         this.setEncodedString(objectHashMap.get("encodedString").toString());
         this.setTotalAmount(Double.parseDouble(objectHashMap.get("totalAmount").toString()));
         this.setPurchase_id(objectHashMap.get("purchase_id").toString());
-        this.setAuthorPersonalImage(objectHashMap.get("authorPersonalImage").toString());
+        //this.setAuthorPersonalImage(objectHashMap.get("authorPersonalImage").toString());
 
         List<PurchaseContributor> pc_list = new ArrayList<>();
         pc_list.removeAll(pc_list);
