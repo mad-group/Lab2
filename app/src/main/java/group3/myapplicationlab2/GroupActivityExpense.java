@@ -113,7 +113,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                                     images.put(key, util.downloadImage(uri));
                                 else{
                                     images.put(key, BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                                            R.drawable.ic_add_user));
+                                            R.mipmap.ic_launcher));
                                 }
                                 
                             }
