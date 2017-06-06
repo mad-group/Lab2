@@ -552,7 +552,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-/*    private void drawQRDialogBox(Bitmap bitmap, String groupName){
+    private void drawQRDialogBox(Bitmap bitmap, String groupName){
         ImageView imageView = new ImageView(MainActivity.this);
         imageView.setImageBitmap(bitmap);
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -567,7 +567,6 @@ public class MainActivity extends AppCompatActivity
         AlertDialog dialog = builder.create();
         dialog.show();
         dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
-        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
 
-    }*/
+    }
 }

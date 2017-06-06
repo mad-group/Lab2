@@ -89,6 +89,7 @@ public class PurchaseContributors extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("user");
         purchase = (Purchase) getIntent().getSerializableExtra("purchase");
 
+
         if(!purchase.getPathImage().equals("nopath")){
 
             CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
