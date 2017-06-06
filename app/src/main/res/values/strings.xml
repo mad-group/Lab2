@@ -127,7 +127,10 @@
          Otherwise, ignore this email.
          <br/>
          GroupID: [%2$s] <br/>
-         Password: [%3$s] </p>]]>
+         Password: [%3$s] <pr/>
+
+          or scan this QR: <img src="%4$s" alt="QRcode"> </p>
+        ]]>
 </string>
     <string name="no_group_creation_and_inviting">First to invite, create a group.</string>
     <string name="group_created">Group created</string>
@@ -266,6 +269,7 @@
     <string name="error_group_creation">An error occurred, please retry.</string>
     <string name="scan_Modify_username">Insert new username</string>
     <string name="scan_QR_title">QR code</string>
+    <string name="title_activity_simple_scanner">SimpleScannerActivity</string>
 
 
 </resources>

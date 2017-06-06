@@ -2,6 +2,7 @@ package group3.myapplicationlab2;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -24,13 +25,19 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.zxing.WriterException;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,12 +62,15 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private User user;
 
     private DataBaseProxy dataBaseProxy;
+    private DatabaseReference groupRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_creation_form);
 
+        groupRef = FirebaseDatabase.getInstance().getReference("Groups");
         user = (User)getIntent().getSerializableExtra("user");
         dataBaseProxy = new DataBaseProxy();
 
@@ -195,13 +205,38 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         }
     }
 
-    public void onInviteClicked(String groupName, String groupPin, String groupId) {
-        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                .setMessage(getString(R.string.invitation_message))
-                .setEmailHtmlContent(getString(R.string.invitation_email, currentUser, groupIdTmp, groupPinTmp))
-                .setEmailSubject(groupName+" "+ getString(R.string.email_subject))
-                .build();
-        startActivityForResult(intent, REQUEST_INVITE);
+    public void onInviteClicked(final String groupName, String groupPin, final String groupId) {
+        final Util util = new Util(getApplicationContext());
+        try {
+            String mex = "##"+groupId+"##||##"+groupPin +"##";
+            Bitmap QR = util.encodeAsBitmap(mex);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            QR.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            final byte[] data = baos.toByteArray();
+
+            final StorageReference groupQRref = FirebaseStorage.getInstance().getReference("QR");
+            UploadTask uploadTask = groupQRref.child(groupId).putBytes(data);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    Log.d("URI", downloadUrl.toString());
+
+                    groupRef.child(groupId).child("QRpath").setValue(downloadUrl.toString());
+                    newGroup.setQRpath(downloadUrl);
+                    Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                            .setMessage(getString(R.string.invitation_message))
+                            .setEmailHtmlContent(getString(R.string.invitation_email, currentUser, groupIdTmp, groupPinTmp, downloadUrl.toString()))
+                            .setEmailSubject(groupName+" "+ getString(R.string.email_subject))
+                            .build();
+                    startActivityForResult(intent, REQUEST_INVITE);
+                }
+
+            });
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

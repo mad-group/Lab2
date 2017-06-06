@@ -1,6 +1,8 @@
 package group3.myapplicationlab2;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,12 +17,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.zxing.WriterException;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -111,47 +119,73 @@ public class GroupModification extends AppCompatActivity {
                 .setAction("Action", null).show();*/
 
         if (hm.keySet().size()>1) {
-                //aggiorno dati nel gruppo
-                Long ts = System.currentTimeMillis();
-                hm.put("lastModifyTimeStamp", (Object)ts);
-                final DatabaseReference groups = FirebaseDatabase.getInstance().getReference("Groups")
-                        .child(group_id);
-                groups.updateChildren(hm);
-                hm.remove("lastModifyTimeStamp");
-                hm.put("lastModify",ts);
 
-                //listener sui membri del gruppo, dove mi salvo le key di tutti i componenti
-                final DatabaseReference group_members = FirebaseDatabase.getInstance()
-                        .getReference("Groups")
-                        .child(group_id)
-                        .child("members2");
+            Util util = new Util (getApplicationContext());
+            try {
+                //aggirono il QR
+                String mex = "##" + group_id + "##||##" + hm.get("pin") + "##";
+                Bitmap QR = util.encodeAsBitmap(mex);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                QR.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] data = baos.toByteArray();
 
-                group_members.addListenerForSingleValueEvent(new ValueEventListener() {
-
+                final StorageReference groupQRref = FirebaseStorage.getInstance().getReference("QR");
+                UploadTask uploadTask = groupQRref.child(group_id).putBytes(data);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, Object> objMember = (HashMap<String, Object>) dataSnapshot.getValue();
-
-                        for (String key : objMember.keySet()){
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(key)
-                                    .child("groupsHash")
-                                    .child(group_id)
-                                    .updateChildren(hm);
-                            SystemClock.sleep(20);
-                            //Log.d("Debug", "usr - " + key);
-
-                        }
-                        Intent i = new Intent();
-                        setResult(RESULT_OK, i);
-                        finish();
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Log.d("URI", downloadUrl.toString());
+                        DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups");
+                        groupRef.child(group_id).child("QRpath").setValue(downloadUrl.toString());
                     }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
                 });
+            }catch (WriterException e) {
+                e.printStackTrace();
+            }
+
+            //aggiorno dati nel gruppo
+            Long ts = System.currentTimeMillis();
+            hm.put("lastModifyTimeStamp", (Object)ts);
+            final DatabaseReference groups = FirebaseDatabase.getInstance().getReference("Groups")
+                    .child(group_id);
+            groups.updateChildren(hm);
+            hm.remove("lastModifyTimeStamp");
+            hm.put("lastModify",ts);
+
+            //listener sui membri del gruppo, dove mi salvo le key di tutti i componenti
+            final DatabaseReference group_members = FirebaseDatabase.getInstance()
+                    .getReference("Groups")
+                    .child(group_id)
+                    .child("members2");
+
+            group_members.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> objMember = (HashMap<String, Object>) dataSnapshot.getValue();
+
+                    for (String key : objMember.keySet()){
+                        FirebaseDatabase.getInstance().getReference("Users")
+                                .child(key)
+                                .child("groupsHash")
+                                .child(group_id)
+                                .updateChildren(hm);
+                        SystemClock.sleep(20);
+                        //Log.d("Debug", "usr - " + key);
+
+                    }
+                    Intent i = new Intent();
+                    setResult(RESULT_OK, i);
+                    finish();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 }

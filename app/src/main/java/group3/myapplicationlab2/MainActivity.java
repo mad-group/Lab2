@@ -50,6 +50,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.WriterException;
 
 import org.w3c.dom.Text;
 
@@ -276,17 +277,30 @@ public class MainActivity extends AppCompatActivity
                 pin.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange (DataSnapshot dataSnapshot){
-                        pin_str = dataSnapshot.getValue(String.class);
-                        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                                .setMessage(getString(R.string.invitation_message))
-                                .setEmailHtmlContent(getString(R.string.invitation_email,
-                                        user.getGroups().get(pos).getName(),
-                                        user.getGroups().get(pos).getId(),
-                                        pin_str))
-                                .setEmailSubject(user.getGroups().get(pos).getName()+
-                                        " "+ getString(R.string.email_subject))
-                                .build();
-                        startActivityForResult(intent, REQUEST_INVITE);
+                        final String groupPin  = dataSnapshot.child("pin").getValue(String.class);
+                        final String groupId = dataSnapshot.child("id").getValue(String.class);
+                        final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
+                        final String groupName = dataSnapshot.child("name").getValue(String.class);
+
+                        try {
+                            String mex = "##"+groupId+"##||##"+groupPin +"##";
+                            Bitmap QR = util.encodeAsBitmap(mex);
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            QR.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            final byte[] data = baos.toByteArray();
+                            Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                                    .setMessage(getString(R.string.invitation_message))
+                                    .setEmailHtmlContent(getString(R.string.invitation_email, user.getName(),
+                                            groupId, groupPin, QRpath))
+                                    .setEmailSubject(groupName+" "+ getString(R.string.email_subject))
+                                    .build();
+                            startActivityForResult(intent, REQUEST_INVITE);
+
+
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     @Override
@@ -296,6 +310,25 @@ public class MainActivity extends AppCompatActivity
                 });
 
                 return true;
+
+            case R.id.generate_QR:
+                DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
+                        .child(user.getGroups().get(info.position).getId());
+                pos = info.position;
+                group.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange (DataSnapshot dataSnapshot){
+                        final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
+                        final String groupName = dataSnapshot.child("name").getValue(String.class);
+                        Bitmap QR = util.downloadImage(QRpath);
+                        drawQRDialogBox(QR,groupName);
+                    }
+
+                    @Override
+                    public void onCancelled (DatabaseError databaseError){
+                        System.out.println("FAIL PIN INFO");
+                    }
+                });
             default:
                 return super.onContextItemSelected(item);
         }
@@ -566,7 +599,7 @@ public class MainActivity extends AppCompatActivity
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
 
     }
 }

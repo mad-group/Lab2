@@ -1,10 +1,14 @@
 package group3.myapplicationlab2;
 
+import android.*;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +32,9 @@ import java.util.List;
 import java.util.Map;
 
 public class JoinGroupActivity extends AppCompatActivity {
+
+    private static final int READ_QR = 235;
+    private static final int ZXING_CAMERA_PERMISSION = 1;
 
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
@@ -60,6 +67,14 @@ public class JoinGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        Button readQR = (Button)findViewById(R.id.readQR);
+        readQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readFromQR(view);
             }
         });
 
@@ -149,6 +164,35 @@ public class JoinGroupActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void readFromQR(View view){
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
+        } else {
+            Intent intent = new Intent(this, SimpleScannerActivity.class);
+            startActivityForResult(intent,READ_QR);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == READ_QR) {
+
+            if (resultCode== RESULT_OK) {
+
+                groupID.setText( data.getStringExtra("gid"));
+                groupPassword.setText(data.getStringExtra("pin"));
+
+            }
+            if(resultCode == RESULT_CANCELED){
+                //handle cancel
+            }
+        }
     }
 
 }

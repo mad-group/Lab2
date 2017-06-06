@@ -1,6 +1,7 @@
 package group3.myapplicationlab2;
 
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +30,7 @@ public class Group implements Serializable {
     private List<Double> myDebts;
     private List<GroupMember> groupMembers;
     private List<String> userKeys;
+    private Uri QRpath;
 
 
     public Group() {
@@ -336,5 +338,9 @@ public class Group implements Serializable {
 
     public void setNumeric_id(Integer numeric_id) {
         this.numeric_id = numeric_id;
+    }
+
+    public void setQRpath(Uri QRpath) {
+        this.QRpath = QRpath;
     }
 }

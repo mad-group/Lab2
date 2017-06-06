@@ -109,7 +109,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                                 String key = group.getGroupMembers().get(i).getUser_id();
                                 String uri = dataSnapshot.child(key).child("userPathImage").getValue(String.class);
                                 Bitmap downloadBtmp = util.downloadImage(uri);
-                                if (downloadBtmp != null)
+                                //if (downloadBtmp != null)
+                                if (false)
                                     images.put(key, util.downloadImage(uri));
                                 else{
                                     images.put(key, BitmapFactory.decodeResource(getApplicationContext().getResources(),
