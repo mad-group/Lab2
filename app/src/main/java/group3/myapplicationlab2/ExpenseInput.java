@@ -473,7 +473,7 @@ public class ExpenseInput extends AppCompatActivity {
             pc.setUser_name(et_userName.getText().toString().trim());
             Double amount = Double.parseDouble(et_amount.getText().toString());
             pc.setAmount(amount);
-            if (et_amount.getText().toString().equals("0")){
+            if (et_amount.getText().toString().equals("0") || pc.getUser_id().equals(user.getUid())){
                 pc.setPayed(true);
             }
             else{

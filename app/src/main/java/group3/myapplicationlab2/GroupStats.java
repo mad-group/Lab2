@@ -73,7 +73,7 @@ public class GroupStats extends AppCompatActivity {
 
                 if (debit > 0){
                     debit_credit.setText("+" + String.format( "%.2f €", debit ));
-                    debit_credit.setTextColor(getColor(R.color.mood_fine));
+                    debit_credit.setTextColor(getResources().getColor(R.color.mood_fine));
                     debit_credit_text.setText(R.string.owes_you);
                     mood.setBackgroundResource(0);
                     mood.setImageResource(R.mipmap.ic_smile);
@@ -81,7 +81,7 @@ public class GroupStats extends AppCompatActivity {
                 }
                 else if (debit <0) {
                     debit_credit.setText(String.format( "%.2f €", debit ));
-                    debit_credit.setTextColor(getColor(R.color.mood_sad));
+                    debit_credit.setTextColor(getResources().getColor(R.color.mood_sad));
                     debit_credit_text.setText(R.string.you_owe);
                     mood.setBackgroundResource(0);
                     mood.setImageResource(R.mipmap.ic_sad);
@@ -91,7 +91,7 @@ public class GroupStats extends AppCompatActivity {
                 }
                 else {
                     debit_credit.setText(String.format( "%.2f €", debit ));
-                    debit_credit.setTextColor(getColor(R.color.black));
+                    debit_credit.setTextColor(getResources().getColor(R.color.black));
                     debit_credit_text.setText(R.string.were_even);
                     mood.setBackgroundResource(0);
                     mood.setImageResource(R.mipmap.ic_smile);

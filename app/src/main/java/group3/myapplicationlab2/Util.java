@@ -210,7 +210,7 @@ public class Util {
         return bitmap;
     }
 
-    public void saveImageInMemory(String uri, String key){
+    public void downloadImageInMemory(String uri, String key){
         File pictureFile = this.fileProfileImageCreator(key);
         if (pictureFile == null)
             Log.d("PATH_FIG", "null");
@@ -228,6 +228,23 @@ public class Util {
         }
     }
 
+    public void saveImageInMemory(Bitmap b, String key){
+        File pictureFile = this.fileProfileImageCreator(key);
+        if (pictureFile == null)
+            Log.d("PATH_FIG", "null");
+        else
+            Log.d("PATH_FIG", pictureFile.getAbsolutePath());
+        try{
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            b.compress(Bitmap.CompressFormat.PNG, 50, fos);
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            Log.d("ERROR", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("ERROR", "Error accessing file: " + e.getMessage());
+        }
+    }
 
     public void getGrantedPermissions(Activity activity) {
         ActivityCompat.requestPermissions(activity,

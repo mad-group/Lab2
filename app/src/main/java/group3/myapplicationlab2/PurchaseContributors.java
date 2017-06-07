@@ -9,10 +9,12 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.session.IMediaControllerCallback;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +36,8 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -141,7 +146,7 @@ public class PurchaseContributors extends AppCompatActivity {
 
     private void drawNewCotnributor(PurchaseContributor pc_){
         final PurchaseContributor pc = pc_;
-        if (!pc.getUser_id().equals(purchase.getAuthorName())) {
+        if (!pc.getUser_id().equals(purchase.getAuthor_id())) {
             //Log.d("debug", "pc_id: " + pc.getUser_id() + "p_auth_id: "+purchase.getAuthorName());
             View linearLayout = findViewById(R.id.ll_scroll_3);
             DecimalFormat df = new DecimalFormat("##.##");

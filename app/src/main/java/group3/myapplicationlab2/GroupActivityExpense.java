@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,6 +30,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,8 +43,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Key;
@@ -99,74 +111,56 @@ public class GroupActivityExpense extends AppCompatActivity {
                     group = new Group();
                     group.GroupConstructor(objectMap);
 
-                    //Collections.sort(group.getPurchases());
-                    //Collections.reverse(group.getPurchases());
-                    //final HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
-                    //DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-                    /* usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (int i =0; i< group.getGroupMembers().size(); i++){
-                                // controllo se la foto è stata aggironata
-                                final String key = group.getGroupMembers().get(i).getUser_id();
-                                final String user_uri = dataSnapshot.child(key).child("userPathImage").getValue(String.class);
-                                String current = dataSnapshot.child(key).child("currentPicsUpload").getValue(String.class);
-                                String last = dataSnapshot.child(key).child("lastPicsUpload").getValue(String.class);
+                    String key;
+                    for (int i=0; i< group.getGroupMembers().size();i++){
+                        key = group.getGroupMembers().get(i).getUser_id();
 
-                                //se in memoria non c'è path per downloadre l'immagine, ne metto una default
-                                if (user_uri.equals("nopath")){
-                                    images.put(key, BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                                            R.mipmap.ic_launcher));
+                        final StorageReference storageReference = FirebaseStorage.getInstance().getReference("UsersImage").child(key);
+
+                        final String finalKey = key;
+                        storageReference.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+                            private HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+                            @Override
+                            public void onSuccess(final StorageMetadata storageMetadata) {
+                                //here the image exist
+                                final String last =storageMetadata.getCustomMetadata("lastPicsModify");
+                                final String current = storageMetadata.getCustomMetadata("currentPicsModify");
+
+                                if(current.equals(last)){
+                                    //here I have the image in memory
+                                    try {
+                                        File f=new File(Environment.getExternalStorageDirectory(), "MoneyTracker/profileImages/"+ finalKey +".jpg");
+                                        Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                                        images.put(finalKey,b );
+
+                                    }
+                                    catch (FileNotFoundException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
                                 }
                                 else{
-                                    //se non è stata aggiornata carico da memoira del telefono
-                                    if (current.equals(last)){
-                                        try {
-                                            File f=new File(Environment.getExternalStorageDirectory(), "MoneyTracker/profileImages/"+key+".jpg");
-                                            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                                            images.put(key,b );
-
+                                    storageReference.getBytes(1024*1024).addOnCompleteListener(new OnCompleteListener<byte[]>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<byte[]> task) {
+                                            task.getResult();
+                                            Bitmap b = BitmapFactory.decodeByteArray(task.getResult(),0,task.getResult().length);
+                                            util.saveImageInMemory(b, finalKey);
+                                            images.put(finalKey, b);
+                                            StorageMetadata metadata2 = new StorageMetadata.Builder()
+                                                    .setContentType("image/jpg")
+                                                    .setCustomMetadata("lastPicsModify", current)
+                                                    .build();
+                                            storageReference.updateMetadata(metadata2);
                                         }
-                                        catch (FileNotFoundException e)
-                                        {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                    //se è stata aggionrata setto, le segno, scarico da url attraverso appostio listner e salvo in memoira del telefono
-                                    else{
-                                        Log.d("GAE", "different");
-                                        Log.d("GAE", "c: " + current + " l: " + last);
-                                        FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("lastPicsUpload").setValue(current);
-                                        FirebaseStorage.getInstance().getReference("UsersImage").child(key)
-                                                .getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                            @Override
-                                            public void onSuccess(byte[] bytes) {
-                                                Bitmap b = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                                util.saveImageInMemory(user_uri, key);
-                                                images.put(key, b);
-                                            }
-                                        });
-
-                                    }
+                                    });
                                 }
                             }
 
-                            Collections.sort(group.getPurchases());
-                            Collections.reverse(group.getPurchases());
-                            expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, new ArrayList<Purchase>(), user);
-                            expenseAdapter.setImages(images);
+                        }//end on success
+                        );
 
-                            expenseAdapter.addAll(group.getPurchases());
-                            listView = (ListView) findViewById(R.id.expense_list);
-                            listView.setAdapter(expenseAdapter);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });*/
+                    }
 
                     if (group.getPurchases().size()<1){
                         findViewById(R.id.content_with_purchases).setVisibility(View.GONE);
@@ -340,7 +334,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 builder1.setMessage("You are alone in the group");
                 builder1.setCancelable(true);
 
-                builder1.setNegativeButton(
+                builder1.setPositiveButton(
                         "Ok",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -350,6 +344,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
+                alert11.getButton(alert11.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
 
             }
             else {

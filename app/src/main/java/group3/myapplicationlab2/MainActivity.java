@@ -48,6 +48,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.zxing.WriterException;
@@ -382,7 +383,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (requestCode == GROUP_CLICKED){
             if (resultCode == RESULT_OK) {
-                Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
                 user = (User)data.getSerializableExtra(Constant.ACTIVITYUSERMODIFIED);
                 reDrawGroupList();
             }
@@ -419,6 +420,12 @@ public class MainActivity extends AppCompatActivity
                         user.setCurrentPicsUpload(ts);
                         FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("currentPicsUpload").setValue(ts);
                         user_info.child("userPathImage").setValue(downloadUrl.toString());
+
+                        StorageMetadata metadata = new StorageMetadata.Builder()
+                                .setContentType("image/jpg")
+                                .setCustomMetadata("currentPicsModify", ts)
+                                .build();
+                        FirebaseStorage.getInstance().getReference("UsersImage").child(user.getUid()).updateMetadata(metadata);
                         /*user_image_link.child(user.getUid()).setValue(downloadUrl);*/
 
                     }
