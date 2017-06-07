@@ -415,6 +415,9 @@ public class MainActivity extends AppCompatActivity
                         Log.d("URI", downloadUrl.toString());
 
                         user.setUserPathImage(downloadUrl.toString());
+                        String ts = Long.toString(System.currentTimeMillis());
+                        user.setCurrentPicsUpload(ts);
+                        FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("currentPicsUpload").setValue(ts);
                         user_info.child("userPathImage").setValue(downloadUrl.toString());
                         /*user_image_link.child(user.getUid()).setValue(downloadUrl);*/
 

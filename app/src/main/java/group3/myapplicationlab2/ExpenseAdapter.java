@@ -112,8 +112,8 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
 
     private void setUserImage(final ImageView expView, final Purchase purchase, final HashMap<String, Bitmap> images){
 
-        Bitmap image = images.get(purchase.getAuthor_id());
-        expView.setImageBitmap(util.getCroppedBitmap(image,200,200));
+/*        Bitmap image = images.get(purchase.getAuthor_id());
+        expView.setImageBitmap(util.getCroppedBitmap(image,200,200));*/
     }
 
     public void setImages(HashMap<String,Bitmap> images) {

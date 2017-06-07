@@ -1,5 +1,7 @@
 package group3.myapplicationlab2;
 
+import android.*;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,6 +17,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.support.v4.app.ActivityCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -31,6 +34,8 @@ import com.google.zxing.common.BitMatrix;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -203,6 +208,34 @@ public class Util {
 
         bitmap.setPixels(pixels, 0, 320, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bitmap;
+    }
+
+    public void saveImageInMemory(String uri, String key){
+        File pictureFile = this.fileProfileImageCreator(key);
+        if (pictureFile == null)
+            Log.d("PATH_FIG", "null");
+        else
+            Log.d("PATH_FIG", pictureFile.getAbsolutePath());
+        try{
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            this.downloadImage(uri).compress(Bitmap.CompressFormat.PNG, 50, fos);
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            Log.d("ERROR", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("ERROR", "Error accessing file: " + e.getMessage());
+        }
+    }
+
+
+    public void getGrantedPermissions(Activity activity) {
+        ActivityCompat.requestPermissions(activity,
+                new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.CAMERA}
+                ,1);
+
     }
 
 

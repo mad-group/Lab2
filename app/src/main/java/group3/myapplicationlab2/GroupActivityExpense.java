@@ -98,25 +98,58 @@ public class GroupActivityExpense extends AppCompatActivity {
                             dataSnapshot.getValue();
                     group = new Group();
                     group.GroupConstructor(objectMap);
+
                     //Collections.sort(group.getPurchases());
                     //Collections.reverse(group.getPurchases());
                     //final HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
                     //DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-                    /*usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    /* usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (int i =0; i< group.getGroupMembers().size(); i++){
-                                String key = group.getGroupMembers().get(i).getUser_id();
-                                String uri = dataSnapshot.child(key).child("userPathImage").getValue(String.class);
-                                Bitmap downloadBtmp = util.downloadImage(uri);
-                                //if (downloadBtmp != null)
-                                if (false)
-                                    images.put(key, util.downloadImage(uri));
-                                else{
+                                // controllo se la foto è stata aggironata
+                                final String key = group.getGroupMembers().get(i).getUser_id();
+                                final String user_uri = dataSnapshot.child(key).child("userPathImage").getValue(String.class);
+                                String current = dataSnapshot.child(key).child("currentPicsUpload").getValue(String.class);
+                                String last = dataSnapshot.child(key).child("lastPicsUpload").getValue(String.class);
+
+                                //se in memoria non c'è path per downloadre l'immagine, ne metto una default
+                                if (user_uri.equals("nopath")){
                                     images.put(key, BitmapFactory.decodeResource(getApplicationContext().getResources(),
                                             R.mipmap.ic_launcher));
                                 }
-                                
+                                else{
+                                    //se non è stata aggiornata carico da memoira del telefono
+                                    if (current.equals(last)){
+                                        try {
+                                            File f=new File(Environment.getExternalStorageDirectory(), "MoneyTracker/profileImages/"+key+".jpg");
+                                            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                                            images.put(key,b );
+
+                                        }
+                                        catch (FileNotFoundException e)
+                                        {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                    //se è stata aggionrata setto, le segno, scarico da url attraverso appostio listner e salvo in memoira del telefono
+                                    else{
+                                        Log.d("GAE", "different");
+                                        Log.d("GAE", "c: " + current + " l: " + last);
+                                        FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("lastPicsUpload").setValue(current);
+                                        FirebaseStorage.getInstance().getReference("UsersImage").child(key)
+                                                .getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                            @Override
+                                            public void onSuccess(byte[] bytes) {
+                                                Bitmap b = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                                util.saveImageInMemory(user_uri, key);
+                                                images.put(key, b);
+                                            }
+                                        });
+
+                                    }
+                                }
                             }
 
                             Collections.sort(group.getPurchases());

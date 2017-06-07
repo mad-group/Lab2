@@ -22,6 +22,9 @@ public class User implements Serializable {
     private HashMap<String, GroupPreview> groupsHash;
     private HashMap<String, Notification> notificationHashMap;
     private String userPathImage="nopath";
+    private String lastPicsUpload;
+    private String currentPicsUpload;
+
 
     public void setEmail(String email){
         this.email = email;
@@ -95,4 +98,19 @@ public class User implements Serializable {
     public void setUserPathImage(String userPathImage) {
         this.userPathImage = userPathImage;
     }
+
+    public String getLastPicsUpload() {
+        return lastPicsUpload;
+    }
+
+    public void setLastPicsUpload(String lastPicsUpload) {
+        this.lastPicsUpload = lastPicsUpload;
+    }
+
+    public String getCurrentPicsUpload() {
+        return currentPicsUpload;
+    }
+
+    public void setCurrentPicsUpload(String currentPicsUpload) {
+        this.currentPicsUpload = currentPicsUpload;}
 }

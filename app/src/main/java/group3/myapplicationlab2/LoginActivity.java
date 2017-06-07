@@ -34,6 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Util util = new Util(getApplicationContext());
+        util.getGrantedPermissions(this);
+
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
