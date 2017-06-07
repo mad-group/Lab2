@@ -39,9 +39,9 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
 
     private HashMap<String, Bitmap> images  = new HashMap<>();
     private User user;
-    private TextView expense;
-    private TextView expDate;
-    private TextView expAmount;
+    //private TextView expense;
+    //private TextView expDate;
+    //private TextView expAmount;
     private ImageView expViewLeft;
     private ImageView expViewRight;
     private final Util util = new Util(getContext());
@@ -58,23 +58,23 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.expense_item, parent, false);
         }
-        expense = (TextView) convertView.findViewById(R.id.expense_id);
-        expDate = (TextView) convertView.findViewById(R.id.expense_date);
-        expAmount = (TextView) convertView.findViewById(R.id.expense_amount);
-        expViewRight = (ImageView) convertView.findViewById(R.id.imageViewRight);
-        expViewLeft = (ImageView) convertView.findViewById(R.id.imageViewLeft);
+        TextView expense = (TextView) convertView.findViewById(R.id.expense_id);
+        TextView expDate = (TextView) convertView.findViewById(R.id.expense_date);
+        TextView expAmount = (TextView) convertView.findViewById(R.id.expense_amount);
+        //expViewRight = (ImageView) convertView.findViewById(R.id.imageViewRight);
+        //expViewLeft = (ImageView) convertView.findViewById(R.id.imageViewLeft);
 
-        expViewLeft.setVisibility(View.GONE);
-        setUserImage(expViewRight, purchase, this.images);
+        //expViewLeft.setVisibility(View.GONE);
+        //setUserImage(expViewRight, purchase, this.images);
         expense.setText(purchase.getCausal());
         expDate.setText(purchase.getDate());
         expAmount.setText(String.valueOf(purchase.getTotalAmount()) + " \u20ac");
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.RIGHT;
-        expense.setLayoutParams(params);
-        expDate.setLayoutParams(params);
-        expAmount.setLayoutParams(params);
+        //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+        //        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        //params.gravity = Gravity.RIGHT;
+        //expense.setLayoutParams(params);
+        //expDate.setLayoutParams(params);
+        //expAmount.setLayoutParams(params);
 
 /*        if (user.getUid().equals(purchase.getAuthor_id()) ){
             //if the author of the purchase is the current user -> RIGHT

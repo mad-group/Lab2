@@ -98,11 +98,11 @@ public class GroupActivityExpense extends AppCompatActivity {
                             dataSnapshot.getValue();
                     group = new Group();
                     group.GroupConstructor(objectMap);
-                    Collections.sort(group.getPurchases());
-                    Collections.reverse(group.getPurchases());
-                    final HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
-                    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-                    usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    //Collections.sort(group.getPurchases());
+                    //Collections.reverse(group.getPurchases());
+                    //final HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+                    //DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+                    /*usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (int i =0; i< group.getGroupMembers().size(); i++){
@@ -133,7 +133,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                         public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    });
+                    });*/
 
                     if (group.getPurchases().size()<1){
                         findViewById(R.id.content_with_purchases).setVisibility(View.GONE);
@@ -226,6 +226,9 @@ public class GroupActivityExpense extends AppCompatActivity {
         expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese, user);
         listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
+
+        listView.setDivider(null);
+        listView.setDividerHeight(0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
         setSupportActionBar(toolbar);
