@@ -61,6 +61,7 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         TextView expense = (TextView) convertView.findViewById(R.id.expense_id);
         TextView expDate = (TextView) convertView.findViewById(R.id.expense_date);
         TextView expAmount = (TextView) convertView.findViewById(R.id.expense_amount);
+        TextView authorName = (TextView) convertView.findViewById(R.id.author_name);
         //expViewRight = (ImageView) convertView.findViewById(R.id.imageViewRight);
         //expViewLeft = (ImageView) convertView.findViewById(R.id.imageViewLeft);
 
@@ -69,6 +70,7 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         expense.setText(purchase.getCausal());
         expDate.setText(purchase.getDate());
         expAmount.setText(String.valueOf(purchase.getTotalAmount()) + " \u20ac");
+        authorName.setText(purchase.getAuthorName());
         //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
         //        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //params.gravity = Gravity.RIGHT;

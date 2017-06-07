@@ -218,7 +218,7 @@ public class ExpenseInput extends AppCompatActivity {
 
             Purchase p = new Purchase();
             p.setAuthor_id(author);
-            p.setAuthorName(author);
+            p.setAuthorName(user.getName());
             p.setTotalAmount(Double.parseDouble(amount));
             p.setCausal(expense);
             p.setDateMillis(myd.getTime());

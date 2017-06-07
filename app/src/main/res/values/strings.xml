@@ -270,6 +270,11 @@
     <string name="scan_Modify_username">Insert new username</string>
     <string name="scan_QR_title">QR code</string>
     <string name="title_activity_simple_scanner">SimpleScannerActivity</string>
+    <string name="author">Author</string>
+    <string name="paid">paid</string>
+    <string name="expensename">ExpenseName</string>
+    <string name="amount">Amount</string>
+    <string name="date">Date</string>
 
 
 </resources>

@@ -43,31 +43,39 @@
             android:id="@+id/expense_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/colorFabCustom"
             android:paddingLeft="5dp"
             android:paddingStart="5dp"
-            android:text="ExpenseName"
-            android:textSize="30sp"/>
+            android:text="@string/expensename"
+            android:textSize="25sp"/>
 
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/author_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="X payed"
+                android:text="@string/author"
                 android:paddingLeft="5dp"
-                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/paid"
+                android:paddingLeft="5dp"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/expense_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Amount"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/amount"
                 android:paddingLeft="5dp"
-                android:textColor="@color/black"
                 android:textSize="20sp" />
 
         </android.support.v7.widget.LinearLayoutCompat>
@@ -76,8 +84,8 @@
             android:id="@+id/expense_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date "
-            android:textColor="@color/black"
+            android:text="@string/date"
+            android:textColor="#b3b3b3"
             android:textSize="15dp"
             android:textAlignment="textEnd"
             android:layout_gravity="end"
