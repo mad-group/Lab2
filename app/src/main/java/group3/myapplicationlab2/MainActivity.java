@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity
         user_image = FirebaseStorage.getInstance().getReference("UsersImage");
 
 
-        user_info.addValueEventListener(new ValueEventListener() {
+        user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
