@@ -36,9 +36,9 @@ public class GroupPreviewAdapter extends ArrayAdapter<GroupPreview> {
 
         // Lookup view for data population
         TextView groupName = (TextView) convertView.findViewById(R.id.group_item_name);
-        TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
+        //TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
         groupName.setText(group.getName());
-        groupDescription.setText(group.getDescription());
+        //groupDescription.setText(group.getDescription());
 
         return convertView;
     }

@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
         mDatabase = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEUSERS);
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
         user_groups = user_info.child(Constant.REFERENCEGROUPS);

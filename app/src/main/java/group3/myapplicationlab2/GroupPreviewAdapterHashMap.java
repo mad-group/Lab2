@@ -61,10 +61,10 @@ public class GroupPreviewAdapterHashMap extends BaseAdapter {
 
         // Lookup view for data population
         TextView groupName = (TextView) convertView.findViewById(R.id.group_item_name);
-        TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
+        //TextView groupDescription = (TextView) convertView.findViewById(R.id.group_item_component);
 
         groupName.setText(groupPreviewEntry.getValue().getName());
-        groupDescription.setText(groupPreviewEntry.getValue().getDescription());
+        //groupDescription.setText(groupPreviewEntry.getValue().getDescription());
 
         return convertView;
     }
