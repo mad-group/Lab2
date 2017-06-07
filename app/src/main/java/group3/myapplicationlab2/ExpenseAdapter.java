@@ -71,6 +71,19 @@ public class ExpenseAdapter extends ArrayAdapter<Purchase> {
         expDate.setText(purchase.getDate());
         expAmount.setText(String.valueOf(purchase.getTotalAmount()) + " \u20ac");
         authorName.setText(purchase.getAuthorName());
+        ImageView expViewLeft = (ImageView) convertView.findViewById(R.id.imageViewLeft);
+
+        if (images.get(purchase.getAuthor_id()) != null){
+
+            Bitmap image = images.get(purchase.getAuthor_id());
+            expViewLeft.setImageBitmap(image);
+
+        }
+        else
+        {
+            expViewLeft.setImageResource(R.mipmap.ic_standard_user);
+        }
+
         //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
         //        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //params.gravity = Gravity.RIGHT;

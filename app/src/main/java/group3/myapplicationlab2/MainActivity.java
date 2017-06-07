@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity
 
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+
         util = new Util (getApplicationContext());
         auth = FirebaseAuth.getInstance();
         // this listener will be called when there is change in firebase user session

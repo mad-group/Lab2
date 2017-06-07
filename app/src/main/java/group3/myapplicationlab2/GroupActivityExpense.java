@@ -51,6 +51,8 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Key;
@@ -81,17 +83,13 @@ public class GroupActivityExpense extends AppCompatActivity {
     private User user;
     private ListView listView;
 
-    ArrayList<Purchase> spese;
+    ArrayList<Purchase> expenseList;
     ChildEventListener childEventListener;
-
-    private Util util;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
-        util = new Util(getApplicationContext());
 
         gid = getIntent().getStringExtra(Constant.ACTIVITYGROUPID);
         user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
@@ -111,55 +109,54 @@ public class GroupActivityExpense extends AppCompatActivity {
                     group = new Group();
                     group.GroupConstructor(objectMap);
 
-                    String key;
-                    for (int i=0; i< group.getGroupMembers().size();i++){
-                        key = group.getGroupMembers().get(i).getUser_id();
+                    final HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
 
-                        final StorageReference storageReference = FirebaseStorage.getInstance().getReference("UsersImage").child(key);
+                    final File cacheDir = getBaseContext().getCacheDir();
+                    for (int i=0; i<group.getGroupMembers().size(); i++){
+                        final String key = group.getGroupMembers().get(i).getUser_id();
+                        File f = new File(cacheDir, key);
+                        FileInputStream fis = null;
+                        try {
+                            fis = new FileInputStream(f);
+                            Bitmap bitmap = BitmapFactory.decodeStream(fis);
+                            images.put(key, bitmap);
 
-                        final String finalKey = key;
-                        storageReference.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-                            private HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    expenseAdapter.setImages(images);
+                    expenseAdapter.notifyDataSetChanged();
+
+
+                    for (int i=0; i < group.getGroupMembers().size(); i++){
+                        final String key = group.getGroupMembers().get(i).getUser_id();
+
+                        FirebaseStorage.getInstance().getReference("UsersImage").child(key)
+                                .getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
-                            public void onSuccess(final StorageMetadata storageMetadata) {
-                                //here the image exist
-                                final String last =storageMetadata.getCustomMetadata("lastPicsModify");
-                                final String current = storageMetadata.getCustomMetadata("currentPicsModify");
+                            public void onSuccess(byte[] bytes) {
+                                Bitmap b = BitmapFactory.decodeByteArray(bytes, 0 , bytes.length);
 
-                                if(current.equals(last)){
-                                    //here I have the image in memory
-                                    try {
-                                        File f=new File(Environment.getExternalStorageDirectory(), "MoneyTracker/profileImages/"+ finalKey +".jpg");
-                                        Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                                        images.put(finalKey,b );
+                                File f = new File(cacheDir, key);
 
-                                    }
-                                    catch (FileNotFoundException e)
-                                    {
-                                        e.printStackTrace();
-                                    }
+                                try {
+                                    FileOutputStream out = new FileOutputStream(f);
+                                    b.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                    out.flush();
+                                    out.close();
+
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-                                else{
-                                    storageReference.getBytes(1024*1024).addOnCompleteListener(new OnCompleteListener<byte[]>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<byte[]> task) {
-                                            task.getResult();
-                                            Bitmap b = BitmapFactory.decodeByteArray(task.getResult(),0,task.getResult().length);
-                                            util.saveImageInMemory(b, finalKey);
-                                            images.put(finalKey, b);
-                                            StorageMetadata metadata2 = new StorageMetadata.Builder()
-                                                    .setContentType("image/jpg")
-                                                    .setCustomMetadata("lastPicsModify", current)
-                                                    .build();
-                                            storageReference.updateMetadata(metadata2);
-                                        }
-                                    });
-                                }
+
+                                images.put(key, b);
+                                expenseAdapter.setImages(images);
+                                expenseAdapter.notifyDataSetChanged();
                             }
-
-                        }//end on success
-                        );
-
+                        });
                     }
 
                     if (group.getPurchases().size()<1){
@@ -189,8 +186,8 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Purchase purchase = new Purchase();
                 purchase.PurchaseConstructor(objectMap);
 
-                spese.add(0, purchase);
-                group.setPurchases(spese);
+                expenseList.add(0, purchase);
+                group.setPurchases(expenseList);
                 expenseAdapter.notifyDataSetChanged();
             }
 
@@ -203,16 +200,16 @@ public class GroupActivityExpense extends AppCompatActivity {
                 purchase.PurchaseConstructor(objectMap);
 
                 int position;
-                for (int ii=0; ii<spese.size(); ii++){
+                for (int ii=0; ii<expenseList.size(); ii++){
 
-                    if (spese.get(ii).getPurchase_id().equals(purchase.getPurchase_id())){
+                    if (expenseList.get(ii).getPurchase_id().equals(purchase.getPurchase_id())){
                         position = ii;
-                        spese.remove(position);
+                        expenseList.remove(position);
                     }
                 }
 
-                spese.add(0, purchase);
-                group.setPurchases(spese);
+                expenseList.add(0, purchase);
+                group.setPurchases(expenseList);
                 expenseAdapter.notifyDataSetChanged();
 
             }
@@ -225,15 +222,15 @@ public class GroupActivityExpense extends AppCompatActivity {
                 purchase.PurchaseConstructor(objectMap);
 
                 int position;
-                for (int ii=0; ii<spese.size(); ii++){
+                for (int ii=0; ii<expenseList.size(); ii++){
 
-                    if (spese.get(ii).getPurchase_id().equals(purchase.getPurchase_id())){
+                    if (expenseList.get(ii).getPurchase_id().equals(purchase.getPurchase_id())){
                         position = ii;
-                        spese.remove(position);
+                        expenseList.remove(position);
                     }
 
                 }
-                group.setPurchases(spese);
+                group.setPurchases(expenseList);
                 expenseAdapter.notifyDataSetChanged();
 
             }
@@ -249,8 +246,8 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
         };
 
-        spese = new ArrayList<Purchase>();
-        expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, spese, user);
+        expenseList = new ArrayList<Purchase>();
+        expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, expenseList, user);
         listView = (ListView) findViewById(R.id.expense_list);
         listView.setAdapter(expenseAdapter);
 
@@ -282,8 +279,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         });
 
         registerListenerOnListView();
-
-
 
     }
 
