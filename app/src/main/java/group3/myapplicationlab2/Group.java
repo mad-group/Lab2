@@ -179,7 +179,7 @@ public class Group implements Serializable {
 
         for (int i=0; i<this.purchases.size(); i++){
             Purchase purchase = this.purchases.get(i);
-            String owner = purchase.getAuthorName();
+            String owner = purchase.getAuthor_id();
 
             List<GroupMember> backup = this.groupMembers;
             Boolean present = false;
@@ -189,20 +189,17 @@ public class Group implements Serializable {
                 Log.d("SOLDI", String.valueOf(purchaseContributor.getAmount()));
             }
 
-            if (purchase.getContributors().size()>1){
-
-                Log.d("UYES", "YES");
+            /*if (purchase.getContributors().size()>1){
 
                 for (PurchaseContributor purchaseContributor: purchase.getContributors()){
-
 
                     if (owner.equals(myself)){
 
                         if (!purchaseContributor.getUser_id().equals(myself)){
 
                             for (int ii=0; ii<this.groupMembers.size(); ii++){
-                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id()) && !purchaseContributor.getPayed()){
-                                    this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() + purchaseContributor.getAmount());
+                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id())){
+                                    this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() - purchaseContributor.getAmount());
                                 }
                             }
 
@@ -211,11 +208,9 @@ public class Group implements Serializable {
                     }
                     else {
 
-                        if (!purchaseContributor.getUser_id().equals(myself)){
-                            for (int ii=0; ii<this.groupMembers.size(); ii++){
-                                if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id()) && !purchaseContributor.getPayed()){
-                                    this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() - purchaseContributor.getAmount());
-                                }
+                        for (int ii=0; ii<this.groupMembers.size(); ii++){
+                            if(this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id())){
+                                this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() + purchaseContributor.getAmount());
                             }
                         }
 
@@ -231,13 +226,41 @@ public class Group implements Serializable {
                     this.groupMembers = backup;
                 }
 
+            }*/
+
+
+            if (purchase.getContributors().size()>1){
+                if (owner.equals(myself)){
+                    present = true;
+                    for (PurchaseContributor purchaseContributor: purchase.getContributors()){
+                        if (!purchaseContributor.getPayed()){
+                            for (int ii=0; ii<this.getGroupMembers().size(); ii++){
+                                if (this.groupMembers.get(ii).getUser_id().equals(purchaseContributor.getUser_id())){
+                                    this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() + purchaseContributor.getAmount());
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    for (PurchaseContributor purchaseContributor: purchase.getContributors()){
+                        if (!purchaseContributor.getPayed()){
+                            if (purchaseContributor.getUser_id().equals(myself)){
+                                present = true;
+                                for (int ii=0; ii<this.getGroupMembers().size(); ii++){
+                                    if (this.groupMembers.get(ii).getUser_id().equals(owner)){
+                                        this.groupMembers.get(ii).setPayment(this.groupMembers.get(ii).getPayment() - purchaseContributor.getAmount());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!present){
+                    this.groupMembers = backup;
+                }
             }
-
-
-
         }
-
-
     }
 
 
