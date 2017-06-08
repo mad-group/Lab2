@@ -2,6 +2,8 @@ package group3.myapplicationlab2;
 
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.Image;
@@ -20,8 +22,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 public class GroupStats extends AppCompatActivity {
@@ -53,6 +59,23 @@ public class GroupStats extends AppCompatActivity {
             }
         }
 
+        final HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+
+        final File cacheDir = getBaseContext().getCacheDir();
+        for (int i=0; i<group.getGroupMembers().size(); i++){
+            final String key = group.getGroupMembers().get(i).getUser_id();
+            File f = new File(cacheDir, key);
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(f);
+                Bitmap bitmap = BitmapFactory.decodeStream(fis);
+                images.put(key, bitmap);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
         ArrayAdapter<GroupMember> memberArrayAdapter = new ArrayAdapter<GroupMember>(this, R.layout.group_balance_item, members){
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -67,7 +90,21 @@ public class GroupStats extends AppCompatActivity {
 
                 TextView debit_credit = (TextView)convertView.findViewById(R.id.expense_amount);
                 TextView debit_credit_text = (TextView)convertView.findViewById(R.id.debt_text);
-                ImageView mood =(ImageView) convertView.findViewById(R.id.balance_face);
+                //ImageView mood =(ImageView) convertView.findViewById(R.id.balance_face);
+
+                ImageView expViewLeft = (ImageView) convertView.findViewById(R.id.imageViewLeft);
+
+                if (images.get(getItem(position).getUser_id()) != null){
+
+                    Bitmap image = images.get(getItem(position).getUser_id());
+                    expViewLeft.setImageBitmap(image);
+
+                }
+                else
+                {
+                    expViewLeft.setImageResource(R.mipmap.ic_standard_user);
+                }
+
 
                 Double debit = getItem(position).getPayment();
 
@@ -75,17 +112,17 @@ public class GroupStats extends AppCompatActivity {
                     debit_credit.setText("+" + String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(getResources().getColor(R.color.mood_fine));
                     debit_credit_text.setText(R.string.owes_you);
-                    mood.setBackgroundResource(0);
-                    mood.setImageResource(R.mipmap.ic_smile);
-                    mood.setColorFilter(getContext().getResources().getColor(R.color.mood_fine));
+                    //mood.setBackgroundResource(0);
+                    //mood.setImageResource(R.mipmap.ic_smile);
+                    //mood.setColorFilter(getContext().getResources().getColor(R.color.mood_fine));
                 }
                 else if (debit <0) {
                     debit_credit.setText(String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(getResources().getColor(R.color.mood_sad));
                     debit_credit_text.setText(R.string.you_owe);
-                    mood.setBackgroundResource(0);
-                    mood.setImageResource(R.mipmap.ic_sad);
-                    mood.setColorFilter(getContext().getResources().getColor(R.color.mood_sad));
+                    //mood.setBackgroundResource(0);
+                    //mood.setImageResource(R.mipmap.ic_sad);
+                    //mood.setColorFilter(getContext().getResources().getColor(R.color.mood_sad));
 
 
                 }
@@ -93,9 +130,9 @@ public class GroupStats extends AppCompatActivity {
                     debit_credit.setText(String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(getResources().getColor(R.color.black));
                     debit_credit_text.setText(R.string.were_even);
-                    mood.setBackgroundResource(0);
-                    mood.setImageResource(R.mipmap.ic_smile);
-                    mood.setColorFilter(getContext().getResources().getColor(R.color.black));
+                    //mood.setBackgroundResource(0);
+                    //mood.setImageResource(R.mipmap.ic_smile);
+                    //mood.setColorFilter(getContext().getResources().getColor(R.color.black));
 
                 }
                 return convertView;
