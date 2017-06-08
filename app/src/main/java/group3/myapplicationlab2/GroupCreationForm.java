@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.appinvite.AppInvite;
@@ -64,11 +65,16 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
     private DataBaseProxy dataBaseProxy;
     private DatabaseReference groupRef;
 
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_creation_form);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         groupRef = FirebaseDatabase.getInstance().getReference("Groups");
         user = (User)getIntent().getSerializableExtra("user");
@@ -125,6 +131,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 prepareUser(view);
             }
         });
@@ -140,11 +147,15 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             groupName.setError(getResources().getString(R.string.insert_group_name), null);
             groupName.requestFocus();
             prova = false;
+
+            progressBar.setVisibility(View.GONE);
         }
         else if (groupPin.getText().toString().isEmpty() || groupPin.getText().toString().length() < 6){
             groupPin.setError(getResources().getString(R.string.wrong_group_pin), null);
             groupPin.requestFocus();
             prova=false;
+
+            progressBar.setVisibility(View.GONE);
         }
         else{
             newGroup.setName(groupName.getText().toString());
@@ -195,9 +206,10 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
             this.groupIdTmp = newGroup.getId();
             //Toast.makeText(getApplicationContext(), R.string.group_created, Toast.LENGTH_SHORT).show();
 
-            if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null )
+            if (this.groupNameTmp !=null && this.groupPinTmp != null && this.groupIdTmp != null ){
                 //Toast.makeText(getApplicationContext(), this.groupNameTmp, Toast.LENGTH_SHORT).show();
                 onInviteClicked(this.groupNameTmp, this.groupPinTmp, this.groupIdTmp);
+            }
             else{
                 Toast.makeText(getApplicationContext(), R.string.error_group_creation, Toast.LENGTH_SHORT).show();
             }
