@@ -281,7 +281,7 @@ public class ExpenseInput extends AppCompatActivity {
                 //Log.d("Debug", "aaaaaaaaaaa " + encodedExpenseImage);
             }
 
-            if (recPurch!=null) {
+            if (recPurch==null) {
                 String pid = myRef.push().getKey();
                 Long lastModify = System.currentTimeMillis();
                 HashMap<String,Object> hm = new HashMap<>();
@@ -291,7 +291,6 @@ public class ExpenseInput extends AppCompatActivity {
                 p.setPurchase_id(pid);
                 myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
 
-                String key;
 
                 for (int indexList=0; indexList<l.size(); indexList++){
                 /*l.get(indexList).setContributor_id(user.getUid());*/
@@ -309,7 +308,6 @@ public class ExpenseInput extends AppCompatActivity {
             }
             else{
                 String pid = purchase_id;
-                Log.d("PID", pid);
                 Long lastModify = System.currentTimeMillis();
                 HashMap<String,Object> hm = new HashMap<>();
                 hm.put(Constant.GROUPLASTMODIFY, lastModify);
@@ -317,8 +315,6 @@ public class ExpenseInput extends AppCompatActivity {
                 hm.put(Constant.GROUPSLASTAUTHOR, user.getUid());
                 p.setPurchase_id(pid);
                 myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
-
-                String key;
 
                 for (int indexList=0; indexList<l.size(); indexList++){
                 l.get(indexList).setContributor_id(user.getUid());
