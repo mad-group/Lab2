@@ -121,6 +121,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/text_cost"
                             android:drawableLeft="@mipmap/ic_euro"
+                            android:inputType="numberDecimal"
                             android:hint="@string/how_muchHint"
                             android:cursorVisible="true"
                             android:textSize="25sp"
