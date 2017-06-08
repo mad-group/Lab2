@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/group_Stats"
 
-        android:title="Group Stats"
-        app:showAsAction="never" />
+    <!--in GAE-->
+    <item android:id="@+id/group_Stats_GAE"
+        android:title="Group Stats" />
 
-    <item android:id="@+id/leave"
-        android:title="Leave Group" />
+    <item android:id="@+id/modify_GAE"
+        android:title="Modify Group"
+        />
 
-    <item android:id="@+id/group_generate_QR"
+    <item android:id="@+id/add_members_GAE"
+        android:title="Invite User" />
+
+    <item android:id="@+id/generate_QR_GAE"
         android:title="Generate QR code" />
+
+    <item android:id="@+id/leave_group_GAE"
+        android:title="Leave Group" />
 
 
 </menu>

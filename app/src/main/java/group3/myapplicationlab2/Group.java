@@ -30,7 +30,7 @@ public class Group implements Serializable {
     private List<Double> myDebts;
     private List<GroupMember> groupMembers;
     private List<String> userKeys;
-    private Uri QRpath;
+    private String QRpath;
 
 
     public Group() {
@@ -46,6 +46,7 @@ public class Group implements Serializable {
         this.setLastEvent(objectHashMap.get("lastEvent").toString());
         this.setId(objectHashMap.get("id").toString());
         this.setNumeric_id(new Integer(objectHashMap.get("numeric_id").toString()));
+        this.setQRpath(objectHashMap.get("QRpath").toString());
 
         List<GroupMember> groupMembers = new ArrayList<GroupMember>();
         if (objectHashMap.get("members2") != null){
@@ -363,7 +364,11 @@ public class Group implements Serializable {
         this.numeric_id = numeric_id;
     }
 
-    public void setQRpath(Uri QRpath) {
+    public void setQRpath(String QRpath) {
         this.QRpath = QRpath;
+    }
+
+    public String getQRpath() {
+        return QRpath;
     }
 }

@@ -77,4 +77,6 @@ public class GroupPreview implements Serializable, Comparable<GroupPreview> {
     public void setLastAuthor(String lastAuthor) {
         this.lastAuthor = lastAuthor;
     }
+
+
 }

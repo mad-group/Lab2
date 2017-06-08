@@ -54,9 +54,17 @@ public class GroupModification extends AppCompatActivity {
         setContentView(R.layout.activity_group_modification);
 
         user = (User)getIntent().getSerializableExtra("user");
-        pos = Integer.parseInt(getIntent().getStringExtra("position"));
-        group_id = user.getGroups().get(pos).getId();
-        group_name = user.getGroups().get(pos).getName();
+        String posStr = getIntent().getStringExtra("position");
+
+        if (posStr != null){
+            pos = Integer.parseInt(posStr);
+            group_id = user.getGroups().get(pos).getId();
+            group_name = user.getGroups().get(pos).getName();
+        }
+        else{
+            group_id = getIntent().getStringExtra(Constant.ACTIVITYGROUPID);
+            group_name = getIntent().getStringExtra(Constant.ACTIVITYGROUPNAME);
+        }
         user_id = user.getUid();
 
 
@@ -135,6 +143,7 @@ public class GroupModification extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        hm.put("QRpath", downloadUrl.toString());
                         Log.d("URI", downloadUrl.toString());
                         DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups");
                         groupRef.child(group_id).child("QRpath").setValue(downloadUrl.toString());
@@ -177,6 +186,10 @@ public class GroupModification extends AppCompatActivity {
 
                     }
                     Intent i = new Intent();
+                    i.putExtra(Constant.ACTIVITYGROUPNAME+"mod", (String)hm.get("name"));
+                    Log.d("NAME", "mod " + (String)hm.get("name"));
+                    i.putExtra(Constant.ACTIVITYGROUPPIN+"mod", (String)hm.get("pin"));
+                    i.putExtra(Constant.ACTIVITYGROUPQRPATH+"mod", (String)hm.get("QRpath"));
                     setResult(RESULT_OK, i);
                     finish();
                 }

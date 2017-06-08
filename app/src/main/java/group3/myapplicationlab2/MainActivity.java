@@ -67,6 +67,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static group3.myapplicationlab2.Constant.*;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -86,10 +88,6 @@ public class MainActivity extends AppCompatActivity
 
     private List<GroupPreview> currentGroupPreview;
 
-    private final int CREATE_GROUP = 1;
-    private static final int MODIFY_GROUP = 2;
-    private static final int REQUEST_INVITE =0;
-    private static final int JOIN_GROUP = 3;
 
     private String pin_str;
     private int pos;
@@ -144,9 +142,9 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        mDatabase = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEUSERS);
+        mDatabase = FirebaseDatabase.getInstance().getReference(REFERENCEUSERS);
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
-        user_groups = user_info.child(Constant.REFERENCEGROUPS);
+        user_groups = user_info.child(REFERENCEGROUPS);
         user_image = FirebaseStorage.getInstance().getReference("UsersImage");
 
 
@@ -186,7 +184,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
-                serviceIntent.putExtra(Constant.ACTIVITYUSER, user);
+                serviceIntent.putExtra(ACTIVITYUSER, user);
                 startService(serviceIntent);
             }
 
@@ -200,11 +198,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i=new Intent(MainActivity.this, GroupActivityExpense.class);
-                i.putExtra(Constant.ACTIVITYUSERID, user.getUid());
-                i.putExtra(Constant.ACTIVITYGROUPNAME, user.getGroups().get(position).getName());
-                i.putExtra(Constant.ACTIVITYPOSITION, Integer.toString(position));
-                i.putExtra(Constant.ACTIVITYGROUPID, user.getGroups().get(position).getId());
-                i.putExtra(Constant.ACTIVITYUSER, user);
+                i.putExtra(ACTIVITYUSERID, user.getUid());
+                i.putExtra(ACTIVITYGROUPNAME, user.getGroups().get(position).getName());
+                i.putExtra(ACTIVITYPOSITION, Integer.toString(position));
+                i.putExtra(ACTIVITYGROUPID, user.getGroups().get(position).getId());
+                i.putExtra(ACTIVITYUSER, user);
 
                 startActivityForResult(i, GROUP_CLICKED);
             }
@@ -226,8 +224,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 Intent i = new Intent(MainActivity.this, GroupCreationForm.class);
-                i.putExtra(Constant.ACTIVITYUSER, user);
-                startActivityForResult(i, CREATE_GROUP);
+                i.putExtra(ACTIVITYUSER, user);
+                startActivityForResult(i, Constant.CREATE_GROUP);
             }
         });
 
@@ -267,18 +265,37 @@ public class MainActivity extends AppCompatActivity
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final AdapterView.AdapterContextMenuInfo finalInfo = info;
         switch (item.getItemId()) {
+            case R.id.group_Stats :
+
+                final DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
+                        .child(user.getGroups().get(info.position).getId());
+                pos = info.position;
+                group.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        generateGroupStats(dataSnapshot);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                return true;
+
             case R.id.modify:
                 Intent i = new Intent(MainActivity.this, GroupModification.class);
 
-                i.putExtra(Constant.ACTIVITYUSER,user);
-                i.putExtra(Constant.ACTIVITYPOSITION, Integer.toString(info.position));
+                i.putExtra(ACTIVITYUSER,user);
+                i.putExtra(ACTIVITYPOSITION, Integer.toString(info.position));
                 startActivityForResult(i, MODIFY_GROUP);
                 return true;
 
             case R.id.add_members:
-                DatabaseReference pin = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
+                DatabaseReference pin = FirebaseDatabase.getInstance().getReference(REFERENCEGROUPS)
                         .child(user.getGroups().get(info.position).getId())
-                        .child(Constant.REFERENCEGROUPSPIN);
+                        .child(REFERENCEGROUPSPIN);
                 pos = info.position;
                 pin.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -318,10 +335,10 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.generate_QR:
-                final DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
+                final DatabaseReference group1 = FirebaseDatabase.getInstance().getReference("Groups")
                         .child(user.getGroups().get(info.position).getId());
                 pos = info.position;
-                group.addListenerForSingleValueEvent(new ValueEventListener() {
+                group1.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange (DataSnapshot dataSnapshot){
                         final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
@@ -345,7 +362,6 @@ public class MainActivity extends AppCompatActivity
                      @Override
                      public void onDataChange(DataSnapshot dataSnapshot) {
                          if (dataSnapshot.getValue() != null) {
-                             boolean result;
                              Map<String, Object> objectMap = (HashMap<String, Object>)
                                      dataSnapshot.getValue();
                              Group groupReaded = new Group();
@@ -366,6 +382,64 @@ public class MainActivity extends AppCompatActivity
                 return true;
             default:
                 return super.onContextItemSelected(item);
+        }
+    }
+
+    private void generateGroupStats(DataSnapshot dataSnapshot) {
+        Map<String, Object> objectMap = (HashMap<String, Object>)
+                dataSnapshot.getValue();
+        Group groupReaded = new Group();
+        groupReaded.GroupConstructor(objectMap);
+        if (groupReaded.getPurchases().size() == 0){
+            //drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
+            //        getString(R.string.stats_no_pruchases_text));
+
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+            builder1.setMessage("There aren't purchases.");
+            builder1.setCancelable(true);
+
+            builder1.setNegativeButton(
+                    "Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+
+        }
+        else if(groupReaded.getGroupMembers() == null || groupReaded.getGroupMembers().size()<2){
+
+            //drawLeavingDialogBox(getString(R.string.stats_no_members),
+            //        getString(R.string.stats_no_members_text));
+
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+            builder1.setMessage("You are alone in the group");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+            alert11.getButton(alert11.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        }
+        else {
+            groupReaded.resetPaymentProportion();
+            //group.computePaymentProportion(user);
+            groupReaded.computePaymentProportionContributors(user);
+            Intent i = new Intent(MainActivity.this, GroupStats.class);
+            i.putExtra(ACTIVITYGROUP, groupReaded);
+            i.putExtra(ACTIVITYUSER, user);
+            startActivity(i);
         }
     }
 
@@ -419,7 +493,7 @@ public class MainActivity extends AppCompatActivity
         else if (requestCode == GROUP_CLICKED){
             if (resultCode == RESULT_OK) {
                 //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
-                user = (User)data.getSerializableExtra(Constant.ACTIVITYUSERMODIFIED);
+                user = (User)data.getSerializableExtra(ACTIVITYUSERMODIFIED);
                 reDrawGroupList();
             }
 
@@ -525,7 +599,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.join_group) {
 
             Intent i = new Intent(MainActivity.this, JoinGroupActivity.class);
-            i.putExtra(Constant.ACTIVITYUSER, user);
+            i.putExtra(ACTIVITYUSER, user);
             startActivityForResult(i, JOIN_GROUP);
 
         } else if (id == R.id.logout) {
@@ -585,7 +659,7 @@ public class MainActivity extends AppCompatActivity
                 user_name.setText(user.getName());
 
                 Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
-                serviceIntent.putExtra(Constant.ACTIVITYUSER, user);
+                serviceIntent.putExtra(ACTIVITYUSER, user);
                 startService(serviceIntent);
             }
 

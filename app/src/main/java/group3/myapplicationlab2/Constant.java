@@ -23,6 +23,11 @@ public class Constant {
     public static final String ACTIVITYUSER = "user";
     public static final String ACTIVITYGROUP = "group";
     public static final String ACTIVITYPURCHASE = "purchase";
+    public static final String ACTIVITYGROUPPIN = "pin";
+    public static final String ACTIVITYGROUPQRPATH = "QRpath";
+
+
+
 
     // PARAMETERS GROUP //
     public static final String GROUPLASTMODIFY = "lastModify";
@@ -43,6 +48,12 @@ public class Constant {
     // DEFAULT PARAMETERS //
     public static final String IMAGENOPATH = "nopath";
     public static final String STRINGNOSTRING = "nostring";
+
+    // ACTIVITIES ID//
+    public static final int CREATE_GROUP = 1;
+    public static final int MODIFY_GROUP = 2;
+    public static final int REQUEST_INVITE =0;
+    public static final int JOIN_GROUP = 3;
 
 
 

@@ -235,7 +235,7 @@ public class GroupCreationForm extends AppCompatActivity implements GoogleApiCli
                     Log.d("URI", downloadUrl.toString());
 
                     groupRef.child(groupId).child("QRpath").setValue(downloadUrl.toString());
-                    newGroup.setQRpath(downloadUrl);
+                    newGroup.setQRpath(downloadUrl.toString());
                     Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
                             .setMessage(getString(R.string.invitation_message))
                             .setEmailHtmlContent(getString(R.string.invitation_email, currentUser, groupIdTmp, groupPinTmp, downloadUrl.toString()))

@@ -1,5 +1,6 @@
 package group3.myapplicationlab2;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,7 +10,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +31,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.zxing.WriterException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,6 +57,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     private ListView listView;
     private Util util;
 
+    private Toolbar toolbar;
     ArrayList<Purchase> expenseList;
     ChildEventListener childEventListener;
 
@@ -224,7 +231,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         listView.setDivider(null);
         listView.setDividerHeight(0);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_exp);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getIntent().getStringExtra(Constant.ACTIVITYGROUPNAME));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -268,7 +275,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.group_Stats) {
+        if (id == R.id.group_Stats_GAE) {
 
             if (group.getPurchases().size() == 0){
                 //drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
@@ -319,17 +326,55 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
                 i.putExtra(Constant.ACTIVITYGROUP, group);
                 i.putExtra(Constant.ACTIVITYUSER, user);
-                startActivity(i);
+                startActivityForResult(i,Constant.MODIFY_GROUP);
             }
             return true;
         }
 
-        if (id == R.id.leave){
+        if (id == R.id.leave_group_GAE){
             drawLeavingDialogBox(group.getDescription(), user.getUid());
             return true;
         }
 
-        if (id == R.id.group_generate_QR){
+        if (id == R.id.modify_GAE) {
+            Intent i = new Intent(GroupActivityExpense.this, GroupModification.class);
+
+            i.putExtra(Constant.ACTIVITYUSER, user);
+            i.putExtra(Constant.ACTIVITYGROUPID, group.getId());
+            i.putExtra(Constant.ACTIVITYGROUPNAME, group.getName());
+            startActivityForResult(i, Constant.MODIFY_GROUP);
+            return true;
+        }
+
+        if (id == R.id.add_members_GAE) {
+            final String groupPin = group.getPin();
+            final String groupId = group.getId();
+            final String QRpath = group.getQRpath().toString();
+            final String groupName = group.getName();
+
+            try {
+                String mex = "##" + groupId + "##||##" + groupPin + "##";
+                Bitmap QR = util.encodeAsBitmap(mex);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                QR.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] data = baos.toByteArray();
+                Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                        .setMessage(getString(R.string.invitation_message))
+                        .setEmailHtmlContent(getString(R.string.invitation_email, user.getName(),
+                                groupId, groupPin, QRpath))
+                        .setEmailSubject(groupName + " " + getString(R.string.email_subject))
+                        .build();
+                startActivityForResult(intent, Constant.REQUEST_INVITE);
+
+
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+
+            return true;
+
+        }
+        if (id == R.id.generate_QR_GAE){
 
             DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
                     .child(gid);
@@ -353,6 +398,14 @@ public class GroupActivityExpense extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+ /*   @Override
+    public void onResume(){
+        super.onResume();
+
+
+    }*/
+
+
     private void drawQRDialogBox(Bitmap bitmap, String groupName){
         ImageView imageView = new ImageView(GroupActivityExpense.this);
         imageView.setImageBitmap(bitmap);
@@ -371,14 +424,13 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
 
                 findViewById(R.id.content_with_purchases).setVisibility(View.VISIBLE);
                 findViewById(R.id.content_without_purchases).setVisibility(View.GONE);
-
                 Toast.makeText(getApplicationContext(), R.string.correct_purchase_added, Toast.LENGTH_SHORT).show();
 
             }
@@ -389,6 +441,24 @@ public class GroupActivityExpense extends AppCompatActivity {
                 group.getPurchases().get(i).setContributors((List<PurchaseContributor>)data.getSerializableExtra("pcList"));
             }
         }
+
+        if (requestCode == Constant.MODIFY_GROUP) {
+            if (resultCode == RESULT_OK) {
+                //here manage the resutls
+            }
+        }
+
+
+
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent();
+        i.putExtra(Constant.ACTIVITYUSER,user);
+        //here send back the the suer to redraw in main 
+        finish();
+
     }
 
     public void registerListenerOnListView(){
