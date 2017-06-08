@@ -281,7 +281,7 @@ public class ExpenseInput extends AppCompatActivity {
                 //Log.d("Debug", "aaaaaaaaaaa " + encodedExpenseImage);
             }
 
-            if (recPurch==null) {
+            if (purchase_id.isEmpty()) {
                 String pid = myRef.push().getKey();
                 Long lastModify = System.currentTimeMillis();
                 HashMap<String,Object> hm = new HashMap<>();
@@ -304,10 +304,32 @@ public class ExpenseInput extends AppCompatActivity {
                         .child(Constant.REFERENCEGROUPSHASH)
                         .child(group.getId())
                         .updateChildren(hm);
-            /*end insertions*/
+                /*end insertions*/
+
+
+                Notification notification = new Notification();
+                notification.setAuthorName(user.getName());
+                notification.setAuthorId(user.getUid());
+                notification.setEventType(Constant.PUSHNEWEXPENSE);
+                notification.setGroupName(group.getName());
+                notification.setGroupId(group.getId());
+                notification.setId(group.getNumeric_id());
+
+                // SEND NOTIFICATION
+                for (GroupMember groupMember: group.getGroupMembers()){
+                    if (!groupMember.getUser_id().equals(user.getUid())){
+                        users.child(groupMember.getUser_id())
+                                .child(Constant.PUSH)
+                                .push()
+                                .setValue(notification);
+                        SystemClock.sleep(20);
+                    }
+                }
+                // END NOTIFICATION
             }
             else{
                 String pid = purchase_id;
+                Log.d("PID", pid);
                 Long lastModify = System.currentTimeMillis();
                 HashMap<String,Object> hm = new HashMap<>();
                 hm.put(Constant.GROUPLASTMODIFY, lastModify);
@@ -315,6 +337,7 @@ public class ExpenseInput extends AppCompatActivity {
                 hm.put(Constant.GROUPSLASTAUTHOR, user.getUid());
                 p.setPurchase_id(pid);
                 myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
+
 
                 for (int indexList=0; indexList<l.size(); indexList++){
                 l.get(indexList).setContributor_id(user.getUid());
@@ -328,28 +351,29 @@ public class ExpenseInput extends AppCompatActivity {
                         .child(Constant.REFERENCEGROUPSHASH)
                         .child(group.getId())
                         .updateChildren(hm);
-            }
 
+                Notification notification = new Notification();
+                notification.setAuthorName(user.getName());
+                notification.setAuthorId(user.getUid());
+                notification.setEventType(Constant.PUSHNEWEXPENSE);
+                notification.setGroupName(group.getName());
+                notification.setGroupId(group.getId());
+                notification.setId(group.getNumeric_id());
 
-            Notification notification = new Notification();
-            notification.setAuthorName(user.getName());
-            notification.setAuthorId(user.getUid());
-            notification.setEventType(Constant.PUSHNEWEXPENSE);
-            notification.setGroupName(group.getName());
-            notification.setGroupId(group.getId());
-            notification.setId(group.getNumeric_id());
-
-            // SEND NOTIFICATION
-            for (GroupMember groupMember: group.getGroupMembers()){
-                if (!groupMember.getUser_id().equals(user.getUid())){
-                    users.child(groupMember.getUser_id())
-                            .child(Constant.PUSH)
-                            .push()
-                            .setValue(notification);
-                    SystemClock.sleep(20);
+                // SEND NOTIFICATION
+                for (GroupMember groupMember: group.getGroupMembers()){
+                    if (!groupMember.getUser_id().equals(user.getUid())){
+                        users.child(groupMember.getUser_id())
+                                .child(Constant.PUSH)
+                                .push()
+                                .setValue(notification);
+                        SystemClock.sleep(20);
+                    }
                 }
             }
-            // END NOTIFICATION
+
+
+
 
             context = v.getContext();
 
