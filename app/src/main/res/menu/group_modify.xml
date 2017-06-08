@@ -7,8 +7,11 @@
         android:title="Leave Group" />-->
 
     <item android:id="@+id/add_members"
-        android:title="Invite New User" />
+        android:title="Invite User" />
 
     <item android:id="@+id/generate_QR"
         android:title="Generate QR code" />
+
+    <item android:id="@+id/leave_group"
+        android:title="Leave Group" />
 </menu>

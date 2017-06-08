@@ -325,7 +325,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         }
 
         if (id == R.id.leave){
-            final String uid = user.getUid();
             drawLeavingDialogBox(group.getDescription(), user.getUid());
             return true;
         }
@@ -420,8 +419,8 @@ public class GroupActivityExpense extends AppCompatActivity {
         builder.setMessage(getString(R.string.grpup_leaving_text)).setTitle(getString(R.string.leaving_group_title));
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                if (userHasDebits(user.getUid())==false){
-                        deleteUserFromGroup();
+                if (util.userHasDebits(group, user)==false){
+                        util.deleteUserFromGroup(group, user, Integer.parseInt(getIntent().getStringExtra("position")));
                         Intent i = new Intent();
                         i.putExtra(Constant.ACTIVITYUSERMODIFIED, user);
                         setResult(RESULT_OK, i);
@@ -453,43 +452,8 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     }
 
-    private Boolean userHasDebits(String user_id){
-        List<Purchase> list = group.getPurchases();
-        for (Purchase p: list){
-            for(PurchaseContributor pc : p.getContributors()){
-                if(pc.getUser_id().equals(user.getUid()) && pc.getPayed()==false) {
-                    return true;
-                }
-
-            }
-        }
-        return false;
-    }
-
-    private void deleteUserFromGroup(){
-
-        /*Removing fromu group Preview*/
-        DatabaseReference user_groups;
-        user_groups = FirebaseDatabase.getInstance().getReference()
-                .child(Constant.REFERENCEUSERS)
-                .child(user.getUid())
-                .child(Constant.REFERENCEGROUPSHASH);
-        user_groups.child(group.getId()).removeValue();
 
 
-        /*removing from user groups variable*/
-        if (user.getGroups().size()>0) {
-            user.getGroups().remove(Integer.parseInt(getIntent().getStringExtra("position")));
-        }
-
-        /*Removing from user from groups*/
-        DatabaseReference groupsQuery = FirebaseDatabase.getInstance().getReference()
-                .child(Constant.REFERENCEGROUPS)
-                .child(group.getId())
-                .child(Constant.REFERENCEGROUPSMEMBERS)
-                .child(user.getUid());
-        groupsQuery.removeValue();
-    }
 
 
     @Override
@@ -501,7 +465,7 @@ public class GroupActivityExpense extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.modify_purchase:
                 if(group.getPurchases().get(info.position).getAuthor_id().equals(user.getUid())){
@@ -512,31 +476,73 @@ public class GroupActivityExpense extends AppCompatActivity {
                     startActivityForResult(i,1);
                 }
                 else{
-                AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
-                builder.setMessage(getString(R.string.purch_mod_err_text)).setTitle(getString(R.string.purch_mod_err_title));
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        return;
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
-
-
+                    onlyAuthorDialogBox();
             }
-
-
 
                 return true;
             case R.id.delete_purchase:
-                // edit stuff here
-                return true;
+                if(group.getPurchases().get(info.position).getAuthor_id().equals(user.getUid())){
+                    HashMap<String, String> owers = new HashMap<>();
+                    for (PurchaseContributor pc : group.getPurchases().get(info.position).getContributors()){
+                        if (!pc.getPayed()){
+                            owers.put(pc.getUser_name(),Double.toString(pc.getAmount()));
+                        }
+                    }
 
+                    if(owers.size()>0){
+                        String mex = "Do you really want delete this expense?\n";
+                        for (String key : owers.keySet()){
+                            mex += key + " owes you " +  owers.get(key) + "€\n";
+                        }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+                        builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
+                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                deletePurchase(group, group.getPurchases().get(info.position).getPurchase_id());
+                            }
+                        });
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                return;
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                    }
+                }
+                else{
+                    onlyAuthorDialogBox();
+                }
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
+
+    public void onlyAuthorDialogBox(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+        builder.setMessage(getString(R.string.purch_mod_err_text)).setTitle(getString(R.string.purch_mod_err_title));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    public void deletePurchase(Group group, String pid){
+        FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
+                .child(group.getId())
+                .child(Constant.REFERENCEGROUPSPURCHASE)
+                .child(pid).removeValue();
+    }
+
+
 }
 
 

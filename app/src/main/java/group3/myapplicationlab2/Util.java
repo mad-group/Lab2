@@ -26,6 +26,7 @@ import android.util.TypedValue;
 import android.widget.ImageView;
 
 import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +49,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by mc on 03/06/17.
@@ -55,6 +59,7 @@ import java.util.Date;
 
 public class Util {
     private Context context;
+    private boolean result = true;
 
     public Util(Context c){
         context = c;
@@ -263,4 +268,87 @@ public class Util {
                 ,1);
 
     }
+
+    public Boolean userHasDebits(Group group, User user){
+        List<Purchase> list = group.getPurchases();
+        for (Purchase p: list){
+            for(PurchaseContributor pc : p.getContributors()){
+                if(pc.getUser_id().equals(user.getUid()) && pc.getPayed()==false) {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public void deleteUserFromGroup(Group group, User user, int pos){
+
+        /*Removing fromu group Preview*/
+        DatabaseReference user_groups;
+        user_groups = FirebaseDatabase.getInstance().getReference()
+                .child(Constant.REFERENCEUSERS)
+                .child(user.getUid())
+                .child(Constant.REFERENCEGROUPSHASH);
+        user_groups.child(group.getId()).removeValue();
+
+
+        /*removing from user groups variable*/
+        if (user.getGroups().size()>0) {
+            user.getGroups().remove(pos);
+        }
+
+        /*Removing from user from groups*/
+        DatabaseReference groupsQuery = FirebaseDatabase.getInstance().getReference()
+                .child(Constant.REFERENCEGROUPS)
+                .child(group.getId())
+                .child(Constant.REFERENCEGROUPSMEMBERS)
+                .child(user.getUid());
+        groupsQuery.removeValue();
+    }
+
+    public void drawLeavingDialogBox(final Activity activity, final Group group, final User user, final String pos ){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(context.getString(R.string.grpup_leaving_text)).setTitle(context.getString(R.string.leaving_group_title));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (userHasDebits(group, user)==false){
+                    deleteUserFromGroup(group,user,Integer.parseInt(pos));
+                    result = true;
+                }
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setMessage(context.getString(R.string.user_has_debit_text));
+                    builder.setTitle(context.getString(R.string.user_has_debits_title));
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            result = false;
+                        }
+                    });
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.show();
+                    dialog2.getButton(dialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                }
+
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                result = false;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorPrimary));
+
+    }
+
+    public boolean getDrawLeavingDialogBoxResult(){
+        return this.result;
+    }
+
+
+
 }

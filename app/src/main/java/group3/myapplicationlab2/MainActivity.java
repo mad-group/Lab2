@@ -1,5 +1,6 @@
 package group3.myapplicationlab2;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -61,8 +62,10 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -262,6 +265,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onContextItemSelected(MenuItem item) {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo finalInfo = info;
         switch (item.getItemId()) {
             case R.id.modify:
                 Intent i = new Intent(MainActivity.this, GroupModification.class);
@@ -314,7 +318,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.generate_QR:
-                DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
+                final DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
                         .child(user.getGroups().get(info.position).getId());
                 pos = info.position;
                 group.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -332,6 +336,34 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
                 //util.generateDialgQR(user.getGroups().get(info.position).getId());
+                return true;
+            case R.id.leave_group:
+                DatabaseReference group2 = FirebaseDatabase.getInstance().getReference("Groups")
+                        .child(user.getGroups().get(info.position).getId());
+
+                group2.addListenerForSingleValueEvent(new ValueEventListener() {
+                     @Override
+                     public void onDataChange(DataSnapshot dataSnapshot) {
+                         if (dataSnapshot.getValue() != null) {
+                             boolean result;
+                             Map<String, Object> objectMap = (HashMap<String, Object>)
+                                     dataSnapshot.getValue();
+                             Group groupReaded = new Group();
+                             groupReaded.GroupConstructor(objectMap);
+                             drawLeavingDialogBox(MainActivity.this, groupReaded, user, Integer.toString(finalInfo.position));
+
+
+                         }
+
+                     }
+
+                     @Override
+                     public void onCancelled(DatabaseError databaseError) {
+
+                     }
+
+                });
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -611,6 +643,42 @@ public class MainActivity extends AppCompatActivity
 
         AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+
+    }
+
+    public void drawLeavingDialogBox(final Activity activity, final Group group, final User user, final String pos ){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(getResources().getString(R.string.grpup_leaving_text)).setTitle(getResources().getString(R.string.leaving_group_title));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (util.userHasDebits(group, user)==false){
+                    util.deleteUserFromGroup(group,user,Integer.parseInt(pos));
+                    reDrawGroupList();
+                }
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setMessage(getResources().getString(R.string.user_has_debit_text));
+                    builder.setTitle(getResources().getString(R.string.user_has_debits_title));
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.show();
+                    dialog2.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                }
+
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
         dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
 
     }
