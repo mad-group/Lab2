@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="50dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/what"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/WhiteActivated">
+
+                <EditText
+                    android:id="@+id/ie_et_expense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/whatHint"
+                    android:inputType="textEmailAddress"
+                    android:theme="@style/WhiteActivated"
+                    android:cursorVisible="true"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/text_cost"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/how_much"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold"
+                    android:textAlignment="textStart"
+                    android:layout_gravity="start"/>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/text_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ie_et_amount"
+                    android:textAlignment="textStart"
+                    android:layout_gravity="start"
+                    android:text="@string/when"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold"
+                    android:textCursorDrawable="@drawable/color_cursor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <EditText
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:id="@+id/ie_et_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:drawableLeft="@mipmap/ic_euro"
+                    android:drawableStart="@mipmap/ic_euro"
+                    android:imeOptions="actionDone"
+                    android:textCursorDrawable="@null"
+                    android:hint="@string/how_muchHint"
+                    android:cursorVisible="true"
+                    android:theme="@style/WhiteActivated" />
+
+                <EditText
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:id="@+id/ie_tv_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:drawableLeft="@mipmap/ic_calendar"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/whenHint"
+                    android:inputType="date"
+                    android:onClick="dataPicker"
+                    android:theme="@style/WhiteActivated"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list_participants_expense"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:divider="#00000000">
+        </ListView>
+
+        <TextView
+            android:id="@+id/text_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/photo"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"/>
+
+        <!--<ImageButton
+            android:id="@+id/ie_ib_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/list_participants_expense"
+            android:layout_centerHorizontal="true"
+            android:onClick="takeImage"
+            app:srcCompat="@drawable/ic_menu_camera" />-->
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageViewLeft"
+            android:paddingTop="20dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@drawable/ic_menu_camera"
+            android:onClick="takeImage"
+            android:visibility="visible" />
+
+
+        <!--<de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imageViewLeft"
+            android:paddingTop="20dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@drawable/ic_menu_camera"
+            app:civ_border_width="1dp"
+            android:onClick="takeImage"
+            android:visibility="visible"
+            app:civ_border_color="#bbbbbb"/>-->
+
+    </LinearLayout>
+
+    </ScrollView>
+
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@mipmap/ic_check"
+        app:backgroundTint="@color/colorPrimary"
+        android:tint="@color/colorIcon">
+    </android.support.design.widget.FloatingActionButton>
+
+
+</android.support.design.widget.CoordinatorLayout>
