@@ -10,5 +10,8 @@
     <item android:id="@+id/leave"
         android:title="Leave Group" />
 
+    <item android:id="@+id/group_generate_QR"
+        android:title="Generate QR code" />
+
 
 </menu>

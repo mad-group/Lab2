@@ -33,7 +33,9 @@
         <activity
             android:name=".ExpenseInput"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
         <activity
             android:name=".GroupStats"
             android:label="@string/title_activity_group_stats"

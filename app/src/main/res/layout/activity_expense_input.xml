@@ -43,7 +43,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/linear_prova"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="50dp"
             tools:context="group3.myapplicationlab2.ExpenseInput">
@@ -122,7 +122,6 @@
                             android:layout_below="@+id/text_cost"
                             android:drawableLeft="@mipmap/ic_euro"
                             android:hint="@string/how_muchHint"
-                            android:inputType="numberDecimal"
                             android:cursorVisible="true"
                             android:textSize="25sp"
                             android:imeOptions="actionDone"
@@ -162,31 +161,33 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/text_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/linear_layout_id"
-                    android:text="@string/photo"
-                    android:textColor="@color/colorText"
-                    android:textStyle="bold"/>
-
-                <ImageButton
-                    android:id="@+id/ie_ib_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_photo"
-                    android:layout_centerHorizontal="true"
-                    android:onClick="takeImage"
-                    app:srcCompat="@drawable/ic_menu_camera" />
 
                 <ListView
                     android:id="@+id/list_participants_expense"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/ie_ib_camera"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/linear_layout_id"
                     android:divider="#00000000">
                 </ListView>
+
+                <TextView
+                    android:id="@+id/text_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/list_participants_expense"
+                    android:text="@string/photo"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold"/>
+                <ImageButton
+                    android:id="@+id/ie_ib_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/list_participants_expense"
+                    android:layout_centerHorizontal="true"
+                    android:onClick="takeImage"
+                    app:srcCompat="@drawable/ic_menu_camera" />
+
 
             </RelativeLayout>
 

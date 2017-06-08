@@ -1,76 +1,43 @@
 package group3.myapplicationlab2;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.security.Key;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 public class GroupActivityExpense extends AppCompatActivity {
 
@@ -82,6 +49,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     private Group group;
     private User user;
     private ListView listView;
+    private Util util;
 
     ArrayList<Purchase> expenseList;
     ChildEventListener childEventListener;
@@ -91,6 +59,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_expense);
 
+        util = new Util(getApplicationContext());
         gid = getIntent().getStringExtra(Constant.ACTIVITYGROUPID);
         user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
 
@@ -249,6 +218,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         expenseList = new ArrayList<Purchase>();
         expenseAdapter = new ExpenseAdapter(GroupActivityExpense.this, expenseList, user);
         listView = (ListView) findViewById(R.id.expense_list);
+        registerForContextMenu(listView);
         listView.setAdapter(expenseAdapter);
 
         listView.setDivider(null);
@@ -360,7 +330,46 @@ public class GroupActivityExpense extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.group_generate_QR){
+
+            DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
+                    .child(gid);
+            group.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange (DataSnapshot dataSnapshot){
+                    final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
+                    final String groupName = dataSnapshot.child("name").getValue(String.class);
+                    Bitmap QR = util.downloadImage(QRpath);
+                    drawQRDialogBox(QR,groupName);
+                }
+
+                @Override
+                public void onCancelled (DatabaseError databaseError){
+                    System.out.println("FAIL PIN INFO");
+                }
+            });
+
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void drawQRDialogBox(Bitmap bitmap, String groupName){
+        ImageView imageView = new ImageView(GroupActivityExpense.this);
+        imageView.setImageBitmap(bitmap);
+        AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+        builder.setTitle(groupName + " - " +  getString(R.string.scan_QR_title));
+        builder.setView(imageView);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -480,6 +489,53 @@ public class GroupActivityExpense extends AppCompatActivity {
                 .child(Constant.REFERENCEGROUPSMEMBERS)
                 .child(user.getUid());
         groupsQuery.removeValue();
+    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.purchase_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.modify_purchase:
+                if(group.getPurchases().get(info.position).getAuthor_id().equals(user.getUid())){
+                    Intent i = new Intent(this, ExpenseInput.class);
+                    i.putExtra(Constant.ACTIVITYGROUP, group);
+                    i.putExtra(Constant.ACTIVITYUSER, user);
+                    i.putExtra(Constant.ACTIVITYPURCHASE, group.getPurchases().get(info.position));
+                    startActivityForResult(i,1);
+                }
+                else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+                builder.setMessage(getString(R.string.purch_mod_err_text)).setTitle(getString(R.string.purch_mod_err_title));
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        return;
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+
+
+            }
+
+
+
+                return true;
+            case R.id.delete_purchase:
+                // edit stuff here
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 }
 

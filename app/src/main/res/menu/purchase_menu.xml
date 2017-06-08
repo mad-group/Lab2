@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/modify_purchase"
+        android:title="Modify Purchase"
+        />
+
+    <item android:id="@+id/delete_purchase"
+        android:title="Delete Purchase"
+        />
+
+</menu>

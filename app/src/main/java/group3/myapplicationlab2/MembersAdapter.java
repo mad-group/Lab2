@@ -24,17 +24,20 @@ import com.google.firebase.auth.GetTokenResult;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mc on 21/05/17.
  */
 
 class MembersAdapter extends ArrayAdapter<GroupMember>{
-    float totAmount;
+    private float totAmount;
+    private List<PurchaseContributor> l;
 
-    public MembersAdapter(Context context, ArrayList<GroupMember> groupMembers, float ta) {
+    public MembersAdapter(Context context, ArrayList<GroupMember> groupMembers, float ta, List<PurchaseContributor> l) {
         super(context, 0, groupMembers);
         totAmount = ta;
+        this.l = l;
     }
 
     @Override
@@ -51,8 +54,18 @@ class MembersAdapter extends ArrayAdapter<GroupMember>{
 
 
         member.setText(groupMember.getName());
-        amount.setText("0");
+
         user_id_tv.setText(groupMember.getUser_id());
+
+        if (l == null)
+            amount.setText("0");
+        else {
+            for(int i=0; i< l.size(); i++){
+                if (l.get(i).getUser_id().equals(groupMember.getUser_id())){
+                    amount.setText(Double.toString(l.get(i).getAmount()));
+                }
+            }
+        }
 
 
         convertView.findViewById(R.id.item_up_part).setOnClickListener(new View.OnClickListener() {

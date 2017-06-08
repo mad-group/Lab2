@@ -331,6 +331,7 @@ public class MainActivity extends AppCompatActivity
                         System.out.println("FAIL PIN INFO");
                     }
                 });
+                //util.generateDialgQR(user.getGroups().get(info.position).getId());
             default:
                 return super.onContextItemSelected(item);
         }

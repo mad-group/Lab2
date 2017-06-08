@@ -30,6 +30,7 @@ import android.support.v7.widget.ContentFrameLayout;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Base64;
@@ -84,6 +85,8 @@ public class ExpenseInput extends AppCompatActivity {
     private EditText dateField;
     private EditText amountField;
     private EditText expenseField;
+    private ImageView picsImageView;
+
     private ImageView mImageView;
     private ListView lv;
 
@@ -97,6 +100,7 @@ public class ExpenseInput extends AppCompatActivity {
     private User user;
     private Group group;
     private MembersAdapter membersAdapter;
+    private Purchase recPurch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,7 @@ public class ExpenseInput extends AppCompatActivity {
         dateField = (EditText) findViewById(R.id.ie_tv_date);
         expenseField = (EditText) findViewById(R.id.ie_et_expense);
         amountField = (EditText) findViewById(R.id.ie_et_amount);
+        picsImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         hideKeyboard(dateField);
         hideKeyboard(expenseField);
         hideKeyboard(amountField);
@@ -122,13 +127,31 @@ public class ExpenseInput extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
         showDate(year, month, day);
 
-        setEditTextAmountListener();
-
         lv = (ListView)findViewById(R.id.list_participants_expense);
         ArrayList<GroupMember> groupMembers = new ArrayList<>();
-        membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0);
-        lv.setAdapter(membersAdapter);
-        membersAdapter.addAll(group.getGroupMembers());
+
+
+
+        final Purchase recPurch = (Purchase)getIntent().getSerializableExtra(Constant.ACTIVITYPURCHASE);
+        if (recPurch==null){
+            setTitle(group.getName() + " - New expense");
+            membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0, null);
+            lv.setAdapter(membersAdapter);
+            membersAdapter.addAll(group.getGroupMembers());
+
+        }
+        else{
+            setTitle(recPurch.getCausal()+ " - Modify");
+            dateField.setText(recPurch.getDate());
+            expenseField.setText(recPurch.getCausal());
+            String amountString = Double.toString(recPurch.getTotalAmount());
+            Float amountFloat = Float.parseFloat(amountString);
+            membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers,amountFloat,recPurch.getContributors());
+            lv.setAdapter(membersAdapter);
+            membersAdapter.addAll(group.getGroupMembers());
+            amountField.setText(amountString);
+
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -141,18 +164,25 @@ public class ExpenseInput extends AppCompatActivity {
             }
         });
 
+        setEditTextAmountListener();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_save);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveExpense(view);
+                if (recPurch==null) {
+                    saveExpense(view, "");
+                }
+                else{
+                    saveExpense(view, recPurch.getPurchase_id());
+                }
             }
         });
 
     }
 
 
-    public void saveExpense(View v) {
+    public void saveExpense(View v, String purchase_id) {
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -251,29 +281,59 @@ public class ExpenseInput extends AppCompatActivity {
                 //Log.d("Debug", "aaaaaaaaaaa " + encodedExpenseImage);
             }
 
-            String pid = myRef.push().getKey();
-            Long lastModify = System.currentTimeMillis();
-            HashMap<String,Object> hm = new HashMap<>();
-            hm.put(Constant.GROUPLASTMODIFY, lastModify);
-            hm.put(Constant.GROUPSLASTEVENT, Constant.PUSHNEWEXPENSE);
-            hm.put(Constant.GROUPSLASTAUTHOR, user.getUid());
-            p.setPurchase_id(pid);
-            myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
+            if (recPurch!=null) {
+                String pid = myRef.push().getKey();
+                Long lastModify = System.currentTimeMillis();
+                HashMap<String,Object> hm = new HashMap<>();
+                hm.put(Constant.GROUPLASTMODIFY, lastModify);
+                hm.put(Constant.GROUPSLASTEVENT, Constant.PUSHNEWEXPENSE);
+                hm.put(Constant.GROUPSLASTAUTHOR, user.getUid());
+                p.setPurchase_id(pid);
+                myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
 
-            String key;
+                String key;
 
-            for (int indexList=0; indexList<l.size(); indexList++){
+                for (int indexList=0; indexList<l.size(); indexList++){
                 /*l.get(indexList).setContributor_id(user.getUid());*/
-                myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).child(Constant.REFERENCEGROUPSCONTRIBUTORS).child(l.get(indexList).getUser_id()).setValue(l.get(indexList));
+                    myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).child(Constant.REFERENCEGROUPSCONTRIBUTORS).child(l.get(indexList).getUser_id()).setValue(l.get(indexList));
+                }
+                p.setContributors(l);
+
+
+                myRef.child(group_id).child(Constant.GROUPLASTMODIFYTIMESTAMP).setValue(lastModify);
+                users.child(user.getUid())
+                        .child(Constant.REFERENCEGROUPSHASH)
+                        .child(group.getId())
+                        .updateChildren(hm);
+            /*end insertions*/
             }
-            p.setContributors(l);
+            else{
+                String pid = purchase_id;
+                Log.d("PID", pid);
+                Long lastModify = System.currentTimeMillis();
+                HashMap<String,Object> hm = new HashMap<>();
+                hm.put(Constant.GROUPLASTMODIFY, lastModify);
+                hm.put(Constant.GROUPSLASTEVENT, Constant.PUSHNEWEXPENSE);
+                hm.put(Constant.GROUPSLASTAUTHOR, user.getUid());
+                p.setPurchase_id(pid);
+                myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
+
+                String key;
+
+                for (int indexList=0; indexList<l.size(); indexList++){
+                l.get(indexList).setContributor_id(user.getUid());
+                    myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).child(Constant.REFERENCEGROUPSCONTRIBUTORS).child(l.get(indexList).getUser_id()).setValue(l.get(indexList));
+                }
+                p.setContributors(l);
 
 
-            myRef.child(group_id).child(Constant.GROUPLASTMODIFYTIMESTAMP).setValue(lastModify);
-            users.child(user.getUid())
-                    .child(Constant.REFERENCEGROUPSHASH)
-                    .child(group.getId())
-                    .updateChildren(hm);
+                myRef.child(group_id).child(Constant.GROUPLASTMODIFYTIMESTAMP).setValue(lastModify);
+                users.child(user.getUid())
+                        .child(Constant.REFERENCEGROUPSHASH)
+                        .child(group.getId())
+                        .updateChildren(hm);
+            }
+
 
             Notification notification = new Notification();
             notification.setAuthorName(user.getName());
@@ -359,9 +419,10 @@ public class ExpenseInput extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case PICK_IMAGE_ID:
+                Log.d("HERE", "here");
+                //here i should insert the bitmap
                 Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                ImageView myImage = (ImageView) findViewById(R.id.ie_iv_from_camera);
-                myImage.setImageBitmap(bitmap);
+                picsImageView.setImageBitmap(bitmap);
 
                 File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "MoneyTracker");
                 mediaStorageDir.mkdirs();
@@ -373,10 +434,11 @@ public class ExpenseInput extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                     out.flush();
                     out.close();
+                    this.imageOutFile = mediaFile;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                this.imageOutFile = mediaFile;
+
                 break;
 
             default:

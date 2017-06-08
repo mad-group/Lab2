@@ -3,6 +3,7 @@ package group3.myapplicationlab2;
 import android.*;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -18,12 +19,19 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
+import android.widget.ImageView;
 
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,6 +55,7 @@ import java.util.Date;
 
 public class Util {
     private Context context;
+
     public Util(Context c){
         context = c;
     }
@@ -254,7 +263,4 @@ public class Util {
                 ,1);
 
     }
-
-
-
 }
