@@ -23,7 +23,7 @@
     <string name="whenHint">dd/mm/yyyy</string>
     <string name="how_much">How Much did it cost?</string>
     <string name="how_muchHint">E.g. 35 €</string>
-    <string name="photo">Photo of the receipt?</string>
+    <string name="photo">Do you want to add a photo?</string>
 
     <string name="miss_author">Set the expense author name.</string>
     <string name="miss_expense">Set what has been bought.</string>

@@ -10,6 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,10 +32,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ContentFrameLayout;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Base64;
@@ -44,6 +51,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -105,7 +113,7 @@ public class ExpenseInput extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expense_input);
+        setContentView(R.layout.activity_expense_input_2);
 
         user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
         group = (Group)getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
@@ -115,7 +123,8 @@ public class ExpenseInput extends AppCompatActivity {
         dateField = (EditText) findViewById(R.id.ie_tv_date);
         expenseField = (EditText) findViewById(R.id.ie_et_expense);
         amountField = (EditText) findViewById(R.id.ie_et_amount);
-        picsImageView = (ImageView) findViewById(R.id.ie_iv_from_camera);
+        picsImageView = (ImageView) findViewById(R.id.imageViewLeft);
+
         hideKeyboard(dateField);
         hideKeyboard(expenseField);
         hideKeyboard(amountField);
@@ -130,7 +139,16 @@ public class ExpenseInput extends AppCompatActivity {
         lv = (ListView)findViewById(R.id.list_participants_expense);
         ArrayList<GroupMember> groupMembers = new ArrayList<>();
 
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         final Purchase recPurch = (Purchase)getIntent().getSerializableExtra(Constant.ACTIVITYPURCHASE);
         if (recPurch==null){
@@ -152,17 +170,6 @@ public class ExpenseInput extends AppCompatActivity {
             amountField.setText(amountString);
 
         }
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         setEditTextAmountListener();
 
@@ -442,7 +449,22 @@ public class ExpenseInput extends AppCompatActivity {
                 Log.d("HERE", "here");
                 //here i should insert the bitmap
                 Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                picsImageView.setImageBitmap(bitmap);
+
+                Bitmap imageRounded = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+                Canvas canvas = new Canvas(imageRounded);
+                Paint mpaint = new Paint();
+                mpaint.setAntiAlias(true);
+                mpaint.setShader(new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+                canvas.drawRoundRect((new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight())), 100, 100, mpaint);
+
+                android.view.ViewGroup.LayoutParams layoutParams = picsImageView.getLayoutParams();
+                layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                picsImageView.setLayoutParams(layoutParams);
+
+                picsImageView.setBackground(null);
+                picsImageView.setImageBitmap(imageRounded);
+                picsImageView.setVisibility(View.VISIBLE);
 
                 File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "MoneyTracker");
                 mediaStorageDir.mkdirs();
