@@ -230,6 +230,11 @@ public class ExpenseInput extends AppCompatActivity {
         }
         else if (sumParts() == 0){
             allOk = false;
+            Toast.makeText(ExpenseInput.this, "At least one member must pay!",Toast.LENGTH_SHORT).show();
+        }
+        else if(sumAmounts() != Float.parseFloat(amount)){
+            Toast.makeText(ExpenseInput.this, "The sum of partial are wrong",Toast.LENGTH_SHORT).show();
+            allOk = false;
         }
         else {
             allOk = true;
@@ -553,6 +558,18 @@ public class ExpenseInput extends AppCompatActivity {
             v = lv.getChildAt(i);
             et = (EditText) v.findViewById(R.id.item_part);
             parts += Integer.parseInt(et.getText().toString());
+        }
+        return parts;
+    }
+
+    private float sumAmounts(){
+        View v;
+        EditText et;
+        float parts = 0;
+        for (int i=0; i<lv.getCount(); i++){
+            v = lv.getChildAt(i);
+            et = (EditText) v.findViewById(R.id.item_amount);
+            parts += Float.parseFloat(et.getText().toString());
         }
         return parts;
     }
