@@ -43,4 +43,14 @@
         android:tint="@color/colorIcon"
         />
 
+    <ProgressBar
+        android:id="@+id/progressBar_GAE"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/progress"/>
+
 </android.support.design.widget.CoordinatorLayout>

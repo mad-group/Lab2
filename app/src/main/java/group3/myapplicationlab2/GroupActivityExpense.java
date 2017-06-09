@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.appinvite.AppInviteInvitation;
@@ -69,6 +70,8 @@ public class GroupActivityExpense extends AppCompatActivity {
         util = new Util(getApplicationContext());
         gid = getIntent().getStringExtra(Constant.ACTIVITYGROUPID);
         user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar_GAE);
+        progressBar.setVisibility(View.VISIBLE);
 
         final DatabaseReference mGroupReference =  FirebaseDatabase.getInstance()
                                                     .getReference(Constant.REFERENCEGROUPS)
@@ -141,6 +144,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     }
 
                     mGroupReference.child(Constant.REFERENCEGROUPSPURCHASE).addChildEventListener(childEventListener);
+                    progressBar.setVisibility(View.GONE);
 
                 }
 

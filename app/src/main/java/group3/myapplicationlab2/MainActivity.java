@@ -38,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -141,6 +142,8 @@ public class MainActivity extends AppCompatActivity
                 takePersonalImage();
             }
         });
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar_main);
+        progressBar.setVisibility(View.VISIBLE);
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference(REFERENCEUSERS);
@@ -182,11 +185,13 @@ public class MainActivity extends AppCompatActivity
                 user_email.setText(user.getEmail());
                 TextView user_name = (TextView)header.findViewById(R.id.username);
                 user_name.setText(user.getName());
+                progressBar.setVisibility(View.GONE);
 
 
                 Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
                 serviceIntent.putExtra(ACTIVITYUSER, user);
                 startService(serviceIntent);
+
             }
 
             @Override
