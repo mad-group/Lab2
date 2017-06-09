@@ -54,7 +54,11 @@
                 android:text="@string/author"
                 android:paddingLeft="5dp"
                 android:textSize="20sp"
-                android:textStyle="italic"/>
+                android:textStyle="italic"
+                android:maxLines="1"
+                android:lines="1"
+                android:maxLength="12"
+                android:ellipsize="end"/>
 
             <TextView
                 android:layout_width="wrap_content"
