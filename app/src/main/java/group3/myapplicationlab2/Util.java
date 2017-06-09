@@ -1,10 +1,12 @@
 package group3.myapplicationlab2;
 
 import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,11 +21,13 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.api.BooleanResult;
@@ -48,10 +52,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static group3.myapplicationlab2.Constant.PICK_IMAGE_ID;
 
 /**
  * Created by mc on 03/06/17.
@@ -307,46 +313,55 @@ public class Util {
         groupsQuery.removeValue();
     }
 
-    public void drawLeavingDialogBox(final Activity activity, final Group group, final User user, final String pos ){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage(context.getString(R.string.grpup_leaving_text)).setTitle(context.getString(R.string.leaving_group_title));
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (userHasDebits(group, user)==false){
-                    deleteUserFromGroup(group,user,Integer.parseInt(pos));
-                    result = true;
-                }
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setMessage(context.getString(R.string.user_has_debit_text));
-                    builder.setTitle(context.getString(R.string.user_has_debits_title));
-                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            result = false;
-                        }
-                    });
-                    AlertDialog dialog2 = builder.create();
-                    dialog2.show();
-                    dialog2.getButton(dialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorPrimary));
-                }
-
+    public void checkGrants(Activity activity, int [] grantResults){
+        Log.d("GRANT", "dim "+grantResults.length);
+        boolean permex=true;
+        for (int i=0; i<grantResults.length; i++){
+            if(grantResults[i] == PackageManager.PERMISSION_DENIED){
+                permex = false;
             }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                result = false;
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.colorPrimary));
-        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorPrimary));
 
+        }
+        if (permex) {
+            // Permission Granted
+            Intent chooseImageIntent = ImagePicker.getPickImageIntent(activity);
+            activity.startActivityForResult(chooseImageIntent, Constant.PICK_IMAGE_ID);
+        } else {
+            // Permission Denied
+            Toast.makeText(activity, R.string.camera_permission_denied, Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
-    public boolean getDrawLeavingDialogBoxResult(){
-        return this.result;
+    public  String[] asksPermissions(Activity activity){
+        ArrayList<String> toAsk = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            toAsk.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            toAsk.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            toAsk.add(android.Manifest.permission.CAMERA);
+        }
+
+        if (toAsk.size()>0){
+            String [] toAskArray = new String[toAsk.size()];
+            for (int i=0; i<toAsk.size(); i++){
+                toAskArray[i] = toAsk.get(i);
+            }
+            return toAskArray;
+
+        }
+        else{
+            return null;
+        }
+
     }
 
 

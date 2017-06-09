@@ -1,5 +1,7 @@
 package group3.myapplicationlab2;
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -75,7 +77,6 @@ public class MainActivity extends AppCompatActivity
 
     public static final int GROUP_CLICKED = 10;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private static final int PICK_IMAGE_ID = 234;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
 
@@ -671,32 +672,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void takePersonalImage() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+        String [] toAskArray = util.asksPermissions(MainActivity.this);
+        if (toAskArray!=null){
+            ActivityCompat.requestPermissions(this,toAskArray,
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-        } else {
+        }
+        else{
             Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
             startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-
-
         }
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-                    startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-                } else {
-                    // Permission Denied
-                    Toast.makeText(MainActivity.this, R.string.camera_permission_denied, Toast.LENGTH_SHORT)
-                            .show();
-                }
+                util.checkGrants(MainActivity.this,grantResults);
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);

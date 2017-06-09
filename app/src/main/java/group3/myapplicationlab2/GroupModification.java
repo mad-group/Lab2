@@ -186,10 +186,10 @@ public class GroupModification extends AppCompatActivity {
 
                     }
                     Intent i = new Intent();
-                    i.putExtra(Constant.ACTIVITYGROUPNAME+"mod", (String)hm.get("name"));
-                    Log.d("NAME", "mod " + (String)hm.get("name"));
-                    i.putExtra(Constant.ACTIVITYGROUPPIN+"mod", (String)hm.get("pin"));
-                    i.putExtra(Constant.ACTIVITYGROUPQRPATH+"mod", (String)hm.get("QRpath"));
+                    i.putExtra("map", hm);
+/*                    Log.d("NAME", "mod " + (String)hm.get("name"));
+                    i.putExtra(Constant.ACTIVITYGROUPPIN, (String)hm.get("pin"));
+                    i.putExtra(Constant.ACTIVITYGROUPQRPATH, (String)hm.get("QRpath"));*/
                     setResult(RESULT_OK, i);
                     finish();
                 }

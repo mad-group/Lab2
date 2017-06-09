@@ -85,6 +85,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.*;
 
+import static group3.myapplicationlab2.Constant.PICK_IMAGE_ID;
+
 public class ExpenseInput extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     Context context;
@@ -109,6 +111,7 @@ public class ExpenseInput extends AppCompatActivity {
     private Group group;
     private MembersAdapter membersAdapter;
     private Purchase recPurch;
+    private Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,7 @@ public class ExpenseInput extends AppCompatActivity {
 
         user = (User)getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
         group = (Group)getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
+        util = new Util(getApplicationContext());
 
         setTitle(group.getName() + " - New expense");
 
@@ -428,14 +432,12 @@ public class ExpenseInput extends AppCompatActivity {
 
     public void takeImage(View v){
 
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+        String [] toAskArray = util.asksPermissions(ExpenseInput.this);
+        if (toAskArray!=null){
+            ActivityCompat.requestPermissions(this,toAskArray,
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }
-        else {
+        else{
             Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
             startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
         }
@@ -449,22 +451,24 @@ public class ExpenseInput extends AppCompatActivity {
                 Log.d("HERE", "here");
                 //here i should insert the bitmap
                 Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                if (bitmap != null){
+                    Bitmap imageRounded = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+                    Canvas canvas = new Canvas(imageRounded);
+                    Paint mpaint = new Paint();
+                    mpaint.setAntiAlias(true);
+                    mpaint.setShader(new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+                    canvas.drawRoundRect((new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight())), 100, 100, mpaint);
 
-                Bitmap imageRounded = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-                Canvas canvas = new Canvas(imageRounded);
-                Paint mpaint = new Paint();
-                mpaint.setAntiAlias(true);
-                mpaint.setShader(new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
-                canvas.drawRoundRect((new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight())), 100, 100, mpaint);
+                    android.view.ViewGroup.LayoutParams layoutParams = picsImageView.getLayoutParams();
+                    layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    picsImageView.setLayoutParams(layoutParams);
 
-                android.view.ViewGroup.LayoutParams layoutParams = picsImageView.getLayoutParams();
-                layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                picsImageView.setLayoutParams(layoutParams);
+                    picsImageView.setBackground(null);
+                    picsImageView.setImageBitmap(imageRounded);
+                    picsImageView.setVisibility(View.VISIBLE);
+                }
 
-                picsImageView.setBackground(null);
-                picsImageView.setImageBitmap(imageRounded);
-                picsImageView.setVisibility(View.VISIBLE);
 
                 File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "MoneyTracker");
                 mediaStorageDir.mkdirs();
@@ -494,15 +498,7 @@ public class ExpenseInput extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-                    startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-                } else {
-                    // Permission Denied
-                    Toast.makeText(ExpenseInput.this, R.string.camera_permission_denied, Toast.LENGTH_SHORT)
-                            .show();
-                }
+                util.checkGrants(ExpenseInput.this,grantResults);
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);

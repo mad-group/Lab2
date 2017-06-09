@@ -444,7 +444,15 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         if (requestCode == Constant.MODIFY_GROUP) {
             if (resultCode == RESULT_OK) {
-                //here manage the resutls
+                Intent intent = getIntent();
+                HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("map");
+                if (hashMap == null){
+                    Log.d("DEBUG", "aaaaaaaaaaaaa");
+                }
+
+/*                for(String k: hashMap.keySet()){
+                    Log.d("DEBUG", hashMap.get("key"));
+                }*/
             }
         }
 
@@ -456,7 +464,7 @@ public class GroupActivityExpense extends AppCompatActivity {
     public void onBackPressed(){
         Intent i = new Intent();
         i.putExtra(Constant.ACTIVITYUSER,user);
-        //here send back the the suer to redraw in main 
+        //here send back the the suer to redraw in main
         finish();
 
     }
