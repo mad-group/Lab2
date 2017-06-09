@@ -30,7 +30,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@mipmap/ic_check"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorFabCustom"
         android:tint="@color/colorIcon">
     </android.support.design.widget.FloatingActionButton>
 

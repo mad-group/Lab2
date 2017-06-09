@@ -16,6 +16,7 @@
             android:id="@+id/group_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines = "1"
             android:paddingLeft="10dp"
             android:text="GroupName"
             android:layout_gravity="center_vertical"
