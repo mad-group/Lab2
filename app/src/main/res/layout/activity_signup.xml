@@ -12,14 +12,16 @@
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:padding="@dimen/activity_horizontal_margin"
+        android:id="@+id/sign_up_parent">
 
 
         <ImageView
+            android:id="@+id/sign_up_logo"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="0dp"
             android:src="@mipmap/ic_logo_app"/>
 
         <android.support.design.widget.TextInputLayout
@@ -88,7 +90,7 @@
 
         <Button
             android:id="@+id/btn_reset_password"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:background="@null"
@@ -100,7 +102,7 @@
 
         <Button
             android:id="@+id/sign_in_button"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:background="@null"
@@ -118,6 +120,6 @@
         android:layout_marginBottom="20dp"
         android:visibility="gone"
         android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/progress"/>/>
+        android:indeterminateDrawable="@drawable/progress"/>
 
 </android.support.design.widget.CoordinatorLayout>

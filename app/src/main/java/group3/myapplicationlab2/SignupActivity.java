@@ -1,11 +1,13 @@
 package group3.myapplicationlab2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -33,19 +35,31 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+
+
         Util util = new Util(getApplicationContext());
-        util.getGrantedPermissions(this);
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
+        setLostFocus(btnSignIn);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
+        setLostFocus(btnSignUp);
         inputName = (EditText) findViewById(R.id.name);
+        setLostFocus(inputName);
         inputEmail = (EditText) findViewById(R.id.email);
+        setLostFocus(inputEmail);
         inputPassword = (EditText) findViewById(R.id.password);
+        setLostFocus(inputPassword);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        setLostFocus(progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
+        setLostFocus(btnResetPassword);
+
+        View rootParent = findViewById(R.id.sign_up_parent);
+        View logo = findViewById(R.id.sign_up_logo);
+        util.desappearViewOnSogtKeybpard(rootParent, logo);
 
        btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,5 +147,21 @@ public class SignupActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.GONE);
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void setLostFocus(View v){
+        v.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus ) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
     }
 }

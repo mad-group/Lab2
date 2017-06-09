@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusableInTouchMode="true"
+    android:isScrollContainer="false"
+    android:id="@+id/login_root"
     tools:context="group3.myapplicationlab2.LoginActivity">
 
     <LinearLayout
@@ -18,10 +20,11 @@
         android:padding="@dimen/activity_horizontal_margin">
 
         <ImageView
+            android:id="@+id/login_logo"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="0dp"
             android:src="@mipmap/ic_logo_app"/>
 
         <android.support.design.widget.TextInputLayout
@@ -48,7 +51,7 @@
                 android:id="@+id/password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="0dp"
                 android:hint="@string/hint_password"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
@@ -70,7 +73,7 @@
 
         <Button
             android:id="@+id/btn_reset_password"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:background="@null"
@@ -80,7 +83,7 @@
 
         <Button
             android:id="@+id/btn_signup"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:background="@null"
