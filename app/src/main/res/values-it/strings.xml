@@ -278,7 +278,7 @@
     <string name="date">Data</string>
     <string name="purch_mod_err_title">Non puoi modificare questa spesa</string>
     <string name="purch_mod_err_text">Solo l\'autore della spesa può modificarla!</string>
-    <string name="purch_mod_del_title">Eliminazione spesa</string>
+    <string name="purch_mod_del_title">Eliminazione Spesa</string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -296,9 +296,10 @@
     <string name="statistics">Statistiche</string>
     <string name="ispaying_you">" ti ha ridato "</string>
     <string name="extinguish_debt">Saldo debito</string>
-    <string name="disconnect_account">Disconnettiti</string>
+    <string name="disconnect_account">Disconnetti</string>
     <string name="group_stats">Bilancio Gruppo</string>
-    <string name="modify_group">Invita un amico</string>
+    <string name="modify_group">Modifica Gruppo</string>
+    <string name="invite_user">Invita un amico</string>
     <string name="share_qr_code">Condividi il QR code</string>
     <string name="leave_group">Abbandona il Gruppo</string>
     <string name="modify_purchase">Modifica Spesa</string>

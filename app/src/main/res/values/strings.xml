@@ -277,7 +277,7 @@
     <string name="date">Date</string>
     <string name="purch_mod_err_title">You can not modify this purchase</string>
     <string name="purch_mod_err_text">Only the author can modify this purchase</string>
-    <string name="purch_mod_del_title">Purchase </string>
+    <string name="purch_mod_del_title">Delete Expense </string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
