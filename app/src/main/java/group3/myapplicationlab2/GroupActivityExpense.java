@@ -331,7 +331,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
                 i.putExtra(Constant.ACTIVITYGROUP, group);
                 i.putExtra(Constant.ACTIVITYUSER, user);
-                startActivityForResult(i,Constant.MODIFY_GROUP);
+                startActivityForResult(i,Constant.STATSGROUP);
             }
             return true;
         }
@@ -449,11 +449,17 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         if (requestCode == Constant.MODIFY_GROUP) {
             if (resultCode == RESULT_OK) {
-                Intent intent = getIntent();
-                HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("map");
+                //Intent intent = getIntent();
+                /*HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("map");
                 if (hashMap == null){
                     Log.d("DEBUG", "aaaaaaaaaaaaa");
                 }
+
+                Log.d("DOPOMODIFY", hashMap.keySet().toString());*/
+
+                //String newName = intent.getStringExtra("newName");
+                String newName = data.getStringExtra("newName");
+                getSupportActionBar().setTitle(newName);
 
 /*                for(String k: hashMap.keySet()){
                     Log.d("DEBUG", hashMap.get("key"));

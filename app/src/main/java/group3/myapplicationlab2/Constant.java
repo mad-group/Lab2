@@ -57,6 +57,7 @@ public class Constant {
     public static final int JOIN_GROUP = 3;
     public static final int PICK_IMAGE_ID =4;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 5;
+    public static final int STATSGROUP = 6;
 
 
 

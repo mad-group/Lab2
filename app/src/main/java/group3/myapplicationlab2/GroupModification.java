@@ -189,10 +189,11 @@ public class GroupModification extends AppCompatActivity {
                                 .updateChildren(hm);
                         SystemClock.sleep(20);
                         //Log.d("Debug", "usr - " + key);
-
                     }
+
                     Intent i = new Intent();
-                    i.putExtra("map", hm);
+                    i.putExtra("newName", hm.get("name").toString());
+                    //i.putExtra("map", hm);
 /*                    Log.d("NAME", "mod " + (String)hm.get("name"));
                     i.putExtra(Constant.ACTIVITYGROUPPIN, (String)hm.get("pin"));
                     i.putExtra(Constant.ACTIVITYGROUPQRPATH, (String)hm.get("QRpath"));*/
