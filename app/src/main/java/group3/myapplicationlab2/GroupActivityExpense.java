@@ -301,6 +301,8 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
+                alert11.getButton(alert11.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+
 
             }
             else if(group.getGroupMembers() == null || group.getGroupMembers().size()<2){
