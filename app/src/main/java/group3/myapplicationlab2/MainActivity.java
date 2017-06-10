@@ -551,10 +551,10 @@ public class MainActivity extends AppCompatActivity
         else if (requestCode == JOIN_GROUP){
             if (resultCode == RESULT_OK) {
 
-                /*findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
+                findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
                 findViewById(R.id.content_without_groups).setVisibility(View.GONE);
 
-                GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
+                /*GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
                 adapter.insert(groupPreview,0);
 
                 if (user.getGroups() != null){
