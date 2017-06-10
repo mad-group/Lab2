@@ -203,7 +203,7 @@ public class ExpenseInput extends AppCompatActivity {
 
         String author = user.getUid();
         String expense = expenseField.getText().toString().trim();
-        String amount = amountField.getText().toString().trim();
+        String amount = amountField.getText().toString().trim().replace(",","");
         String date = dateField.getText().toString();
 
         Date myd = new Date();
@@ -571,7 +571,7 @@ public class ExpenseInput extends AppCompatActivity {
         for (int i=0; i<lv.getCount(); i++){
             v = lv.getChildAt(i);
             et = (EditText) v.findViewById(R.id.item_amount);
-            parts += Float.parseFloat(et.getText().toString());
+            parts += Float.parseFloat(et.getText().toString().replace(",",""));
         }
         return parts;
     }
@@ -590,7 +590,7 @@ public class ExpenseInput extends AppCompatActivity {
             PurchaseContributor pc = new PurchaseContributor();
             pc.setUser_id(et_id.getText().toString().trim());
             pc.setUser_name(et_userName.getText().toString().trim());
-            Double amount = Double.parseDouble(et_amount.getText().toString());
+            Double amount = Double.parseDouble(et_amount.getText().toString().replace(",",""));
             pc.setAmount(amount);
             if (et_amount.getText().toString().equals("0") || pc.getUser_id().equals(user.getUid())){
                 pc.setPayed(true);
