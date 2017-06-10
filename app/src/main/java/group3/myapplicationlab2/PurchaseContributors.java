@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,10 +23,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,9 +37,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.WriterException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -142,6 +152,158 @@ public class PurchaseContributors extends AppCompatActivity {
             drawNewCotnributor(purchase.getContributors().get(i));
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.purchase_menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.modify_purchase) {
+
+            if(purchase.getAuthor_id().equals(user.getUid())){
+                Intent i = new Intent(this, ExpenseInput.class);
+                i.putExtra(Constant.ACTIVITYGROUP, group);
+                i.putExtra(Constant.ACTIVITYUSER, user);
+                i.putExtra(Constant.ACTIVITYPURCHASE, purchase);
+                startActivityForResult(i,1);
+            }
+            else{
+                onlyAuthorDialogBox();
+            }
+
+            return true;
+
+        }
+
+        if (id == R.id.delete_purchase){
+
+            if(purchase.getAuthor_id().equals(user.getUid())){
+
+                HashMap<String, String> owers = new HashMap<>();
+                for (PurchaseContributor pc : purchase.getContributors()){
+                    if (!pc.getPayed()){
+                        owers.put(pc.getUser_name(),Double.toString(pc.getAmount()));
+                    }
+                }
+
+                if(owers.size()>0){
+                    String mex = getResources().getString(R.string.delete_expense);
+                    for (String key : owers.keySet()){
+                        mex += key + " " + getResources().getString(R.string.owes_you_small) + " " + owers.get(key) + "€\n";
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseContributors.this);
+                    builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            deletePurchase(group, purchase.getPurchase_id());
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            return;
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                    dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                }
+                else {
+                    String mex = getResources().getString(R.string.delete_expense);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseContributors.this);
+                    builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
+                    builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            deletePurchase(group, purchase.getPurchase_id());
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            return;
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                    dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                }
+            }
+            else{
+                onlyAuthorDialogBox();
+            }
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                finish();
+            }
+        }
+    }
+
+    public void onlyAuthorDialogBox(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseContributors.this);
+        builder.setMessage(getString(R.string.purch_mod_err_text)).setTitle(getString(R.string.purch_mod_err_title));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    public void deletePurchase(Group group, String pid){
+
+        FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
+                .child(group.getId())
+                .child(Constant.REFERENCEGROUPSPURCHASE)
+                .child(pid).removeValue();
+
+        Notification notification = new Notification();
+        notification.setAuthorName(user.getName());
+        notification.setAuthorId(user.getUid());
+        notification.setEventType(Constant.PUSHDELETEEXPENSE);
+        notification.setGroupName(group.getName());
+        notification.setGroupId(group.getId());
+        notification.setId(group.getNumeric_id());
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference users = database.getReference(Constant.REFERENCEUSERS);
+
+        // SEND NOTIFICATION
+        for (GroupMember groupMember: group.getGroupMembers()){
+            if (!groupMember.getUser_id().equals(user.getUid())){
+                users.child(groupMember.getUser_id())
+                        .child(Constant.PUSH)
+                        .push()
+                        .setValue(notification);
+                SystemClock.sleep(20);
+            }
+        }
+        // END NOTIFICATION
     }
 
     private void drawNewCotnributor(PurchaseContributor pc_){
