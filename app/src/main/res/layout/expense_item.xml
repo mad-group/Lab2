@@ -53,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/author"
                 android:paddingLeft="5dp"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp"
-                android:textStyle="italic"
                 android:maxLines="1"
                 android:lines="1"
                 android:maxLength="12"
@@ -71,11 +71,12 @@
                 android:id="@+id/expense_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorFabCustom"
+
                 android:text="@string/amount"
                 android:paddingLeft="5dp"
                 android:lines = "1"
-
+                android:textStyle="italic"
                 android:textSize="20sp" />
 
         </android.support.v7.widget.LinearLayoutCompat>
