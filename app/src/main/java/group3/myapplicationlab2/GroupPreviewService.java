@@ -60,6 +60,12 @@ public class GroupPreviewService extends Service{
                         if (lastEvent.equals("newMember")){
                             message = "A new member joined the group ";
                         }
+                        if (lastEvent.equals(Constant.PUSHDELETEEXPENSE)){
+                            message = "An expense was removed in ";
+                        }
+                        if (lastEvent.equals(Constant.PUSHMODIFYEXPENSE)){
+                            message = "An expense was modified in ";
+                        }
 
                         NotificationCompat.Builder mBuilder =
                                 new NotificationCompat.Builder(GroupPreviewService.this)

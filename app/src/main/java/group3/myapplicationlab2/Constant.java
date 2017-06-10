@@ -39,7 +39,8 @@ public class Constant {
     // PUSH TYPES //
     public static final String PUSH = "push";
     public static final String PUSHNEWEXPENSE = "expenseInput";
-    public static final String MODIFYNEWEXPENSE = "expenseModify";
+    public static final String PUSHMODIFYEXPENSE = "expenseModify";
+    public static final String PUSHDELETEEXPENSE = "expenseDelete";
 
     // PARAMETERS ACTIVITY RESPONSE //
     public static final String ACTIVITYUSERMODIFIED = "modified_user";
@@ -56,6 +57,7 @@ public class Constant {
     public static final int JOIN_GROUP = 3;
     public static final int PICK_IMAGE_ID =4;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 5;
+    public static final int STATSGROUP = 6;
 
 
 
