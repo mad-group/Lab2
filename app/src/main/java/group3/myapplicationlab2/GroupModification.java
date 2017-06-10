@@ -53,6 +53,12 @@ public class GroupModification extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_modification);
 
+        Util util = new Util(getApplicationContext());
+
+        View parentRoot = findViewById(R.id.group_modification_parent);
+        View logo = findViewById(R.id.group_modification_logo);
+        util.desappearViewOnSoftKeyboard(parentRoot, logo);
+
         user = (User)getIntent().getSerializableExtra("user");
         String posStr = getIntent().getStringExtra("position");
 

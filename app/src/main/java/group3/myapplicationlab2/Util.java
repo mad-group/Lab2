@@ -366,7 +366,7 @@ public class Util {
         }
 
     }
-    public void desappearViewOnSogtKeybpard(final View activityRootView, final View view) {
+    public void desappearViewOnSoftKeyboard(final View activityRootView, final View view) {
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -384,6 +384,8 @@ public class Util {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
+
+
 
 
 

@@ -32,10 +32,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ExpenseInput"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".GroupStats"
             android:label="@string/title_activity_group_stats"
@@ -65,7 +64,7 @@
             android:name=".GroupCreationForm"
             android:label="@string/title_activity_group_creation"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".JoinGroupActivity"
             android:label="@string/title_activity_join_group"
@@ -74,19 +73,19 @@
         <activity
             android:name=".GroupModification"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PurchaseContributors"
             android:label="@string/title_activity_purchase_contributors"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
 
-        <service android:name=".GroupPreviewService"></service>
+        <service android:name=".GroupPreviewService" />
 
         <activity
             android:name=".SimpleScannerActivity"
             android:label="@string/title_activity_simple_scanner"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

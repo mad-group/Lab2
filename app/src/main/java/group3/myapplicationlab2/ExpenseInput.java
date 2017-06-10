@@ -122,6 +122,10 @@ public class ExpenseInput extends AppCompatActivity {
         group = (Group)getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
         util = new Util(getApplicationContext());
 
+        View parentRoot = findViewById(R.id.expense_input_parent);
+        View logo = findViewById(R.id.fab_save);
+        util.desappearViewOnSoftKeyboard(parentRoot, logo);
+
         setTitle(group.getName() + " - New expense");
 
         dateField = (EditText) findViewById(R.id.ie_tv_date);

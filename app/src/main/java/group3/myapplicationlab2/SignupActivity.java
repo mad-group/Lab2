@@ -20,8 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
-
 public class SignupActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword, inputName;
@@ -59,7 +57,7 @@ public class SignupActivity extends AppCompatActivity {
 
         View rootParent = findViewById(R.id.sign_up_parent);
         View logo = findViewById(R.id.sign_up_logo);
-        util.desappearViewOnSogtKeybpard(rootParent, logo);
+        util.desappearViewOnSoftKeyboard(rootParent, logo);
 
        btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override

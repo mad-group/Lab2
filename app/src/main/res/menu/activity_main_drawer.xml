@@ -5,7 +5,7 @@
             <item
                 android:id="@+id/join_group"
                 android:icon="@drawable/ic_add_user"
-                android:title="Join Group" />
+                android:title="@string/title_activity_join_group" />
             <!--<item
                 android:id="@+id/nav_gallery"
                 android:icon="@drawable/ic_menu_gallery"
