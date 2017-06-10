@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(MainActivity.this);
+
         final View header=navigationView.getHeaderView(0);
         personalPhoto = (ImageView) header.findViewById(R.id.imageViewCamera);
         personalPhoto.setOnClickListener(new View.OnClickListener() {
@@ -568,6 +569,8 @@ public class MainActivity extends AppCompatActivity
                 user.setGroups(currentGroupPreview);*/
 
             }
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.getMenu().getItem(0).setChecked(false);
         }
         else if (requestCode == GROUP_CLICKED){
             if (resultCode == RESULT_OK) {
