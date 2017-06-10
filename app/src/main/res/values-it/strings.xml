@@ -17,14 +17,14 @@
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="title_activity_join_group">Entra in un gruppo</string>
 
-    <string name="what">Per cosa hai pagato?</string>
-    <string name="whatHint">Es. Lavatrice</string>
+    <string name="what">Cosa hai pagato?</string>
+    <string name="whatHint">Es. Biglietti cinema</string>
 
     <string name="When">Quando?</string>
     <string name="whenHint">gg/mm/aaaa</string>
     <string name="how_much">Quanto hai pagato?</string>
     <string name="how_muchHint">Es. 35 €</string>
-    <string name="photo">Vuoi allegare uan foto?</string>
+    <string name="photo">Vuoi allegare una foto?</string>
 
     <string name="miss_author">Inserisci l\'autore.</string>
     <string name="miss_expense">Insersci cosa hai comprato.</string>
@@ -34,128 +34,128 @@
 
     <string name="action_sign_in_short">Registrati</string>
     <string name="email">Email</string>
-    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
-    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
-    <string name="change_email">Change Email</string>
-    <string name="change_password">Change Password</string>
-    <string name="send_password_reset_email">Send Password reset email</string>
-    <string name="remove_user">Remove user</string>
-    <string name="new_pass">New Password</string>
+    <string name="minimum_password">La password è troppo corta, inseriscine una di almeno 6 caratteri!</string>
+    <string name="auth_failed">Autenticazione fallita, controlla email e password o registrati</string>
+    <string name="change_email">Cambia Email</string>
+    <string name="change_password">Cambia Password</string>
+    <string name="send_password_reset_email">Mandami una mail per ripristinare la password</string>
+    <string name="remove_user">Rimuovi utente</string>
+    <string name="new_pass">Nuova password</string>
 
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="hint_name">Fullname</string>
-    <string name="btn_login">LOGIN</string>
-    <string name="btn_link_to_register">Not a member? Get registered now!</string>
-    <string name="btn_link_to_login">Already registered. Login Me!</string>
+    <string name="hint_name">Nome</string>
+    <string name="btn_login">ACCEDI</string>
+    <string name="btn_link_to_register">Ancora non sei iscritto? Fallo ora!</string>
+    <string name="btn_link_to_login">Già registrato. Login!</string>
 
-    <string name="btn_forgot_password">Forgot your password?</string>
-    <string name="btn_reset_password">Reset Password</string>
+    <string name="btn_forgot_password">Password dimenticata?</string>
+    <string name="btn_reset_password">Ripristina la password</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
-    <string name="hint_new_email">New Email</string>
-    <string name="btn_change">Change</string>
-    <string name="btn_send">Send</string>
-    <string name="btn_remove">Remove</string>
-    <string name="btn_sign_out">Sign Out</string>
-    <string name="lbl_forgot_password">Forgot password?</string>
-    <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="hint_new_email">Nuova Email</string>
+    <string name="btn_change">Cambia</string>
+    <string name="btn_send">Manda</string>
+    <string name="btn_remove">Rimuovi</string>
+    <string name="btn_sign_out">Esci</string>
+    <string name="lbl_forgot_password">Password dimenticata?</string>
+    <string name="forgot_password_msg">Inserisci la tua email e ti manderemo un messaggio per ripristinare la password.</string>
 
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Entra o registrati</string>
+    <string name="error_invalid_email">Questo indirizzo e-mail non è valido</string>
+    <string name="error_invalid_password">Questa password è troppo corta</string>
+    <string name="error_incorrect_password">Password errata</string>
+    <string name="error_field_required">Riempi questo campo</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
 
-    <string name="enter_email">TEnter an email address!</string>
-    <string name="enter_valid_email">Enter a valid email address!</string>
-    <string name="enter_password">Enter password!</string>
-    <string name="pick_image_intent_text">Select Source</string>
+    <string name="enter_email">Inserisci un indirizzo e-mail!</string>
+    <string name="enter_valid_email">Inserisci un indirizzo e-mail valido!</string>
+    <string name="enter_password">Inserisci una password!</string>
+    <string name="pick_image_intent_text">Scegli sorgente</string>
 
-    <string name="group_name">Group name</string>
-    <string name="group_description">Group description</string>
-    <string name="radiogroup_title_expense">Choose a splitting criterion</string>
-    <string name="groupName">Group name</string>
-    <string name="groupNameHint">Type group name here...</string>
-    <string name="groupNameHintModify">Type new group name here...</string>
-    <string name="groupSubject">Group subject</string>
-    <string name="groupSubjectHint">Type the subject here...</string>
-    <string name="groupSubjectHintModify">Type new subject here...</string>
-    <string name="radiogroup_title">Choose a default split criterion</string>
-    <string name="equal_parts">Split equally</string>
-    <string name="per_quotes">Split by quotes</string>
-    <string name="per_percentage">Split by percentages</string>
-    <string name="insert_member">Insert a new member</string>
-    <string name="add_participant">Create Group</string>
+    <string name="group_name">Nome del gruppo</string>
+    <string name="group_description">Descrizione</string>
+    <string name="radiogroup_title_expense">Scegli un criterio di suddivisione delle spese</string>
+    <string name="groupName">Nome del gruppo</string>
+    <string name="groupNameHint">Inserisci il nome del gruppo qui...</string>
+    <string name="groupNameHintModify">TInserisci il nome del gruppo qui...</string>
+    <string name="groupSubject">Oggetto del gruppo</string>
+    <string name="groupSubjectHint">Scrivi l\'oggetto del gruppo qui...</string>
+    <string name="groupSubjectHintModify">Inserisci un nuovo oggetto qui...</string>
+    <string name="radiogroup_title">Scegli un criterio di suddivisione delle spese</string>
+    <string name="equal_parts">Dividi equamente</string>
+    <string name="per_quotes">Dividi per quote</string>
+    <string name="per_percentage">Dividi per percentuale</string>
+    <string name="insert_member">Aggiungi un nuovo membro</string>
+    <string name="add_participant">Crea un gruppo</string>
 
-    <string name="splitting_criterion_prompt">Choose a splitting criterion</string>
+    <string name="splitting_criterion_prompt">Scegli un criterio di suddivisione delle spese</string>
     <string-array name="splitting_criteria">
-        <item>Equal parts</item>
-        <item>Per quotes</item>
-        <item>Per percentage</item>
+        <item>Parti uguali</item>
+        <item>Per quote</item>
+        <item>Per percentualee</item>
     </string-array>
 
-    <string name="invalid_mail_address">Invalid Email Address</string>
-    <string name="no_user_insert">There is not any user to invite</string>
-    <string name="insert_group_name">Insert group name</string>
-    <string name="insert_group_descr">There are any description</string>
+    <string name="invalid_mail_address">Indirizzo Email non valido</string>
+    <string name="no_user_insert">Non ci sono utenti da invitare</string>
+    <string name="insert_group_name">Inserisci un nome per il gruppo</string>
+    <string name="insert_group_descr">Non c\'è una descrizione</string>
 
-    <string name="invitation_title">Chose your friends to invite!</string>
-    <string name="invitation_message"><html><h1> PiggyBill group invite</h1></html></string>
+    <string name="invitation_title">Scegli quali amici invitare!</string>
+    <string name="invitation_message"><html><h1> Invito a un gruppo su PiggyBill</h1></html></string>
     <string name="invitation_deep_link">https://www.google.it</string>
     <string name="invitation_custom_image">http://pix.iemoji.com/images/emoji/apple/ios-9/256/grinning-face-with-smiling-eyes.png</string>
     <string name="invitation_cta">test cta</string>
-    <string name="invitation_email_subject">You\'are invited in a group</string>
+    <string name="invitation_email_subject">Sei invitato a partecipare in un gruppo</string>
 
-    <string name="groupPin">Group password</string>
-    <string name="groupPinHint">Type group password here...</string>
-    <string name="groupPinHintModify">Type new group password here...</string>
+    <string name="groupPin">Password del gruppo</string>
+    <string name="groupPinHint">Inserisci qui una password per il gruppo...</string>
+    <string name="groupPinHintModify">Inserisci qui una nuova password per il gruppo...</string>
 
-    <string name="wrong_group_pin">The password must be of at least 6 characters</string>
-    <string name="email_subject"> Piggy Bill joining group invitation</string>
-    <string name="invitation_failed">Invitation failed</string>
+    <string name="wrong_group_pin">La password deve essere di almeno 6 caratteri</string>
+    <string name="email_subject">Invito a partecipare a un gruppo su Piggy Bill</string>
+    <string name="invitation_failed">Invito fallito</string>
     <string name="invitation_email">
-        <![CDATA[<p>Dear user,<br/>
-         you received an invitation to join a Piggy Bill group from %1$s.
+        <![CDATA[<p>Caro utente,<br/>
+         Hai ricevuto un invito a partecipare a un gruppo di condivisione spese su PiggyBill da %1$s.
          <br/>
-         If you want to join it, please fill the join group form with the following ID and password.
-         Otherwise, ignore this email.
+         Se vuoi partecipare, riempi il form per partecipare a un nuovo gruppo con i seguenti ID e password contenuti nelle parentesi.
+         Altrimenti, ignora questa mail.
          <br/>
-         GroupID: [<b>%2$s</b>] <br/>
+         IDGruppo: [<b>%2$s</b>] <br/>
          Password: [</b>%3$s</b>] <br/>
 
-          or scan this QR: <img src="%4$s" alt="QRcode"> </p>
+          oppure effettua la scansione di questo codice QR: <img src="%4$s" alt="QRcode"> </p>
         ]]>
 </string>
-    <string name="no_group_creation_and_inviting">First to invite, create a group.</string>
-    <string name="group_created">Group created</string>
-    <string name="group_id">Group ID</string>
-    <string name="group_password">Group password</string>
-    <string name="join">Join</string>
-    <string name="camera_permission_denied">Impossible use camera: permission denied</string>
-    <string name="correct_purchase_added">Purchase added</string>
-    <string name="grpup_leaving_text">Do you really want leave the group?</string>
-    <string name="leaving_group_title">Leaving Group</string>
+    <string name="no_group_creation_and_inviting">Prima di invitare amici, crea un gruppo.</string>
+    <string name="group_created">Gruppo creato</string>
+    <string name="group_id">ID Gruppo</string>
+    <string name="group_password">Password del Gruppo</string>
+    <string name="join">Unisciti</string>
+    <string name="camera_permission_denied">Permessi negati per utilizzare l\'app</string>
+    <string name="correct_purchase_added">Spesa aggiunta</string>
+    <string name="grpup_leaving_text">Sei sicuro di voler abbandonare il gruppo?</string>
+    <string name="leaving_group_title">Abbandonare il gruppo</string>
     <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
-    <string name="title_activity_group_modify">GroupModify</string>
-    <string name="title_activity_group_modifcation">groupModifcation</string>
-    <string name="bt_modify_group">modify group</string>
-    <string name="user_name">Your name</string>
-    <string name="stats_no_pruchases">There isn\'t any purchase!</string>
-    <string name="stats_no_pruchases_text">If there are not any purchase is impossible to show the debits among the group members.</string>
-    <string name="stats_no_members">You are alone in this group!</string>
-    <string name="stats_no_members_text">Is impossible to compute debits and credits if you are alone in the groups.</string>
-    <string name="insert_expense">Insert new expense</string>
-    <string name="owes_you">Owes you</string>
-    <string name="you_owe">You owe him</string>
-    <string name="were_even">We are even!</string>
+    <string name="cancel">Annulla</string>
+    <string name="title_activity_group_modify">Modifica gruppo</string>
+    <string name="title_activity_group_modifcation">Modifica gruppo</string>
+    <string name="bt_modify_group">Modifica gruppo</string>
+    <string name="user_name">Il tuo nome</string>
+    <string name="stats_no_pruchases">Non ci sono spese aggiunte!</string>
+    <string name="stats_no_pruchases_text">Se non ci sono spese aggiunte è impossibile mostrare lo stato dei debiti/crediti tra i membri del gruppo.</string>
+    <string name="stats_no_members">Sei solo in questo gruppo!</string>
+    <string name="stats_no_members_text">Se sei solo in questo gruppo è impossibile mostrare lo stato dei debiti/crediti.</string>
+    <string name="insert_expense">Aggiungi una nuova spesa</string>
+    <string name="owes_you">Ti deve</string>
+    <string name="you_owe">Gli devi</string>
+    <string name="were_even">Siete pari!</string>
     <string name="title_activity_purchase_contributors">purchase_contributors</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -248,35 +248,35 @@
     </string>
     <string name="title_activity_zzz_test">zzz_test</string>
     <string name="no">No</string>
-    <string name="yes">Yes</string>
-    <string name="owes_to"> owes </string>
-    <string name="payed_to"> payed to </string>
+    <string name="yes">Sì</string>
+    <string name="owes_to"> ti deve </string>
+    <string name="payed_to"> ha pagato a </string>
 
-    <string name="welcomeMsg"> You have not added any groups yet. </string>
-    <string name="add_one"> Add one! </string>
+    <string name="welcomeMsg"> Non hai ancora aggiunto nessun gruppo. </string>
+    <string name="add_one"> Aggiungine uno! </string>
 
-    <string name="no_expenses_yet"> It seems like you have not any expenses recorded yet. </string>
-    <string name="author_name">Author</string>
-    <string name="date_value">Date</string>
-    <string name="payers_names">Payers</string>
-    <string name="new_group_message"><b>You are creating a new group</b>\n Please select a name and a password\n then go to the next step and invite friends.</string>
-    <string name="modification_group_message"><b>You are modifying a group</b>\n Please modify the name and the password\n then tap <b>MODIFY GROUP</b> to save the changes.</string>
-    <string name="join_group_message"><b>You are joining a group</b>\n Please insert the group ID, the password\n then tap <b>Join</b> to start sharing expenses.</string>
-    <string name="insert_expense_message"><b>You are adding an expense</b>\n Please <b>fill the 3 fields</b> down here,\n choose the <b>splitting</b> criterion and <b>attach\n a photo</b>, if necessary, before saving.</string>
-    <string name="user_has_debit_text">You can not leave the group. Please check the expenses and pay your debits!</string>
-    <string name="user_has_debits_title">Impossible to leave</string>
-    <string name="miss_name_mod">Please insert the new group name</string>
-    <string name="miss_pin_mod">The pin must have at least 6 characters</string>
-    <string name="error_group_creation">An error occurred, please retry.</string>
-    <string name="scan_Modify_username">Insert new username</string>
+    <string name="no_expenses_yet"> Sembra proprio che tu non abbia ancora aggiunto nessuna spesa. </string>
+    <string name="author_name">Autore</string>
+    <string name="date_value">Data</string>
+    <string name="payers_names">Contributori</string>
+    <string name="new_group_message"><b>Stai creando un nuovo gruppo</b>\n Scegli un nome  e una password\n dopo vai al passo successivo e invita i tuoi amici.</string>
+    <string name="modification_group_message"><b>Stai modificand un gruppo</b>\n Modifica nome e/o password\n e dopo seleziona <b>MODIFICA GRUPPO</b> per salvare i cambiamenti.</string>
+    <string name="join_group_message"><b>Stai entrando in un gruppo</b>\n Inserisci l\'ID del gruppo, la password\n e dopo seleziona <b>ENTRA</b> per iniziare a condividere le spese.</string>
+    <string name="insert_expense_message"><b>Stai aggiungendo una nuova spesa</b>\n Per favore <b>riempi i tre campi</b> qui in basso,\n scegli il <b>criterio</b> di suddivisione e <b>aggiungi\n una foto</b>, if necessary, before saving.</string>
+    <string name="user_has_debit_text">Non puoi abbandonare il gruppo. Controlla le spese e salda i tuoi debiti!</string>
+    <string name="user_has_debits_title">Impossibile uscire</string>
+    <string name="miss_name_mod">Per favore inserisci un nuovo nome per il gruppo</string>
+    <string name="miss_pin_mod">Il pin deve avere almeno 6 caratteri</string>
+    <string name="error_group_creation">C\'è stato un errore, per favore riprova.</string>
+    <string name="scan_Modify_username">Inserisci un nuovo nome utente</string>
     <string name="scan_QR_title">QR code</string>
     <string name="title_activity_simple_scanner">SimpleScannerActivity</string>
-    <string name="author">Author</string>
-    <string name="paid">paid</string>
-    <string name="expensename">ExpenseName</string>
-    <string name="amount">Amount</string>
-    <string name="date">Date</string>
-    <string name="purch_mod_err_title">You can\'t modify this purchase</string>
-    <string name="purch_mod_err_text">Only the author can modify this purchase</string>
-    <string name="purch_mod_del_title">Purchase deleting</string>
+    <string name="author">Autore</string>
+    <string name="paid">ha pagato</string>
+    <string name="expensename">NomeSpesa</string>
+    <string name="amount">Costo</string>
+    <string name="date">Data</string>
+    <string name="purch_mod_err_title">Non puoi modificare questa spesa</string>
+    <string name="purch_mod_err_text">Solo l\'autore della spesa può modificarla!</string>
+    <string name="purch_mod_del_title">Eliminazione spesa</string>
 </resources>

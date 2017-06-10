@@ -17,23 +17,23 @@
     <string name="title_activity_join_group">Join a group</string>
 
     <string name="what">What did you pay for?</string>
-    <string name="whatHint">E.g. Washing machine</string>
+    <string name="whatHint">E.g. Cinema tickets</string>
 
     <string name="When">When?</string>
     <string name="whenHint">dd/mm/yyyy</string>
-    <string name="how_much">How Much did it cost?</string>
+    <string name="how_much">How much did it cost?</string>
     <string name="how_muchHint">E.g. 35 €</string>
-    <string name="photo">Do you want to add a photo?</string>
+    <string name="photo">Do you want to add a photo of the receipt?</string>
 
     <string name="miss_author">Set the expense author name.</string>
     <string name="miss_expense">Set what has been bought.</string>
     <string name="miss_amount">Set the expense amount.</string>
     <string name="when">When?</string>
-    <string name="has_not_camera">Your device has not camara avaiable.</string>
+    <string name="has_not_camera">Your device has not a camera avaiable.</string>
 
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
-    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
+    <string name="minimum_password">Password too short, enter at least 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
     <string name="change_email">Change Email</string>
     <string name="change_password">Change Password</string>
@@ -57,7 +57,7 @@
     <string name="btn_remove">Remove</string>
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
-    <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="forgot_password_msg">We just need your registered Email Id to send you password reset instructions.</string>
 
 
     <!-- Strings related to login -->
@@ -72,7 +72,7 @@
         completions."
     </string>
 
-    <string name="enter_email">TEnter an email address!</string>
+    <string name="enter_email">Enter an email address!</string>
     <string name="enter_valid_email">Enter a valid email address!</string>
     <string name="enter_password">Enter password!</string>
     <string name="pick_image_intent_text">Select Source</string>
@@ -101,9 +101,9 @@
     </string-array>
 
     <string name="invalid_mail_address">Invalid Email Address</string>
-    <string name="no_user_insert">There is not any user to invite</string>
+    <string name="no_user_insert">There is no user to invite</string>
     <string name="insert_group_name">Insert group name</string>
-    <string name="insert_group_descr">There are any description</string>
+    <string name="insert_group_descr">There is no description</string>
 
     <string name="invitation_title">Chose your friends to invite!</string>
     <string name="invitation_message"><html><h1> PiggyBill group invite</h1></html></string>
@@ -123,7 +123,7 @@
         <![CDATA[<p>Dear user,<br/>
          you received an invitation to join a Piggy Bill group from %1$s.
          <br/>
-         If you want to join it, please fill the join group form with the following ID and password.
+         If you want to join it, please fill the join group form with the following ID and password contained in the squared brackets.
          Otherwise, ignore this email.
          <br/>
          GroupID: [<b>%2$s</b>] <br/>
@@ -132,15 +132,15 @@
           or scan this QR: <img src="%4$s" alt="QRcode"> </p>
         ]]>
 </string>
-    <string name="no_group_creation_and_inviting">First to invite, create a group.</string>
+    <string name="no_group_creation_and_inviting">Before inviting, create a group.</string>
     <string name="group_created">Group created</string>
     <string name="group_id">Group ID</string>
     <string name="group_password">Group password</string>
     <string name="join">Join</string>
-    <string name="camera_permission_denied">Impossible use camera: permission denied</string>
+    <string name="camera_permission_denied">Impossible to use camera: permission denied</string>
     <string name="correct_purchase_added">Purchase added</string>
-    <string name="grpup_leaving_text">Do you really want leave the group?</string>
-    <string name="leaving_group_title">Leaving Group</string>
+    <string name="grpup_leaving_text">Do you really want  to leave the group?</string>
+    <string name="leaving_group_title">Leaving the Group</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_group_modify">GroupModify</string>
@@ -148,13 +148,13 @@
     <string name="bt_modify_group">modify group</string>
     <string name="user_name">Your name</string>
     <string name="stats_no_pruchases">There isn\'t any purchase!</string>
-    <string name="stats_no_pruchases_text">If there are not any purchase is impossible to show the debits among the group members.</string>
+    <string name="stats_no_pruchases_text">If there are no purchases it is impossible to show the debts among the group members.</string>
     <string name="stats_no_members">You are alone in this group!</string>
-    <string name="stats_no_members_text">Is impossible to compute debits and credits if you are alone in the groups.</string>
-    <string name="insert_expense">Insert new expense</string>
+    <string name="stats_no_members_text">It is impossible to compute debts and credits if you are alone in the group.</string>
+    <string name="insert_expense">Insert a new expense</string>
     <string name="owes_you">Owes you</string>
     <string name="you_owe">You owe him</string>
-    <string name="were_even">We are even!</string>
+    <string name="were_even">You are even!</string>
     <string name="title_activity_purchase_contributors">purchase_contributors</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -260,9 +260,9 @@
     <string name="payers_names">Payers</string>
     <string name="new_group_message"><b>You are creating a new group</b>\n Please select a name and a password\n then go to the next step and invite friends.</string>
     <string name="modification_group_message"><b>You are modifying a group</b>\n Please modify the name and the password\n then tap <b>MODIFY GROUP</b> to save the changes.</string>
-    <string name="join_group_message"><b>You are joining a group</b>\n Please insert the group ID, the password\n then tap <b>Join</b> to start sharing expenses.</string>
+    <string name="join_group_message"><b>You are joining a group</b>\n Please insert the group ID, the password\n then tap <b>Join</b> to start sharing the expenses.</string>
     <string name="insert_expense_message"><b>You are adding an expense</b>\n Please <b>fill the 3 fields</b> down here,\n choose the <b>splitting</b> criterion and <b>attach\n a photo</b>, if necessary, before saving.</string>
-    <string name="user_has_debit_text">You can not leave the group. Please check the expenses and pay your debits!</string>
+    <string name="user_has_debit_text">You can not leave the group. Please check the expenses and pay your debts off!</string>
     <string name="user_has_debits_title">Impossible to leave</string>
     <string name="miss_name_mod">Please insert the new group name</string>
     <string name="miss_pin_mod">The pin must have at least 6 characters</string>
