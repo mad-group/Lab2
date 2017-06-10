@@ -571,7 +571,9 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 return true;
             case R.id.delete_purchase:
+
                 if(group.getPurchases().get(info.position).getAuthor_id().equals(user.getUid())){
+
                     HashMap<String, String> owers = new HashMap<>();
                     for (PurchaseContributor pc : group.getPurchases().get(info.position).getContributors()){
                         if (!pc.getPayed()){
@@ -585,6 +587,26 @@ public class GroupActivityExpense extends AppCompatActivity {
                             mex += key + " " + getResources().getString(R.string.owes_you_small) + " " + owers.get(key) + "€\n";
                         }
                         AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+                        builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
+                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                deletePurchase(group, group.getPurchases().get(info.position).getPurchase_id());
+                            }
+                        });
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                return;
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                    }
+                    else {
+                        String mex = getResources().getString(R.string.delete_expense);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+                        builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
                         builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
                         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
