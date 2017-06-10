@@ -82,8 +82,8 @@
     <string name="group_description">Descrizione</string>
     <string name="radiogroup_title_expense">Scegli un criterio di suddivisione delle spese</string>
     <string name="groupName">Nome del gruppo</string>
-    <string name="groupNameHint">Inserisci il nome del gruppo qui...</string>
-    <string name="groupNameHintModify">TInserisci il nome del gruppo qui...</string>
+    <string name="groupNameHint">Scrivi il nome del gruppo qui...</string>
+    <string name="groupNameHintModify">Scrivi il nome del gruppo qui...</string>
     <string name="groupSubject">Oggetto del gruppo</string>
     <string name="groupSubjectHint">Scrivi l\'oggetto del gruppo qui...</string>
     <string name="groupSubjectHintModify">Inserisci un nuovo oggetto qui...</string>
@@ -114,8 +114,8 @@
     <string name="invitation_email_subject">Sei invitato a partecipare in un gruppo</string>
 
     <string name="groupPin">Password del gruppo</string>
-    <string name="groupPinHint">Inserisci qui una password per il gruppo...</string>
-    <string name="groupPinHintModify">Inserisci qui una nuova password per il gruppo...</string>
+    <string name="groupPinHint">Scrivi qui una password per il gruppo...</string>
+    <string name="groupPinHintModify">Scrivi qui una nuova password per il gruppo...</string>
 
     <string name="wrong_group_pin">La password deve essere di almeno 6 caratteri</string>
     <string name="email_subject">Invito a partecipare a un gruppo su Piggy Bill</string>
@@ -137,7 +137,7 @@
     <string name="group_created">Gruppo creato</string>
     <string name="group_id">ID Gruppo</string>
     <string name="group_password">Password del Gruppo</string>
-    <string name="join">Unisciti</string>
+    <string name="join">ENTRA</string>
     <string name="camera_permission_denied">Permessi negati per utilizzare l\'app</string>
     <string name="correct_purchase_added">Spesa aggiunta</string>
     <string name="grpup_leaving_text">Sei sicuro di voler abbandonare il gruppo?</string>
@@ -255,7 +255,7 @@
     <string name="welcomeMsg"> Non hai ancora aggiunto nessun gruppo. </string>
     <string name="add_one"> Aggiungine uno! </string>
 
-    <string name="no_expenses_yet"> Sembra proprio che tu non abbia ancora aggiunto nessuna spesa. </string>
+    <string name="no_expenses_yet"> Non hai ancora nessun acquisto registrato. </string>
     <string name="author_name">Autore</string>
     <string name="date_value">Data</string>
     <string name="payers_names">Contributori</string>
@@ -279,4 +279,13 @@
     <string name="purch_mod_err_title">Non puoi modificare questa spesa</string>
     <string name="purch_mod_err_text">Solo l\'autore della spesa può modificarla!</string>
     <string name="purch_mod_del_title">Eliminazione spesa</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifiche</string>
+    <string name="delete_expense">Sei sicuro di voler eliminare questa spesa?\n</string>
+    <string name="owes_you_small"> ti deve </string>
+    <string name="new_expense">Nuova spesa</string>
+    <string name="modify">Modifica</string>
+
 </resources>

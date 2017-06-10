@@ -139,7 +139,7 @@
     <string name="join">Join</string>
     <string name="camera_permission_denied">Impossible to use camera: permission denied</string>
     <string name="correct_purchase_added">Purchase added</string>
-    <string name="grpup_leaving_text">Do you really want  to leave the group?</string>
+    <string name="grpup_leaving_text">Do you really want to leave the group?</string>
     <string name="leaving_group_title">Leaving the Group</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
@@ -147,7 +147,7 @@
     <string name="title_activity_group_modifcation">groupModifcation</string>
     <string name="bt_modify_group">modify group</string>
     <string name="user_name">Your name</string>
-    <string name="stats_no_pruchases">There isn\'t any purchase!</string>
+    <string name="stats_no_pruchases">There are no purchases!</string>
     <string name="stats_no_pruchases_text">If there are no purchases it is impossible to show the debts among the group members.</string>
     <string name="stats_no_members">You are alone in this group!</string>
     <string name="stats_no_members_text">It is impossible to compute debts and credits if you are alone in the group.</string>
@@ -275,13 +275,17 @@
     <string name="expensename">ExpenseName</string>
     <string name="amount">Amount</string>
     <string name="date">Date</string>
-    <string name="purch_mod_err_title">You can\'t modify this purchase</string>
+    <string name="purch_mod_err_title">You can not modify this purchase</string>
     <string name="purch_mod_err_text">Only the author can modify this purchase</string>
-    <string name="purch_mod_del_title">Purchase deleting</string>
+    <string name="purch_mod_del_title">Purchase </string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="delete_expense">Do you really want to delete this expense?\n</string>
+    <string name="owes_you_small">owes you</string>
+    <string name="new_expense">New expense</string>
+    <string name="modify">Modify</string>
 
 
 </resources>

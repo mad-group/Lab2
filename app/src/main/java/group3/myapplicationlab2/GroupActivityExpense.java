@@ -286,7 +286,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 //        getString(R.string.stats_no_pruchases_text));
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(GroupActivityExpense.this);
-                builder1.setMessage("There aren't purchases.");
+                builder1.setMessage(R.string.stats_no_pruchases);
                 builder1.setCancelable(true);
 
                 builder1.setNegativeButton(
@@ -307,7 +307,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                 //        getString(R.string.stats_no_members_text));
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(GroupActivityExpense.this);
-                builder1.setMessage("You are alone in the group");
+                builder1.setMessage(R.string.stats_no_members);
                 builder1.setCancelable(true);
 
                 builder1.setPositiveButton(
@@ -572,9 +572,9 @@ public class GroupActivityExpense extends AppCompatActivity {
                     }
 
                     if(owers.size()>0){
-                        String mex = "Do you really want delete this expense?\n";
+                        String mex = getResources().getString(R.string.delete_expense);
                         for (String key : owers.keySet()){
-                            mex += key + " owes you " +  owers.get(key) + "€\n";
+                            mex += key + " " + getResources().getString(R.string.owes_you_small) + " " + owers.get(key) + "€\n";
                         }
                         AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
                         builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));

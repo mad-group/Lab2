@@ -126,7 +126,7 @@ public class ExpenseInput extends AppCompatActivity {
         View logo = findViewById(R.id.fab_save);
         util.desappearViewOnSoftKeyboard(parentRoot, logo);
 
-        setTitle(group.getName() + " - New expense");
+        setTitle(group.getName() + " - " + getResources().getString(R.string.new_expense));
 
         dateField = (EditText) findViewById(R.id.ie_tv_date);
         expenseField = (EditText) findViewById(R.id.ie_et_expense);
@@ -160,14 +160,14 @@ public class ExpenseInput extends AppCompatActivity {
 
         final Purchase recPurch = (Purchase)getIntent().getSerializableExtra(Constant.ACTIVITYPURCHASE);
         if (recPurch==null){
-            setTitle(group.getName() + " - New expense");
+            setTitle(group.getName() + " - " + getResources().getString(R.string.new_expense));
             membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0, null);
             lv.setAdapter(membersAdapter);
             membersAdapter.addAll(group.getGroupMembers());
 
         }
         else{
-            setTitle(recPurch.getCausal()+ " - Modify");
+            setTitle(recPurch.getCausal()+ " - " + getResources().getString(R.string.new_expense));
             dateField.setText(recPurch.getDate());
             expenseField.setText(recPurch.getCausal());
             String amountString = Double.toString(recPurch.getTotalAmount());
