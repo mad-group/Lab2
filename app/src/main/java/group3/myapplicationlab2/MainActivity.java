@@ -46,6 +46,7 @@ import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -89,6 +90,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private List<GroupPreview> currentGroupPreview;
+    private ArrayList<GroupPreview> groupPreviews;
+
+    ChildEventListener childEventListener;
 
 
     private String pin_str;
@@ -126,8 +130,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //OLD ADAPTER
-        final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
+        //final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
+        groupPreviews = new ArrayList<GroupPreview>();
         adapter = new GroupPreviewAdapter(this, groupPreviews);
+
+
         final ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
@@ -159,16 +166,20 @@ public class MainActivity extends AppCompatActivity
                 adapter.clear();
                 user = dataSnapshot.getValue(User.class);
                 if (user.getGroupsHash()!=null){
-                    Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
+
+                    /*Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
                     adapter.clear();
                     for (int i=0; i<user.getGroups().size(); i++){
                         adapter.add(user.getGroups().get(i));
-                    }
+                    }*/
+
                 }
                 else {
                     findViewById(R.id.content_with_groups).setVisibility(View.GONE);
                     findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
                 }
+
+                user_info.child(Constant.REFERENCEGROUPSHASH).addChildEventListener(childEventListener);
 
                 Bitmap image = util.downloadImage(user.getUserPathImage());
                 if (image != null)
@@ -187,10 +198,11 @@ public class MainActivity extends AppCompatActivity
                 user_name.setText(user.getName());
                 progressBar.setVisibility(View.GONE);
 
-
                 Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
                 serviceIntent.putExtra(ACTIVITYUSER, user);
                 startService(serviceIntent);
+
+
 
             }
 
@@ -199,6 +211,68 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("FAIL USER INFO");
             }
         });
+
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                //Map<String, Object> objectMap = (HashMap<String, Object>) dataSnapshot.getValue();
+                GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
+
+                groupPreviews.add(0, groupPreview);
+                user.setGroups(groupPreviews);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
+
+                int position;
+                for (int ii=0; ii<groupPreviews.size(); ii++){
+
+                    if (groupPreviews.get(ii).getId().equals(groupPreview.getId())){
+                        position = ii;
+                        groupPreviews.remove(position);
+                    }
+                }
+
+                groupPreviews.add(0, groupPreview);
+                user.setGroups(groupPreviews);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
+
+                int position;
+                for (int ii=0; ii<groupPreviews.size(); ii++){
+                    if (groupPreviews.get(ii).getId().equals(groupPreview.getId())){
+                        position = ii;
+                        groupPreviews.remove(position);
+                    }
+                }
+
+                user.setGroups(groupPreviews);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -373,8 +447,6 @@ public class MainActivity extends AppCompatActivity
                              Group groupReaded = new Group();
                              groupReaded.GroupConstructor(objectMap);
                              drawLeavingDialogBox(MainActivity.this, groupReaded, user, Integer.toString(finalInfo.position));
-
-
                          }
 
                      }
@@ -458,7 +530,7 @@ public class MainActivity extends AppCompatActivity
                 findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
                 findViewById(R.id.content_without_groups).setVisibility(View.GONE);
 
-                GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
+                /*GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
                 adapter.insert(groupPreview,0);
 
                 if (user.getGroups() != null){
@@ -470,14 +542,14 @@ public class MainActivity extends AppCompatActivity
 
                 currentGroupPreview.add(groupPreview);
                 Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                user.setGroups(currentGroupPreview);
+                user.setGroups(currentGroupPreview);*/
 
             }
         }
         else if (requestCode == JOIN_GROUP){
             if (resultCode == RESULT_OK) {
 
-                findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
+                /*findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
                 findViewById(R.id.content_without_groups).setVisibility(View.GONE);
 
                 GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
@@ -492,21 +564,21 @@ public class MainActivity extends AppCompatActivity
 
                 currentGroupPreview.add(groupPreview);
                 Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                user.setGroups(currentGroupPreview);
+                user.setGroups(currentGroupPreview);*/
 
             }
         }
         else if (requestCode == GROUP_CLICKED){
             if (resultCode == RESULT_OK) {
                 //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
-                user = (User)data.getSerializableExtra(ACTIVITYUSERMODIFIED);
-                reDrawGroupList();
+                //user = (User)data.getSerializableExtra(ACTIVITYUSERMODIFIED);
+                //reDrawGroupList();
             }
 
         }
         else if (requestCode == MODIFY_GROUP){
             if (resultCode == RESULT_OK){
-                reloadUser();
+                //reloadUser();
             }
         }
         else if (requestCode == PICK_IMAGE_ID){
@@ -551,7 +623,8 @@ public class MainActivity extends AppCompatActivity
             //this.imageOutFile = mediaFile;
         }
         else {
-            if (user.getGroups() != null) {
+
+            /*if (user.getGroups() != null) {
                 currentGroupPreview = user.getGroups();
                 for (int j = 0; j < user.getGroups().size(); j++)
                     Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
@@ -561,7 +634,8 @@ public class MainActivity extends AppCompatActivity
                     adapter.add(user.getGroups().get(i));
                 }
                 user.setGroups(currentGroupPreview);
-            }
+            }*/
+
         }
     }
 

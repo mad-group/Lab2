@@ -211,6 +211,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     }
 
                 }
+
                 group.setPurchases(expenseList);
                 expenseAdapter.notifyDataSetChanged();
 
