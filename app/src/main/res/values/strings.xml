@@ -249,7 +249,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="owes_to"> owes </string>
-    <string name="payed_to"> payed to </string>
+    <string name="payed_to"> paid </string>
 
     <string name="welcomeMsg"> You have not added any groups yet. </string>
     <string name="add_one"> Add one! </string>
