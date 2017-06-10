@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/group_Stats"
-        android:title="Group Stats" />
+        android:title="@string/group_stats"/>
 
     <item android:id="@+id/modify"
-        android:title="Modify Group"
-        />
+        android:title="@string/modify_group"/>
 
     <item android:id="@+id/add_members"
-        android:title="Invite User" />
+        android:title="@string/invite_user"/>
 
     <item android:id="@+id/generate_QR"
-        android:title="Generate QR code" />
+        android:title="@string/share_qr_code"/>
 
     <item android:id="@+id/leave_group"
-        android:title="Leave Group" />
+        android:title="@string/leave_group"/>
 </menu>

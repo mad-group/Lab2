@@ -155,7 +155,7 @@ public class GroupStats extends AppCompatActivity {
                 finish();
             }
         });
-        toolbar.setTitle(group.getName()+" - Statistics");
+        toolbar.setTitle(group.getName()+" - " + getResources().getString(R.string.statistics));
     }
 
     private void drawLeavingDialogBox(String title, String text) {

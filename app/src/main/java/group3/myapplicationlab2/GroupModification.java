@@ -74,7 +74,7 @@ public class GroupModification extends AppCompatActivity {
         user_id = user.getUid();
 
 
-        setTitle(group_name + " - Modify");
+        setTitle(group_name + " - " + getResources().getString(R.string.modify));
 
         et_name = (EditText) findViewById(R.id.mod_new_group);
         et_pin = (EditText) findViewById(R.id.mod_group_pin);

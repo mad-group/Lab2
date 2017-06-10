@@ -33,7 +33,7 @@
             <item
                 android:id="@+id/logout"
                 android:icon="@mipmap/ic_logout"
-                android:title="Disconnect account" />
+                android:title="@string/disconnect_account"/>
         </menu>
     </item>
 

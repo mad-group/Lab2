@@ -50,21 +50,21 @@ public class GroupPreviewService extends Service{
                     if (!notification.getAuthorId().equals(user.getUid())){
 
                         String lastEvent = notification.getEventType();
-                        String message = "Probably there are changes in ";
+                        String message = getResources().getString(R.string.probably_changes) + " ";
                         if (lastEvent.equals("expenseInput")){
-                            message = "A new expense was added in ";
+                            message = getResources().getString(R.string.new_expense_notification) + " ";
                         }
                         if (lastEvent.equals("changeName")){
-                            message = "A group changed name in ";
+                            message = getResources().getString(R.string.change_group_name_notification) + " ";
                         }
                         if (lastEvent.equals("newMember")){
-                            message = "A new member joined the group ";
+                            message = getResources().getString(R.string.new_member_in_group_notification) + " ";
                         }
                         if (lastEvent.equals(Constant.PUSHDELETEEXPENSE)){
-                            message = "An expense was removed in ";
+                            message = getResources().getString(R.string.remove_expense_notification) + " ";
                         }
                         if (lastEvent.equals(Constant.PUSHMODIFYEXPENSE)){
-                            message = "An expense was modified in ";
+                            message = getResources().getString(R.string.modified_expense_notification) + " ";
                         }
 
                         NotificationCompat.Builder mBuilder =

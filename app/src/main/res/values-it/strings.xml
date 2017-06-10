@@ -287,5 +287,21 @@
     <string name="owes_you_small"> ti deve </string>
     <string name="new_expense">Nuova spesa</string>
     <string name="modify">Modifica</string>
+    <string name="probably_changes">Potrebbero esserci novità in </string>
+    <string name="new_expense_notification">Una nuova spesa è stata aggiunta in </string>
+    <string name="change_group_name_notification">Un gruppo ha cambiato nome in</string>
+    <string name="new_member_in_group_notification">Un nuovo membro si è unito al gruppo </string>
+    <string name="remove_expense_notification">Una spesa è stata eliminata da </string>
+    <string name="modified_expense_notification">Una spesa è stata modificata in </string>
+    <string name="statistics">Statistiche</string>
+    <string name="ispaying_you">" ti ha ridato "</string>
+    <string name="extinguish_debt">Saldo debito</string>
+    <string name="disconnect_account">Disconnettiti</string>
+    <string name="group_stats">Bilancio Gruppo</string>
+    <string name="modify_group">Invita un amico</string>
+    <string name="share_qr_code">Condividi il QR code</string>
+    <string name="leave_group">Abbandona il Gruppo</string>
+    <string name="modify_purchase">Modifica Spesa</string>
+    <string name="delete_purchase">Elimina Spesa</string>
 
 </resources>
