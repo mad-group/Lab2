@@ -301,6 +301,8 @@
     <string name="invite_user">Invite User</string>
     <string name="share_qr_code">Share QR Code</string>
     <string name="modify_purchase">Modify Expense</string>
+    <string name="leave_group">Leave Group</string>
+
     <string name="delete_purchase">Delete Expense</string>
 
 </resources>
