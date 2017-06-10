@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -592,7 +593,6 @@ public class GroupActivityExpense extends AppCompatActivity {
                         dialog.show();
                         dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
                         dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
-
                     }
                 }
                 else{
@@ -618,10 +618,34 @@ public class GroupActivityExpense extends AppCompatActivity {
     }
 
     public void deletePurchase(Group group, String pid){
+
         FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
                 .child(group.getId())
                 .child(Constant.REFERENCEGROUPSPURCHASE)
                 .child(pid).removeValue();
+
+        Notification notification = new Notification();
+        notification.setAuthorName(user.getName());
+        notification.setAuthorId(user.getUid());
+        notification.setEventType(Constant.PUSHDELETEEXPENSE);
+        notification.setGroupName(group.getName());
+        notification.setGroupId(group.getId());
+        notification.setId(group.getNumeric_id());
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference users = database.getReference(Constant.REFERENCEUSERS);
+
+        // SEND NOTIFICATION
+        for (GroupMember groupMember: group.getGroupMembers()){
+            if (!groupMember.getUser_id().equals(user.getUid())){
+                users.child(groupMember.getUser_id())
+                        .child(Constant.PUSH)
+                        .push()
+                        .setValue(notification);
+                SystemClock.sleep(20);
+            }
+        }
+        // END NOTIFICATION
     }
 
 

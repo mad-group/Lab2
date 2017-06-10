@@ -164,7 +164,6 @@ public class ExpenseInput extends AppCompatActivity {
             membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0, null);
             lv.setAdapter(membersAdapter);
             membersAdapter.addAll(group.getGroupMembers());
-
         }
         else{
             setTitle(recPurch.getCausal()+ " - Modify");
@@ -358,13 +357,11 @@ public class ExpenseInput extends AppCompatActivity {
                 p.setPurchase_id(pid);
                 myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).setValue(p);
 
-
                 for (int indexList=0; indexList<l.size(); indexList++){
                 l.get(indexList).setContributor_id(user.getUid());
                     myRef.child(group_id).child(Constant.REFERENCEGROUPSPURCHASE).child(pid).child(Constant.REFERENCEGROUPSCONTRIBUTORS).child(l.get(indexList).getUser_id()).setValue(l.get(indexList));
                 }
                 p.setContributors(l);
-
 
                 myRef.child(group_id).child(Constant.GROUPLASTMODIFYTIMESTAMP).setValue(lastModify);
                 users.child(user.getUid())
@@ -375,7 +372,7 @@ public class ExpenseInput extends AppCompatActivity {
                 Notification notification = new Notification();
                 notification.setAuthorName(user.getName());
                 notification.setAuthorId(user.getUid());
-                notification.setEventType(Constant.PUSHNEWEXPENSE);
+                notification.setEventType(Constant.PUSHMODIFYEXPENSE);
                 notification.setGroupName(group.getName());
                 notification.setGroupId(group.getId());
                 notification.setId(group.getNumeric_id());

@@ -39,7 +39,8 @@ public class Constant {
     // PUSH TYPES //
     public static final String PUSH = "push";
     public static final String PUSHNEWEXPENSE = "expenseInput";
-    public static final String MODIFYNEWEXPENSE = "expenseModify";
+    public static final String PUSHMODIFYEXPENSE = "expenseModify";
+    public static final String PUSHDELETEEXPENSE = "expenseDelete";
 
     // PARAMETERS ACTIVITY RESPONSE //
     public static final String ACTIVITYUSERMODIFIED = "modified_user";
