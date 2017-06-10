@@ -188,7 +188,7 @@ public class JoinGroupActivity extends AppCompatActivity {
                 groupID.setText( data.getStringExtra("gid"));
                 groupPassword.setText(data.getStringExtra("pin"));
                 Join.performClick();
-                
+
             }
             if(resultCode == RESULT_CANCELED){
                 //handle cancel
