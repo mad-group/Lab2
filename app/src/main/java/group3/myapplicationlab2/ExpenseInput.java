@@ -122,9 +122,9 @@ public class ExpenseInput extends AppCompatActivity {
         group = (Group)getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
         util = new Util(getApplicationContext());
 
-        View parentRoot = findViewById(R.id.expense_input_parent);
-        View logo = findViewById(R.id.fab_save);
-        util.desappearViewOnSoftKeyboard(parentRoot, logo);
+        //View parentRoot = findViewById(R.id.expense_input_parent);
+        //View logo = findViewById(R.id.fab_save);
+        //util.desappearViewOnSoftKeyboard(parentRoot, logo);
 
         setTitle(group.getName() + " - " + getResources().getString(R.string.new_expense));
 
@@ -458,7 +458,8 @@ public class ExpenseInput extends AppCompatActivity {
                 //here i should insert the bitmap
                 Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 if (bitmap != null){
-                    Bitmap imageRounded = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+
+                    /*Bitmap imageRounded = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
                     Canvas canvas = new Canvas(imageRounded);
                     Paint mpaint = new Paint();
                     mpaint.setAntiAlias(true);
@@ -468,10 +469,10 @@ public class ExpenseInput extends AppCompatActivity {
                     android.view.ViewGroup.LayoutParams layoutParams = picsImageView.getLayoutParams();
                     layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
                     layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    picsImageView.setLayoutParams(layoutParams);
+                    picsImageView.setLayoutParams(layoutParams);*/
 
                     picsImageView.setBackground(null);
-                    picsImageView.setImageBitmap(imageRounded);
+                    picsImageView.setImageBitmap(bitmap);
                     picsImageView.setVisibility(View.VISIBLE);
                 }
 

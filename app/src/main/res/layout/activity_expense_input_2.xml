@@ -19,14 +19,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:id="@+id/expense_input_parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="50dp"
         android:paddingLeft="10dp"
@@ -45,21 +40,41 @@
                 android:textColor="@color/colorText"
                 android:textStyle="bold"/>
 
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/WhiteActivated">
+                android:weightSum="10">
 
-                <EditText
-                    android:id="@+id/ie_et_expense"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:hint="@string/whatHint"
-                    android:inputType="textEmailAddress"
-                    android:theme="@style/WhiteActivated"
-                    android:cursorVisible="true"/>
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_weight="10"
+                    android:theme="@style/WhiteActivated">
+
+                    <EditText
+                        android:id="@+id/ie_et_expense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/whatHint"
+                        android:inputType="textEmailAddress"
+                        android:theme="@style/WhiteActivated"
+                        android:cursorVisible="true"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewLeft"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/ic_menu_camera"
+                    app:civ_border_width="1dp"
+                    android:onClick="takeImage"
+                    android:visibility="visible"
+                    app:civ_border_color="#bbbbbb"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -143,29 +158,12 @@
         <ListView
             android:id="@+id/list_participants_expense"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:divider="#00000000">
         </ListView>
 
-        <TextView
-            android:id="@+id/text_photo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/photo"
-            android:textColor="@color/colorText"
-            android:textStyle="bold"/>
 
-        <!--<ImageButton
-            android:id="@+id/ie_ib_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/list_participants_expense"
-            android:layout_centerHorizontal="true"
-            android:onClick="takeImage"
-            app:srcCompat="@drawable/ic_menu_camera" />-->
-
-        <ImageView
+        <!--<ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:id="@+id/imageViewLeft"
@@ -173,25 +171,10 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:background="@drawable/ic_menu_camera"
             android:onClick="takeImage"
-            android:visibility="visible" />
-
-
-        <!--<de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/imageViewLeft"
-            android:paddingTop="20dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@drawable/ic_menu_camera"
-            app:civ_border_width="1dp"
-            android:onClick="takeImage"
-            android:visibility="visible"
-            app:civ_border_color="#bbbbbb"/>-->
+            android:visibility="visible" />-->
 
     </LinearLayout>
 
-    </ScrollView>
 
 
     <android.support.design.widget.FloatingActionButton
