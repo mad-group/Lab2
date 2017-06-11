@@ -388,7 +388,7 @@ public class PurchaseContributors extends AppCompatActivity {
                         .child("contributors")
                         .child(pc.getUser_id()).child("payed").setValue("true");
 
-                int index =0;
+                /*int index =0;
                 int falseCounter=0;
                 int authorIndex =0;
                 String authorContributorId="";
@@ -419,7 +419,7 @@ public class PurchaseContributors extends AppCompatActivity {
                             .child(purchase.getPurchase_id())
                             .child("contributors")
                             .child(authorContributorId).child("payed").setValue("true");
-                }
+                }*/
 
 
                 //method to clean the textview

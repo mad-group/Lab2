@@ -261,7 +261,15 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 user.setGroups(groupPreviews);
+
+                if (user.getGroups().size()==0){
+                    findViewById(R.id.content_with_groups).setVisibility(View.GONE);
+                    findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
+                }
+
                 adapter.notifyDataSetChanged();
+
+
 
             }
 
@@ -606,6 +614,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (requestCode == GROUP_CLICKED){
             if (resultCode == RESULT_OK) {
+
                 //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
                 //user = (User)data.getSerializableExtra(ACTIVITYUSERMODIFIED);
                 //reDrawGroupList();

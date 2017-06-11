@@ -93,73 +93,78 @@ public class JoinGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                progressBar.setVisibility(View.VISIBLE);
-                mDatabase = FirebaseDatabase.getInstance().getReference("Groups").child(groupID.getText().toString());
+                if (!groupID.getText().toString().trim().isEmpty() || !groupPassword.getText().toString().trim().isEmpty()){
+                    progressBar.setVisibility(View.VISIBLE);
+                    mDatabase = FirebaseDatabase.getInstance().getReference("Groups").child(groupID.getText().toString());
 
-                ValueEventListener GroupListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    ValueEventListener GroupListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.exists()){
+                            if (dataSnapshot.exists()){
 
-                            Map<String, Object> objectMap = (HashMap<String, Object>)
-                                    dataSnapshot.getValue();
+                                Map<String, Object> objectMap = (HashMap<String, Object>)
+                                        dataSnapshot.getValue();
 
-                            Group group = new Group();
-                            group.GroupConstructor(objectMap);
+                                Group group = new Group();
+                                group.GroupConstructor(objectMap);
 
-                            if (groupPassword.getText().toString().equals(group.getPin())){
-                                auth = FirebaseAuth.getInstance();
+                                if (groupPassword.getText().toString().equals(group.getPin())){
+                                    auth = FirebaseAuth.getInstance();
 
-                                if (!dataSnapshot.hasChild(auth.getCurrentUser().getUid())){
+                                    if (!dataSnapshot.hasChild(auth.getCurrentUser().getUid())){
 
-                                    GroupMember groupMember = new GroupMember();
-                                    groupMember.setName(user.getName());
-                                    groupMember.setEmail(user.getEmail());
-                                    groupMember.setUser_id(user.getUid());
+                                        GroupMember groupMember = new GroupMember();
+                                        groupMember.setName(user.getName());
+                                        groupMember.setEmail(user.getEmail());
+                                        groupMember.setUser_id(user.getUid());
 
-                                    mDatabase.child("members2").child(user.getUid()).setValue(groupMember);
+                                        mDatabase.child("members2").child(user.getUid()).setValue(groupMember);
 
-                                    groupPreviewResult = new GroupPreview();
-                                    groupPreviewResult.GroupPreviewConstructor(
-                                            group.getName(),
-                                            groupID.getText().toString(),
-                                            group.getDescription(),
-                                            System.currentTimeMillis(),
-                                            "GroupJoin",
-                                            user.getUid()
-                                    );
+                                        groupPreviewResult = new GroupPreview();
+                                        groupPreviewResult.GroupPreviewConstructor(
+                                                group.getName(),
+                                                groupID.getText().toString(),
+                                                group.getDescription(),
+                                                System.currentTimeMillis(),
+                                                "GroupJoin",
+                                                user.getUid()
+                                        );
 
 
-                                    dataBaseProxy.insertGroupPreview(groupPreviewResult, user.getUid(), groupID.getText().toString());
+                                        dataBaseProxy.insertGroupPreview(groupPreviewResult, user.getUid(), groupID.getText().toString());
+                                    }
+
+                                    Intent i = new Intent();
+                                    i.putExtra("new_groupPreview", groupPreviewResult);
+                                    setResult(RESULT_OK, i);
+                                    finish();
+
                                 }
 
-                                Intent i = new Intent();
-                                i.putExtra("new_groupPreview", groupPreviewResult);
-                                setResult(RESULT_OK, i);
-                                finish();
-
+                                else{
+                                    Toast.makeText(JoinGroupActivity.this, "Incorrect GroupID or Password", Toast.LENGTH_LONG).show();
+                                    progressBar.setVisibility(View.GONE);
+                                }
                             }
-
                             else{
                                 Toast.makeText(JoinGroupActivity.this, "Incorrect GroupID or Password", Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
                             }
                         }
-                        else{
-                            Toast.makeText(JoinGroupActivity.this, "Incorrect GroupID or Password", Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.GONE);
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Getting Post failed, log a message
+                            Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
                         }
-                    }
+                    };
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Getting Post failed, log a message
-                        Log.d("Debug", "loadPost:onCancelled", databaseError.toException());
-                    }
-                };
-
-                mDatabase.addListenerForSingleValueEvent(GroupListener);
+                    mDatabase.addListenerForSingleValueEvent(GroupListener);
+                }
+                else {
+                    Toast.makeText(JoinGroupActivity.this, "Please Insert GroupId and Password", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
