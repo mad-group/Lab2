@@ -390,17 +390,33 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.add_members:
-                DatabaseReference pin = FirebaseDatabase.getInstance().getReference(REFERENCEGROUPS)
+
+                /*DatabaseReference pin = FirebaseDatabase.getInstance().getReference(REFERENCEGROUPS)
                         .child(user.getGroups().get(info.position).getId())
-                        .child(REFERENCEGROUPSPIN);
+                        .child(REFERENCEGROUPSPIN);*/
+
                 pos = info.position;
-                pin.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+                final DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups")
+                        .child(user.getGroups().get(info.position).getId());
+
+                groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange (DataSnapshot dataSnapshot){
-                        final String groupPin  = dataSnapshot.child("pin").getValue(String.class);
+
+                        Map<String, Object> objectMap = (HashMap<String, Object>)
+                                dataSnapshot.getValue();
+
+                        final String groupPin = objectMap.get("pin").toString();
+                        final String groupId = objectMap.get("id").toString();
+                        final String QRpath = objectMap.get("QRpath").toString();
+                        final String groupName = objectMap.get("name").toString();
+
+                        /*final String groupPin  = dataSnapshot.child("pin").getValue(String.class);
                         final String groupId = dataSnapshot.child("id").getValue(String.class);
                         final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
-                        final String groupName = dataSnapshot.child("name").getValue(String.class);
+                        final String groupName = dataSnapshot.child("name").getValue(String.class);*/
 
                         try {
                             String mex = "##"+groupId+"##||##"+groupPin +"##";
