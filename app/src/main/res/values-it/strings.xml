@@ -115,7 +115,7 @@
 
     <string name="groupPin">Password del gruppo</string>
     <string name="groupPinHint">Scrivi qui una password per il gruppo...</string>
-    <string name="groupPinHintModify">Scrivi qui una nuova password per il gruppo...</string>
+    <string name="groupPinHintModify">Scrivi qui una nuova password...</string>
 
     <string name="wrong_group_pin">La password deve essere di almeno 6 caratteri</string>
     <string name="email_subject">Invito a partecipare a un gruppo su Piggy Bill</string>
