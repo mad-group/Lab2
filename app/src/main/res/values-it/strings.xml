@@ -249,7 +249,7 @@
     <string name="title_activity_zzz_test">zzz_test</string>
     <string name="no">No</string>
     <string name="yes">Sì</string>
-    <string name="owes_to"> ti deve </string>
+    <string name="owes_to"> deve a </string>
     <string name="payed_to"> ha pagato a </string>
 
     <string name="welcomeMsg"> Non hai ancora aggiunto nessun gruppo. </string>
