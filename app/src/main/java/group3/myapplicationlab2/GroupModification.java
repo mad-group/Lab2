@@ -135,7 +135,7 @@ public class GroupModification extends AppCompatActivity {
         if (hm.keySet().size()>0) {
 
             Util util = new Util (getApplicationContext());
-            try {
+            /*try {
                 //aggirono il QR
                 String mex = "##" + group_id + "##||##" + hm.get("pin") + "##";
                 Bitmap QR = util.encodeAsBitmap(mex);
@@ -158,7 +158,7 @@ public class GroupModification extends AppCompatActivity {
                 });
             }catch (WriterException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             //aggiorno dati nel gruppo
             Long ts = System.currentTimeMillis();
