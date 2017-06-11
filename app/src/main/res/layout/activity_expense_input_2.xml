@@ -46,7 +46,7 @@
                 android:weightSum="10">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
                     android:theme="@style/WhiteActivated">
@@ -105,7 +105,6 @@
                     android:id="@+id/text_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ie_et_amount"
                     android:textAlignment="textStart"
                     android:layout_gravity="start"
                     android:text="@string/when"
@@ -126,7 +125,7 @@
                     android:layout_weight="1"
                     android:id="@+id/ie_et_amount"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:drawableLeft="@mipmap/ic_euro"
                     android:drawableStart="@mipmap/ic_euro"
@@ -141,14 +140,16 @@
                     android:layout_weight="1"
                     android:id="@+id/ie_tv_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:drawableLeft="@mipmap/ic_calendar"
+                    android:drawableStart="@mipmap/ic_calendar"
                     android:focusableInTouchMode="false"
                     android:hint="@string/whenHint"
                     android:inputType="date"
                     android:onClick="dataPicker"
+                    android:textSize="13sp"
                     android:theme="@style/WhiteActivated"/>
 
             </LinearLayout>
