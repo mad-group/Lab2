@@ -320,6 +320,10 @@ public class MainActivity extends AppCompatActivity
         builder.setView(editText);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+
+                user_info.child("name").setValue(editText.getText().toString());
+                TextView userNameTv = (TextView) findViewById(R.id.username);
+                userNameTv.setText(editText.getText().toString());
             }
         });
 
