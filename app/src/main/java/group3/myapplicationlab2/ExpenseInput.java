@@ -235,7 +235,7 @@ public class ExpenseInput extends AppCompatActivity {
             allOk = false;
             Toast.makeText(ExpenseInput.this, "At least one member must pay!",Toast.LENGTH_SHORT).show();
         }
-        else if(sumAmounts() != Float.parseFloat(amount)){
+        else if(Math.abs(sumAmounts() - Float.parseFloat(amount))>0.01){
             Toast.makeText(ExpenseInput.this, "The sum of partial are wrong",Toast.LENGTH_SHORT).show();
             allOk = false;
         }
