@@ -587,6 +587,8 @@ public class MainActivity extends AppCompatActivity
                 user.setGroups(currentGroupPreview);*/
 
             }
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.getMenu().getItem(1).setChecked(false);
         }
         else if (requestCode == JOIN_GROUP){
             if (resultCode == RESULT_OK) {
@@ -729,6 +731,12 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.logout) {
             auth.signOut();
+        }
+
+        else if (id == R.id.createGroup){
+            Intent i = new Intent(MainActivity.this, GroupCreationForm.class);
+            i.putExtra(ACTIVITYUSER, user);
+            startActivityForResult(i, Constant.CREATE_GROUP);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

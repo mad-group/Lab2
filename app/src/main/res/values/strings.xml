@@ -304,5 +304,6 @@
     <string name="leave_group">Leave Group</string>
 
     <string name="delete_purchase">Delete Expense</string>
+    <string name="create_group">Create Group</string>
 
 </resources>

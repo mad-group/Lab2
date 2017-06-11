@@ -6,6 +6,10 @@
                 android:id="@+id/join_group"
                 android:icon="@drawable/ic_add_user"
                 android:title="@string/title_activity_join_group" />
+            <item
+                android:id="@+id/createGroup"
+                android:icon="@drawable/ic_new_group"
+                android:title="@string/create_group"/>
             <!--<item
                 android:id="@+id/nav_gallery"
                 android:icon="@drawable/ic_menu_gallery"
