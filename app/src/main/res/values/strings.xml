@@ -153,7 +153,7 @@
     <string name="stats_no_members_text">It is impossible to compute debts and credits if you are alone in the group.</string>
     <string name="insert_expense">Insert a new expense</string>
     <string name="owes_you">Owes you</string>
-    <string name="you_owe">You owe him</string>
+    <string name="you_owe">You owe</string>
     <string name="were_even">You are even!</string>
     <string name="title_activity_purchase_contributors">purchase_contributors</string>
     <string name="large_text">
