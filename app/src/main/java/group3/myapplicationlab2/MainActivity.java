@@ -24,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -312,18 +313,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void changeUserName(User user) {
-        final EditText editText = new EditText(MainActivity.this);
-        editText.setText(user.getName());
+    private void changeUserName(final User user) {
+        //final EditText editText = new EditText(MainActivity.this);
+        //editText.setText(user.getName());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_name, null);
+
+        builder.setView(dialogView);
+
+        final EditText editTextName = (EditText) dialogView.findViewById(R.id.editTextName);
+        editTextName.setText(user.getName());
+
         builder.setTitle(getString(R.string.scan_Modify_username));
-        builder.setView(editText);
+        //builder.setView(editText);
+
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-
-                user_info.child("name").setValue(editText.getText().toString());
+                user_info.child("name").setValue(editTextName.getText().toString());
+                user.setName(editTextName.getText().toString());
                 TextView userNameTv = (TextView) findViewById(R.id.username);
-                userNameTv.setText(editText.getText().toString());
+                userNameTv.setText(editTextName.getText().toString());
             }
         });
 
