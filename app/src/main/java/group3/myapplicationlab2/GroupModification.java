@@ -77,7 +77,7 @@ public class GroupModification extends AppCompatActivity {
         setTitle(group_name + " - " + getResources().getString(R.string.modify));
 
         et_name = (EditText) findViewById(R.id.mod_new_group);
-        et_pin = (EditText) findViewById(R.id.mod_group_pin);
+        //et_pin = (EditText) findViewById(R.id.mod_group_pin);
         et_name.setText(group_name);
 
         Button bt = (Button) findViewById(R.id.mod_new_part_btn);
@@ -104,12 +104,12 @@ public class GroupModification extends AppCompatActivity {
             et_name.setError(getResources().getString(R.string.miss_name_mod), null);
             et_name.requestFocus();
         }
-        else if(et_pin.getText().toString().trim().length()<=5){
+        /*else if(et_pin.getText().toString().trim().length()<=5){
             et_pin.setError(getResources().getString(R.string.miss_pin_mod), null);
-        }
+        }*/
         else{
             hm.put("name", et_name.getText().toString().trim());
-            hm.put("pin", et_pin.getText().toString().trim());
+            //hm.put("pin", et_pin.getText().toString().trim());
         }
 
         /*if(et_name.getText().toString().trim().length()>0){
@@ -132,7 +132,7 @@ public class GroupModification extends AppCompatActivity {
 /*        Snackbar.make(view, Boolean.toString(allok), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();*/
 
-        if (hm.keySet().size()>1) {
+        if (hm.keySet().size()>0) {
 
             Util util = new Util (getApplicationContext());
             try {
