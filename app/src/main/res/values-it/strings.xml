@@ -154,7 +154,7 @@
     <string name="stats_no_members_text">Se sei solo in questo gruppo è impossibile mostrare lo stato dei debiti/crediti.</string>
     <string name="insert_expense">Aggiungi una nuova spesa</string>
     <string name="owes_you">Ti deve</string>
-    <string name="you_owe">Gli devi</string>
+    <string name="you_owe">Devi</string>
     <string name="were_even">Siete pari!</string>
     <string name="title_activity_purchase_contributors">purchase_contributors</string>
     <string name="large_text">
