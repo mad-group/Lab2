@@ -15,7 +15,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/activity_top_margin">
 
         <ImageView
             android:id="@+id/imageViewCamera"
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             app:srcCompat="@drawable/ic_menu_camera"
+            android:layout_gravity="center_vertical"
             android:clickable="true"
             />
 
@@ -31,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/nav_header_vertical_spacing"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center"
             android:text="NOME UTENTE"
             android:textSize="25dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -45,6 +47,8 @@
         android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
         android:text="android.studio@android.com" />
 
 </LinearLayout>
