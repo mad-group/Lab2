@@ -13,7 +13,14 @@ public class Constant {
     public static final String REFERENCEGROUPSPURCHASE = "purchases";
     public static final String REFERENCEGROUPSHASH = "groupsHash";
     public static final String REFERENCEGROUPSMEMBERS = "members2";
+    public static final String REFERENCEGROUPSID = "id";
+    public static final String REFERENCEGROUPSQR = "QRpath";
+    public static final String REFERENCEGROUPSNAME = "name";
     public static final String REFERENCEGROUPSCONTRIBUTORS = "contributors";
+    public static final String REFERENCEUSERIMAGE = "UsersImage";
+    public static final String REFERENCEUSERNAME = "name";
+    public static final String REFERENCEUSERPATHIMAGE = "userPathImage";
+    public static final String REFERENCEUSERCURRENTPIC = "currentPicsUpload";
 
     // PARAMETERS ACTIVITY //
     public static final String ACTIVITYUSERID = "user_id";

@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity
     private GroupPreviewAdapter adapter;
     private StorageReference user_image;
 
-
-    private List<GroupPreview> currentGroupPreview;
     private ArrayList<GroupPreview> groupPreviews;
 
     ChildEventListener childEventListener;
@@ -107,34 +105,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         getApplication().registerActivityLifecycleCallbacks(new ApplicationLifecycleManager());
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
-
         util = new Util (getApplicationContext());
+
         auth = FirebaseAuth.getInstance();
-        // this listener will be called when there is change in firebase user session
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 }
             }
         };
         auth.addAuthStateListener(authListener);
-        setContentView(R.layout.activity_main);
 
-        //OLD ADAPTER
-        //final ArrayList<GroupPreview> groupPreviews = new ArrayList<GroupPreview>();
         groupPreviews = new ArrayList<GroupPreview>();
         adapter = new GroupPreviewAdapter(this, groupPreviews);
-
 
         final ListView listView = (ListView) findViewById(R.id.group_list);
         listView.setAdapter(adapter);
@@ -158,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference(REFERENCEUSERS);
         user_info = mDatabase.child(auth.getCurrentUser().getUid());
         user_groups = user_info.child(REFERENCEGROUPS);
-        user_image = FirebaseStorage.getInstance().getReference("UsersImage");
+        user_image = FirebaseStorage.getInstance().getReference(Constant.REFERENCEUSERIMAGE);
 
 
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -168,12 +158,6 @@ public class MainActivity extends AppCompatActivity
                 adapter.clear();
                 user = dataSnapshot.getValue(User.class);
                 if (user.getGroupsHash()!=null){
-
-                    /*Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
-                    adapter.clear();
-                    for (int i=0; i<user.getGroups().size(); i++){
-                        adapter.add(user.getGroups().get(i));
-                    }*/
 
                 }
                 else {
@@ -204,8 +188,6 @@ public class MainActivity extends AppCompatActivity
                 serviceIntent.putExtra(ACTIVITYUSER, user);
                 startService(serviceIntent);
 
-
-
             }
 
             @Override
@@ -218,9 +200,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                //Map<String, Object> objectMap = (HashMap<String, Object>) dataSnapshot.getValue();
                 GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
-
                 groupPreviews.add(0, groupPreview);
                 user.setGroups(groupPreviews);
                 adapter.notifyDataSetChanged();
@@ -231,10 +211,8 @@ public class MainActivity extends AppCompatActivity
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                 GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
-
                 int position;
                 for (int ii=0; ii<groupPreviews.size(); ii++){
-
                     if (groupPreviews.get(ii).getId().equals(groupPreview.getId())){
                         position = ii;
                         groupPreviews.remove(position);
@@ -251,7 +229,6 @@ public class MainActivity extends AppCompatActivity
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
                 GroupPreview groupPreview = dataSnapshot.getValue(GroupPreview.class);
-
                 int position;
                 for (int ii=0; ii<groupPreviews.size(); ii++){
                     if (groupPreviews.get(ii).getId().equals(groupPreview.getId())){
@@ -261,16 +238,11 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 user.setGroups(groupPreviews);
-
                 if (user.getGroups().size()==0){
                     findViewById(R.id.content_with_groups).setVisibility(View.GONE);
                     findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
                 }
-
                 adapter.notifyDataSetChanged();
-
-
-
             }
 
             @Override
@@ -322,25 +294,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void changeUserName(final User user) {
-        //final EditText editText = new EditText(MainActivity.this);
-        //editText.setText(user.getName());
-
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_name, null);
-
         builder.setView(dialogView);
-
         final EditText editTextName = (EditText) dialogView.findViewById(R.id.editTextName);
         editTextName.setText(user.getName());
-
         builder.setTitle(getString(R.string.scan_Modify_username));
-        //builder.setView(editText);
-
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                user_info.child("name").setValue(editTextName.getText().toString());
+                user_info.child(Constant.REFERENCEUSERNAME).setValue(editTextName.getText().toString());
                 user.setName(editTextName.getText().toString());
                 TextView userNameTv = (TextView) findViewById(R.id.username);
                 userNameTv.setText(editTextName.getText().toString());
@@ -372,7 +335,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.group_Stats :
 
-                final DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
+                final DatabaseReference group = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
                         .child(user.getGroups().get(info.position).getId());
                 pos = info.position;
                 group.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -390,8 +353,8 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.modify:
-                Intent i = new Intent(MainActivity.this, GroupModification.class);
 
+                Intent i = new Intent(MainActivity.this, GroupModification.class);
                 i.putExtra(ACTIVITYUSER,user);
                 i.putExtra(ACTIVITYPOSITION, Integer.toString(info.position));
                 startActivityForResult(i, MODIFY_GROUP);
@@ -399,12 +362,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.add_members:
 
-                /*DatabaseReference pin = FirebaseDatabase.getInstance().getReference(REFERENCEGROUPS)
-                        .child(user.getGroups().get(info.position).getId())
-                        .child(REFERENCEGROUPSPIN);*/
-
                 pos = info.position;
-
 
                 final DatabaseReference groupRef = FirebaseDatabase.getInstance().getReference("Groups")
                         .child(user.getGroups().get(info.position).getId());
@@ -416,15 +374,10 @@ public class MainActivity extends AppCompatActivity
                         Map<String, Object> objectMap = (HashMap<String, Object>)
                                 dataSnapshot.getValue();
 
-                        final String groupPin = objectMap.get("pin").toString();
-                        final String groupId = objectMap.get("id").toString();
-                        final String QRpath = objectMap.get("QRpath").toString();
-                        final String groupName = objectMap.get("name").toString();
-
-                        /*final String groupPin  = dataSnapshot.child("pin").getValue(String.class);
-                        final String groupId = dataSnapshot.child("id").getValue(String.class);
-                        final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
-                        final String groupName = dataSnapshot.child("name").getValue(String.class);*/
+                        final String groupPin = objectMap.get(Constant.REFERENCEGROUPSPIN).toString();
+                        final String groupId = objectMap.get(Constant.REFERENCEGROUPSID).toString();
+                        final String QRpath = objectMap.get(Constant.REFERENCEGROUPSQR).toString();
+                        final String groupName = objectMap.get(Constant.REFERENCEGROUPSNAME).toString();
 
                         try {
                             String mex = "##"+groupId+"##||##"+groupPin +"##";
@@ -456,14 +409,14 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.generate_QR:
-                final DatabaseReference group1 = FirebaseDatabase.getInstance().getReference("Groups")
+                final DatabaseReference group1 = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
                         .child(user.getGroups().get(info.position).getId());
                 pos = info.position;
                 group1.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange (DataSnapshot dataSnapshot){
-                        final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
-                        final String groupName = dataSnapshot.child("name").getValue(String.class);
+                        final String QRpath = dataSnapshot.child(Constant.REFERENCEGROUPSQR).getValue(String.class);
+                        final String groupName = dataSnapshot.child(Constant.REFERENCEGROUPSNAME).getValue(String.class);
                         Bitmap QR = util.downloadImage(QRpath);
                         drawQRDialogBox(QR,groupName);
                     }
@@ -473,10 +426,9 @@ public class MainActivity extends AppCompatActivity
                         System.out.println("FAIL PIN INFO");
                     }
                 });
-                //util.generateDialgQR(user.getGroups().get(info.position).getId());
                 return true;
             case R.id.leave_group:
-                DatabaseReference group2 = FirebaseDatabase.getInstance().getReference("Groups")
+                DatabaseReference group2 = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
                         .child(user.getGroups().get(info.position).getId());
 
                 group2.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -510,11 +462,10 @@ public class MainActivity extends AppCompatActivity
         Group groupReaded = new Group();
         groupReaded.GroupConstructor(objectMap);
         if (groupReaded.getPurchases().size() == 0){
-            //drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
-            //        getString(R.string.stats_no_pruchases_text));
+
 
             AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-            builder1.setMessage("There aren't purchases.");
+            builder1.setMessage(getResources().getString(R.string.stats_no_pruchases));
             builder1.setCancelable(true);
 
             builder1.setNegativeButton(
@@ -532,11 +483,8 @@ public class MainActivity extends AppCompatActivity
         }
         else if(groupReaded.getGroupMembers() == null || groupReaded.getGroupMembers().size()<2){
 
-            //drawLeavingDialogBox(getString(R.string.stats_no_members),
-            //        getString(R.string.stats_no_members_text));
-
             AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-            builder1.setMessage("You are alone in the group");
+            builder1.setMessage(getResources().getString(R.string.stats_no_members));
             builder1.setCancelable(true);
 
             builder1.setPositiveButton(
@@ -554,7 +502,6 @@ public class MainActivity extends AppCompatActivity
         }
         else {
             groupReaded.resetPaymentProportion();
-            //group.computePaymentProportion(user);
             groupReaded.computePaymentProportionContributors(user);
             Intent i = new Intent(MainActivity.this, GroupStats.class);
             i.putExtra(ACTIVITYGROUP, groupReaded);
@@ -572,20 +519,6 @@ public class MainActivity extends AppCompatActivity
                 findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
                 findViewById(R.id.content_without_groups).setVisibility(View.GONE);
 
-                /*GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
-                adapter.insert(groupPreview,0);
-
-                if (user.getGroups() != null){
-                    currentGroupPreview = user.getGroups();
-                }
-                else{
-                    currentGroupPreview = new ArrayList<GroupPreview>();
-                }
-
-                currentGroupPreview.add(groupPreview);
-                Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                user.setGroups(currentGroupPreview);*/
-
             }
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.getMenu().getItem(1).setChecked(false);
@@ -596,20 +529,6 @@ public class MainActivity extends AppCompatActivity
                 findViewById(R.id.content_with_groups).setVisibility(View.VISIBLE);
                 findViewById(R.id.content_without_groups).setVisibility(View.GONE);
 
-                /*GroupPreview groupPreview = (GroupPreview) data.getSerializableExtra("new_groupPreview");
-                adapter.insert(groupPreview,0);
-
-                if (user.getGroups() != null){
-                    currentGroupPreview = user.getGroups();
-                }
-                else{
-                    currentGroupPreview = new ArrayList<GroupPreview>();
-                }
-
-                currentGroupPreview.add(groupPreview);
-                Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                user.setGroups(currentGroupPreview);*/
-
             }
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.getMenu().getItem(0).setChecked(false);
@@ -617,15 +536,12 @@ public class MainActivity extends AppCompatActivity
         else if (requestCode == GROUP_CLICKED){
             if (resultCode == RESULT_OK) {
 
-                //Toast.makeText(MainActivity.this, "aaaaa", Toast. LENGTH_SHORT).show();
-                //user = (User)data.getSerializableExtra(ACTIVITYUSERMODIFIED);
-                //reDrawGroupList();
             }
 
         }
         else if (requestCode == MODIFY_GROUP){
             if (resultCode == RESULT_OK){
-                //reloadUser();
+
             }
         }
         else if (requestCode == PICK_IMAGE_ID){
@@ -647,41 +563,26 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Log.d("URI", downloadUrl.toString());
 
                         user.setUserPathImage(downloadUrl.toString());
                         String ts = Long.toString(System.currentTimeMillis());
                         user.setCurrentPicsUpload(ts);
-                        FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child("currentPicsUpload").setValue(ts);
-                        user_info.child("userPathImage").setValue(downloadUrl.toString());
+                        FirebaseDatabase.getInstance().getReference().child(Constant.REFERENCEUSERS).child(user.getUid()).child(Constant.REFERENCEUSERCURRENTPIC).setValue(ts);
+                        user_info.child(Constant.REFERENCEUSERPATHIMAGE).setValue(downloadUrl.toString());
 
                         StorageMetadata metadata = new StorageMetadata.Builder()
                                 .setContentType("image/jpg")
                                 .setCustomMetadata("currentPicsModify", ts)
                                 .build();
-                        FirebaseStorage.getInstance().getReference("UsersImage").child(user.getUid()).updateMetadata(metadata);
-                        /*user_image_link.child(user.getUid()).setValue(downloadUrl);*/
+                        FirebaseStorage.getInstance().getReference(Constant.REFERENCEUSERIMAGE).child(user.getUid()).updateMetadata(metadata);
 
                     }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //this.imageOutFile = mediaFile;
         }
         else {
-
-            /*if (user.getGroups() != null) {
-                currentGroupPreview = user.getGroups();
-                for (int j = 0; j < user.getGroups().size(); j++)
-                    Collections.sort(currentGroupPreview, Collections.<GroupPreview>reverseOrder());
-                adapter.clear();
-                for (int i = 0; i<currentGroupPreview.size(); i++) {
-                    //Log.d("debug", "after" + user.getGroups().get(i).getName());
-                    adapter.add(user.getGroups().get(i));
-                }
-                user.setGroups(currentGroupPreview);
-            }*/
 
         }
     }
@@ -695,13 +596,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -762,45 +656,6 @@ public class MainActivity extends AppCompatActivity
         }
         user_groups.setValue(user.getGroups());
 
-    }
-
-    private void reloadUser(){
-        user_info.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                adapter.clear();
-                user = dataSnapshot.getValue(User.class);
-                if (user.getGroupsHash()!=null){
-                    Collections.sort(user.getGroups(), Collections.<GroupPreview>reverseOrder());
-                    adapter.clear();
-                    for (int i=0; i<user.getGroups().size(); i++){
-                        adapter.add(user.getGroups().get(i));
-                    }
-                }
-                else {
-                    findViewById(R.id.content_with_groups).setVisibility(View.GONE);
-                    findViewById(R.id.content_without_groups).setVisibility(View.VISIBLE);
-                }
-
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                navigationView.setNavigationItemSelectedListener(MainActivity.this);
-                View header=navigationView.getHeaderView(0);
-                TextView user_email = (TextView)header.findViewById(R.id.user_email);
-                user_email.setText(user.getEmail());
-                TextView user_name = (TextView)header.findViewById(R.id.username);
-                user_name.setText(user.getName());
-
-                Intent serviceIntent = new Intent(MainActivity.this, GroupPreviewService.class);
-                serviceIntent.putExtra(ACTIVITYUSER, user);
-                startService(serviceIntent);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("FAIL USER INFO");
-            }
-        });
     }
 
     public void takePersonalImage() {
