@@ -47,6 +47,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -55,6 +56,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -111,6 +113,7 @@ public class ExpenseInput extends AppCompatActivity {
     private Group group;
     private MembersAdapter membersAdapter;
     private MembersAdapter3 membersAdapter3;
+    private MembersBaseAdapter membersBaseAdapter;
 
 
     private int[] arrayParts;
@@ -118,6 +121,8 @@ public class ExpenseInput extends AppCompatActivity {
 
     private Purchase recPurch;
     private Util util;
+
+    private Switch mySwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +143,7 @@ public class ExpenseInput extends AppCompatActivity {
         expenseField = (EditText) findViewById(R.id.ie_et_expense);
         amountField = (EditText) findViewById(R.id.ie_et_amount);
         picsImageView = (ImageView) findViewById(R.id.imageViewLeft);
+
 
         hideKeyboard(dateField);
         hideKeyboard(expenseField);
@@ -187,7 +193,25 @@ public class ExpenseInput extends AppCompatActivity {
             //membersAdapter.addAll(group.getGroupMembers());
 
             membersAdapter3 = new MembersAdapter3(getApplicationContext(), pcList);
+            membersBaseAdapter = new MembersBaseAdapter(getApplicationContext(), pcList);
             lv.setAdapter(membersAdapter3);
+
+            mySwitch = (Switch) findViewById(R.id.switch1);
+            mySwitch.setChecked(true);
+            mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        lv.setAdapter(membersAdapter3);
+                        mySwitch.setText("Automatic Splitting");
+                    }else{
+                        lv.setAdapter(membersBaseAdapter);
+                        mySwitch.setText("Manual Splitting");
+                    }
+
+                }
+            });
 
         }
         else{
@@ -196,10 +220,33 @@ public class ExpenseInput extends AppCompatActivity {
             expenseField.setText(recPurch.getCausal());
             String amountString = Double.toString(recPurch.getTotalAmount());
             Float amountFloat = Float.parseFloat(amountString);
-            membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers,amountFloat,recPurch.getContributors());
-            lv.setAdapter(membersAdapter);
-            membersAdapter.addAll(group.getGroupMembers());
+
+            //membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers,amountFloat,recPurch.getContributors());
+            //lv.setAdapter(membersAdapter);
+            //membersAdapter.addAll(group.getGroupMembers());
             amountField.setText(amountString);
+
+            membersAdapter3 = new MembersAdapter3(getApplicationContext(), pcList);
+            membersBaseAdapter = new MembersBaseAdapter(getApplicationContext(), pcList);
+            lv.setAdapter(membersAdapter3);
+
+            mySwitch = (Switch) findViewById(R.id.switch1);
+            mySwitch.setChecked(true);
+            mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        lv.setAdapter(membersAdapter3);
+                        mySwitch.setText("Automatic Splitting");
+                    }else{
+                        lv.setAdapter(membersBaseAdapter);
+                        mySwitch.setText("Manual Splitting");
+                    }
+
+                }
+            });
+
         }
 
         setEditTextAmountListener();
@@ -241,32 +288,62 @@ public class ExpenseInput extends AppCompatActivity {
 
         boolean allOk = true;
 
+        if(mySwitch.isChecked()){
 
-        if (author == null || author.isEmpty()){
-            allOk = false;
-        }
-        else if (expense == null || expense.isEmpty()){
-            expenseField.setError(getResources().getString(R.string.miss_expense));
-            expenseField.requestFocus();
-            allOk = false;
-        }
-        else if (amount == null || amount.isEmpty()){
-            amountField.setError(getResources().getString(R.string.miss_amount));
-            amountField.requestFocus();
-            allOk = false;
-        }
-        else if (numberParts() == 0){
-            allOk = false;
-            Toast.makeText(ExpenseInput.this, "At least one member must pay!",Toast.LENGTH_SHORT).show();
-        }
-        else if(Math.abs(sumAmounts2() - Float.parseFloat(amount))>0.10){
-            Toast.makeText(ExpenseInput.this, "The sum of partial are wrong",Toast.LENGTH_SHORT).show();
-            allOk = false;
+            if (author == null || author.isEmpty()){
+                allOk = false;
+            }
+            else if (expense == null || expense.isEmpty()){
+                expenseField.setError(getResources().getString(R.string.miss_expense));
+                expenseField.requestFocus();
+                allOk = false;
+            }
+            else if (amount == null || amount.isEmpty()){
+                amountField.setError(getResources().getString(R.string.miss_amount));
+                amountField.requestFocus();
+                allOk = false;
+            }
+            else if (numberParts() == 0){
+                allOk = false;
+                Toast.makeText(ExpenseInput.this, "At least one member must pay!",Toast.LENGTH_SHORT).show();
+            }
+            else if(Math.abs(sumAmounts2() - Float.parseFloat(amount))>0.10){
+                Toast.makeText(ExpenseInput.this, "The sum of partial are wrong",Toast.LENGTH_SHORT).show();
+                allOk = false;
+            }
+            else {
+                allOk = true;
+            }
+
         }
         else {
-            allOk = true;
-        }
 
+            if (author == null || author.isEmpty()){
+                allOk = false;
+            }
+            else if (expense == null || expense.isEmpty()){
+                expenseField.setError(getResources().getString(R.string.miss_expense));
+                expenseField.requestFocus();
+                allOk = false;
+            }
+            else if (amount == null || amount.isEmpty()){
+                amountField.setError(getResources().getString(R.string.miss_amount));
+                amountField.requestFocus();
+                allOk = false;
+            }
+            else if (numberPartsManual() == 0){
+                allOk = false;
+                Toast.makeText(ExpenseInput.this, "At least one member must pay!",Toast.LENGTH_SHORT).show();
+            }
+            else if(Math.abs(sumAmountsManual() - Float.parseFloat(amount))>0.10){
+                Toast.makeText(ExpenseInput.this, "The sum of partial are wrong",Toast.LENGTH_SHORT).show();
+                allOk = false;
+            }
+            else {
+                allOk = true;
+            }
+
+        }
 
         if (allOk){
 
@@ -533,16 +610,19 @@ public class ExpenseInput extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 float newAmount;
-                if (editable.toString().equals(""))
-                    newAmount = 0;
-                else{
-                    if (Locale.getDefault().getLanguage().equals("en")) {
-                        newAmount = Float.parseFloat(editable.toString());
-                        membersAdapter3.setTotalAmount(newAmount);
-                    }
-                    else {
-                        newAmount = Float.parseFloat(editable.toString());
-                        membersAdapter3.setTotalAmount(newAmount);
+
+                if (mySwitch.isChecked()){
+                    if (editable.toString().equals(""))
+                        newAmount = 0;
+                    else{
+                        if (Locale.getDefault().getLanguage().equals("en")) {
+                            newAmount = Float.parseFloat(editable.toString());
+                            membersAdapter3.setTotalAmount(newAmount);
+                        }
+                        else {
+                            newAmount = Float.parseFloat(editable.toString());
+                            membersAdapter3.setTotalAmount(newAmount);
+                        }
                     }
                 }
             }
@@ -566,6 +646,12 @@ public class ExpenseInput extends AppCompatActivity {
         return parts;
     }
 
+    private int numberPartsManual(){
+        return 1;
+    }
+
+
+
     private float sumAmounts(){
         View v;
         EditText et;
@@ -586,6 +672,10 @@ public class ExpenseInput extends AppCompatActivity {
 
     private float sumAmounts2(){
         return membersAdapter3.sumAmounts();
+    }
+
+    private float sumAmountsManual(){
+        return membersBaseAdapter.sumAmounts();
     }
 
     private List<PurchaseContributor> createPurchaseContributorsList() {

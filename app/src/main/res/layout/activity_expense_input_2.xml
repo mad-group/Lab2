@@ -156,23 +156,20 @@
 
         </LinearLayout>
 
+        <Switch
+            android:id="@+id/switch1"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Automatic Splitting"
+            android:theme="@style/SCBSwitch" />
+
         <ListView
             android:id="@+id/list_participants_expense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="#00000000">
         </ListView>
-
-
-        <!--<ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/imageViewLeft"
-            android:paddingTop="20dp"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@drawable/ic_menu_camera"
-            android:onClick="takeImage"
-            android:visibility="visible" />-->
 
     </LinearLayout>
 

@@ -1,6 +1,8 @@
 package group3.myapplicationlab2;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,15 +49,16 @@ public class MembersAdapter3 extends ArrayAdapter<PurchaseContributor> {
         TextView member = (TextView) convertView.findViewById(R.id.item_member);
         member.setText(purchaseContributor.getUser_name());
 
-        EditText amount = (EditText) convertView.findViewById(R.id.item_amount);
+        final TextView amount = (TextView) convertView.findViewById(R.id.item_amount);
         amount.setText(df.format(purchaseContributor.getAmount()));
 
         EditText part = (EditText)convertView.findViewById(R.id.item_part);
         part.setText(Integer.toString(purchaseContributor.getParts()));
 
-        ImageView up = (ImageView) convertView.findViewById(R.id.item_up_part);
-
         final View finalConvertView = convertView;
+        ImageView up = (ImageView) convertView.findViewById(R.id.item_up_part);
+        ImageView down = (ImageView) convertView.findViewById(R.id.item_down_part);
+
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +72,6 @@ public class MembersAdapter3 extends ArrayAdapter<PurchaseContributor> {
             }
         });
 
-        ImageView down = (ImageView) convertView.findViewById(R.id.item_down_part);
         down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +116,6 @@ public class MembersAdapter3 extends ArrayAdapter<PurchaseContributor> {
         for (int i=0; i<purchaseContributors.size();i++){
             total += purchaseContributors.get(i).getAmount();
         }
-        Log.d("SUMAMOUNTS", String.valueOf(total));
         return total;
     }
 
