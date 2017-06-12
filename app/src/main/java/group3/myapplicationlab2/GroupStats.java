@@ -43,8 +43,8 @@ public class GroupStats extends AppCompatActivity {
 
         final Random r = new Random();
 
-        group = (Group) getIntent().getSerializableExtra("group");
-        user = (User) getIntent().getSerializableExtra("user");
+        group = (Group) getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
+        user = (User) getIntent().getSerializableExtra(Constant.ACTIVITYUSER);
 
         ArrayList<GroupMember> members = new ArrayList<GroupMember>(group.getGroupMembers());
 
@@ -112,27 +112,17 @@ public class GroupStats extends AppCompatActivity {
                     debit_credit.setText("+" + String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(getResources().getColor(R.color.mood_fine));
                     debit_credit_text.setText(R.string.owes_you);
-                    //mood.setBackgroundResource(0);
-                    //mood.setImageResource(R.mipmap.ic_smile);
-                    //mood.setColorFilter(getContext().getResources().getColor(R.color.mood_fine));
                 }
                 else if (debit <0) {
                     debit_credit.setText(String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(getResources().getColor(R.color.mood_sad));
                     debit_credit_text.setText(R.string.you_owe);
-                    //mood.setBackgroundResource(0);
-                    //mood.setImageResource(R.mipmap.ic_sad);
-                    //mood.setColorFilter(getContext().getResources().getColor(R.color.mood_sad));
-
 
                 }
                 else {
                     debit_credit.setText(String.format( "%.2f €", debit ));
                     debit_credit.setTextColor(getResources().getColor(R.color.black));
                     debit_credit_text.setText(R.string.were_even);
-                    //mood.setBackgroundResource(0);
-                    //mood.setImageResource(R.mipmap.ic_smile);
-                    //mood.setColorFilter(getContext().getResources().getColor(R.color.black));
 
                 }
                 return convertView;
@@ -146,7 +136,7 @@ public class GroupStats extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_stats);
         setSupportActionBar(toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getIntent().getStringExtra("group_name"));
+        getSupportActionBar().setTitle(getIntent().getStringExtra(Constant.ACTIVITYGROUPNAME));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -156,14 +146,6 @@ public class GroupStats extends AppCompatActivity {
             }
         });
         toolbar.setTitle(group.getName()+" - " + getResources().getString(R.string.statistics));
-    }
-
-    private void drawLeavingDialogBox(String title, String text) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(text).setTitle(title);
-       /* builder.setPositiveButton(getString(R.string.ok));*/
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
 }
