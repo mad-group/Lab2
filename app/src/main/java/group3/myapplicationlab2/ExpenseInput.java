@@ -113,6 +113,10 @@ public class ExpenseInput extends AppCompatActivity {
     private Purchase recPurch;
     private Util util;
 
+    private MembersAdapter2 membersAdapter2;
+    private ArrayList<PurchaseContributor> pcList;
+    private int[] arrayParts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,9 +126,10 @@ public class ExpenseInput extends AppCompatActivity {
         group = (Group)getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
         util = new Util(getApplicationContext());
 
-        //View parentRoot = findViewById(R.id.expense_input_parent);
-        //View logo = findViewById(R.id.fab_save);
-        //util.desappearViewOnSoftKeyboard(parentRoot, logo);
+        /*hides fab whem kb is open*/
+        View parentRoot = findViewById(R.id.expense_input_parent);
+        View logo = findViewById(R.id.fab_save);
+        util.desappearViewOnSoftKeyboard(parentRoot, logo);
 
         setTitle(group.getName() + " - " + getResources().getString(R.string.new_expense));
 
@@ -147,6 +152,24 @@ public class ExpenseInput extends AppCompatActivity {
         lv = (ListView)findViewById(R.id.list_participants_expense);
         ArrayList<GroupMember> groupMembers = new ArrayList<>();
 
+        arrayParts = new int[group.getGroupMembers().size()];
+        pcList = new ArrayList<>();
+        for (int i=0; i< group.getGroupMembers().size(); i++){
+            PurchaseContributor pc = new PurchaseContributor();
+            pc.setUser_id((group.getGroupMembers().get(i).getUser_id()));
+            if (user.getUid().equals(group.getGroupMembers().get(i).getUser_id())){
+                pc.setPayed(true);
+            }
+            else pc.setPayed(false);
+            pc.setUser_name(group.getGroupMembers().get(i).getName());
+            pc.setAmount(0);
+            pc.setParts(1);
+
+            pcList.add(pc);
+
+            arrayParts[i]=1;
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -161,9 +184,11 @@ public class ExpenseInput extends AppCompatActivity {
         final Purchase recPurch = (Purchase)getIntent().getSerializableExtra(Constant.ACTIVITYPURCHASE);
         if (recPurch==null){
             setTitle(group.getName() + " - " + getResources().getString(R.string.new_expense));
-            membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0, null);
+/*            membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0, null);
             lv.setAdapter(membersAdapter);
-            membersAdapter.addAll(group.getGroupMembers());
+            membersAdapter.addAll(group.getGroupMembers());*/
+            membersAdapter2 = new MembersAdapter2(getApplicationContext(), pcList, 0);
+            lv.setAdapter(membersAdapter2);
         }
         else{
             setTitle(recPurch.getCausal()+ " - " + getResources().getString(R.string.new_expense));
@@ -217,6 +242,7 @@ public class ExpenseInput extends AppCompatActivity {
 
         boolean allOk = true;
 
+        ArrayList<PurchaseContributor> ll =  membersAdapter2.getPcList();
 
         if (author == null || author.isEmpty()){
             allOk = false;
@@ -242,6 +268,8 @@ public class ExpenseInput extends AppCompatActivity {
         else {
             allOk = true;
         }
+
+        allOk=false;
 
         /*if(author == null || author.isEmpty()){
             allOk = false;
@@ -526,10 +554,17 @@ public class ExpenseInput extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                TextView tv;
-                View v;
-                float fraction;
-                for (int i =0; i<lv.getCount(); i++){
+                float newAmount;
+                if (editable.toString().equals(""))
+                    newAmount = 0;
+                else
+                    newAmount = Float.parseFloat(editable.toString());
+
+/*                membersAdapter2.setTotAmount(newAmount);
+                membersAdapter2.notifyDataSetChanged();*/
+
+                //membersAdapter2.updateNewAmount(newAmount);
+/*                for (int i =0; i<lv.getCount(); i++){
                     v = lv.getChildAt(i);
                     tv = (TextView) v.findViewById(R.id.item_amount);
                     if(editable.toString().isEmpty()){
@@ -553,7 +588,8 @@ public class ExpenseInput extends AppCompatActivity {
                         }
 
                     }
-                }
+                }*/
+
 
             }
         });

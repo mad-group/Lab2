@@ -12,6 +12,7 @@ public class PurchaseContributor implements Serializable {
     private boolean payed = false; //if it is true, this contributor isnt showd in the resume
     private double amount;
     private String contributor_id;
+    private int parts;
 
     public PurchaseContributor(){
 
@@ -33,4 +34,11 @@ public class PurchaseContributor implements Serializable {
     public void setContributor_id(String cid) {contributor_id=cid;}
 
 
+    public int getParts() {
+        return parts;
+    }
+
+    public void setParts(int parts) {
+        this.parts = parts;
+    }
 }

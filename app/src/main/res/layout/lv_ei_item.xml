@@ -21,6 +21,7 @@
         android:text="Member  "
         android:lines="1"
         android:textSize="20sp"
+        android:textColor="@color/black"
         />
 
     <EditText
@@ -35,7 +36,10 @@
         android:inputType="numberDecimal"
         android:textSize="20sp"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:theme="@style/WhiteActivated"/>
+        android:theme="@style/WhiteActivated"
+        android:textColor="@color/black"
+        android:clickable="true"
+        />
 
     <TextView
         android:id="@+id/item_currency"
@@ -43,6 +47,8 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="€"
+        android:textColor="@color/black"
+
         />
 
     <TextView
@@ -60,7 +66,7 @@
         android:id="@+id/item_up_part"
         android:src="@drawable/ic_collapse_arrow1600"
         android:clickable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
+
         />
 
     <EditText
@@ -68,7 +74,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/item_part"
         android:inputType="number"
-        android:text="1"/>
+        android:text="1"
+        android:textColor="@color/black"
+        />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -76,7 +84,7 @@
         android:id="@+id/item_down_part"
         android:src="@drawable/ic_expand_arrow1600"
         android:clickable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:textColor="@color/black"
         />
 
 
