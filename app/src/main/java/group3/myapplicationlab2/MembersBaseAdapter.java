@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by anr.putina on 12/06/17.
@@ -85,7 +86,12 @@ public class MembersBaseAdapter extends BaseAdapter{
             @Override
             public void afterTextChanged(Editable arg0) {
                 if (!arg0.toString().isEmpty()){
-                    purchaseContributors.get(holder.ref).setAmount(Float.parseFloat(arg0.toString()));
+                    if (Locale.getDefault().getLanguage().equals("en")) {
+                        purchaseContributors.get(holder.ref).setAmount(Float.parseFloat(arg0.toString()));
+                    }
+                    else{
+                        purchaseContributors.get(holder.ref).setAmount(Float.parseFloat(arg0.toString().replace(",",".")));
+                    }
                 }
             }
         });
