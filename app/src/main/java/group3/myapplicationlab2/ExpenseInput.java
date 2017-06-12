@@ -110,6 +110,12 @@ public class ExpenseInput extends AppCompatActivity {
     private User user;
     private Group group;
     private MembersAdapter membersAdapter;
+    private MembersAdapter3 membersAdapter3;
+
+
+    private int[] arrayParts;
+    private ArrayList<PurchaseContributor> pcList;
+
     private Purchase recPurch;
     private Util util;
 
@@ -158,12 +164,31 @@ public class ExpenseInput extends AppCompatActivity {
             }
         });
 
+        pcList = new ArrayList<>();
+        for (int i=0; i< group.getGroupMembers().size(); i++){
+            PurchaseContributor pc = new PurchaseContributor();
+            pc.setUser_id((group.getGroupMembers().get(i).getUser_id()));
+            if (user.getUid().equals(group.getGroupMembers().get(i).getUser_id())){
+                pc.setPayed(true);
+            }
+            else pc.setPayed(false);
+            pc.setUser_name(group.getGroupMembers().get(i).getName());
+            pc.setAmount(0);
+            pc.setParts(1);
+            pcList.add(pc);
+        }
+
         final Purchase recPurch = (Purchase)getIntent().getSerializableExtra(Constant.ACTIVITYPURCHASE);
+
         if (recPurch==null){
             setTitle(group.getName() + " - " + getResources().getString(R.string.new_expense));
-            membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0, null);
-            lv.setAdapter(membersAdapter);
-            membersAdapter.addAll(group.getGroupMembers());
+            //membersAdapter = new MembersAdapter(ExpenseInput.this, groupMembers, 0, null);
+            //lv.setAdapter(membersAdapter);
+            //membersAdapter.addAll(group.getGroupMembers());
+
+            membersAdapter3 = new MembersAdapter3(getApplicationContext(), pcList);
+            lv.setAdapter(membersAdapter3);
+
         }
         else{
             setTitle(recPurch.getCausal()+ " - " + getResources().getString(R.string.new_expense));
@@ -175,7 +200,6 @@ public class ExpenseInput extends AppCompatActivity {
             lv.setAdapter(membersAdapter);
             membersAdapter.addAll(group.getGroupMembers());
             amountField.setText(amountString);
-
         }
 
         setEditTextAmountListener();
@@ -231,11 +255,11 @@ public class ExpenseInput extends AppCompatActivity {
             amountField.requestFocus();
             allOk = false;
         }
-        else if (sumParts() == 0){
+        else if (numberParts() == 0){
             allOk = false;
             Toast.makeText(ExpenseInput.this, "At least one member must pay!",Toast.LENGTH_SHORT).show();
         }
-        else if(Math.abs(sumAmounts() - Float.parseFloat(amount))>0.01){
+        else if(Math.abs(sumAmounts2() - Float.parseFloat(amount))>0.10){
             Toast.makeText(ExpenseInput.this, "The sum of partial are wrong",Toast.LENGTH_SHORT).show();
             allOk = false;
         }
@@ -243,28 +267,10 @@ public class ExpenseInput extends AppCompatActivity {
             allOk = true;
         }
 
-        /*if(author == null || author.isEmpty()){
-            allOk = false;
-        }
-        if(expense == null || expense.isEmpty()){
-            //Toast.makeText(getApplicationContext(), R.string.miss_amount, Toast.LENGTH_SHORT).show();
-            String err = getResources().getString(R.string.miss_expense);
-            expenseField.setError(err);
-            allOk = false;
-        }
-        if(amount == null || amount.isEmpty()){
-            String err = getResources().getString(R.string.miss_amount);
-            amountField.setError(err);
-            allOk = false;
-        }
-
-        if(sumParts()==0){
-            allOk = false;
-        }*/
 
         if (allOk){
-            String group_id = group.getId();
 
+            String group_id = group.getId();
             Purchase p = new Purchase();
             p.setAuthor_id(author);
             p.setAuthorName(user.getName());
@@ -275,8 +281,8 @@ public class ExpenseInput extends AppCompatActivity {
             p.setLastModify(System.currentTimeMillis());
             p.setUser_name(user.getName());
             p.setAuthor_id(user.getUid());
-            List<PurchaseContributor> l = createPurchaseContributorsList();
 
+            List<PurchaseContributor> l = createPurchaseContributorsList2();
 
             Uri resultUri = Uri.parse(p.getPathImage());
             Bitmap expenseImageBitmap;
@@ -526,40 +532,22 @@ public class ExpenseInput extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                TextView tv;
-                View v;
-                float fraction;
-                for (int i =0; i<lv.getCount(); i++){
-                    v = lv.getChildAt(i);
-                    tv = (TextView) v.findViewById(R.id.item_amount);
-                    if(editable.toString().isEmpty()){
-                        membersAdapter.setTotAmount((float)0);
-                        tv.setText("0");
+                float newAmount;
+                if (editable.toString().equals(""))
+                    newAmount = 0;
+                else{
+                    if (Locale.getDefault().getLanguage().equals("en")) {
+                        newAmount = Float.parseFloat(editable.toString());
+                        membersAdapter3.setTotalAmount(newAmount);
                     }
                     else {
-                        //fraction = Float.parseFloat(editable.toString()) * Integer.parseInt(et.getText().toString())/ sumParts();
-                        membersAdapter.setTotAmount(Float.parseFloat(editable.toString()));
-                        fraction = Float.parseFloat(editable.toString()) / sumParts();
-
-                        if (Locale.getDefault().getLanguage().equals("en")) {
-                            NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-                            //String floatString = Float.toString(fraction);
-                            tv.setText(format.format(fraction));
-                        }
-                        else {
-                            NumberFormat format = NumberFormat.getInstance(Locale.ITALIAN);
-                            //String floatString = Float.toString(fraction);
-                            tv.setText(format.format(fraction));
-                        }
-
+                        newAmount = Float.parseFloat(editable.toString());
+                        membersAdapter3.setTotalAmount(newAmount);
                     }
                 }
-
             }
         });
     }
-
-
 
     private int sumParts(){
         View v;
@@ -573,6 +561,11 @@ public class ExpenseInput extends AppCompatActivity {
         return parts;
     }
 
+    private int numberParts(){
+        int parts = membersAdapter3.getTotalParts();
+        return parts;
+    }
+
     private float sumAmounts(){
         View v;
         EditText et;
@@ -581,17 +574,18 @@ public class ExpenseInput extends AppCompatActivity {
             v = lv.getChildAt(i);
             et = (EditText) v.findViewById(R.id.item_amount);
 
-
             if (Locale.getDefault().getLanguage().equals("en")) {
                 parts += Float.parseFloat(et.getText().toString().replace(",",""));
             }
             else {
                 parts += Float.parseFloat(et.getText().toString().replace(".","").replace(",","."));
             }
-
-
         }
         return parts;
+    }
+
+    private float sumAmounts2(){
+        return membersAdapter3.sumAmounts();
     }
 
     private List<PurchaseContributor> createPurchaseContributorsList() {
@@ -636,6 +630,12 @@ public class ExpenseInput extends AppCompatActivity {
 
         }
         return l;
+    }
+
+    public List<PurchaseContributor> createPurchaseContributorsList2(){
+
+        return membersAdapter3.getPurchaseContributorsList();
+
     }
 
     public void hideKeyboard(View view) {

@@ -1,5 +1,7 @@
 package group3.myapplicationlab2;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 /**
@@ -12,6 +14,8 @@ public class PurchaseContributor implements Serializable {
     private boolean payed = false; //if it is true, this contributor isnt showd in the resume
     private double amount;
     private String contributor_id;
+    private int parts;
+
 
     public PurchaseContributor(){
 
@@ -32,5 +36,13 @@ public class PurchaseContributor implements Serializable {
     public String getContributor_id() {return contributor_id;}
     public void setContributor_id(String cid) {contributor_id=cid;}
 
+    @Exclude
+    public int getParts() {
+        return parts;
+    }
 
+    @Exclude
+    public void setParts(int parts) {
+        this.parts = parts;
+    }
 }
