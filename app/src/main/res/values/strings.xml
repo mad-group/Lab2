@@ -311,5 +311,9 @@
     <string name="sum_partial">The sum of partial are wrong</string>
     <string name="account_options">Account Options</string>
     <string name="groupname">GroupName</string>
+    <string name="authorExpense">Author</string>
+    <string name="amountExpense">Amount</string>
+    <string name="dateExpense">Date</string>
+    <string name="total_debts">Total Debts</string>
 
 </resources>
