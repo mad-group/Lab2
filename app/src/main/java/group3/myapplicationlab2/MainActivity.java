@@ -706,7 +706,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int id) {
                 if (util.userHasDebits(group, user)==false){
                     util.deleteUserFromGroup(group,user,Integer.parseInt(pos));
-                    reDrawGroupList();
+                    //reDrawGroupList();
                 }
                 else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
