@@ -10,30 +10,10 @@
                 android:id="@+id/createGroup"
                 android:icon="@drawable/ic_new_group"
                 android:title="@string/create_group"/>
-            <!--<item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="Gallery" />
-            <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Slideshow" />
-            <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="Settings" />
-            <item
-                android:id="@+id/logout"
-                android:icon="@mipmap/ic_logout"
-                android:title="Logout" />-->
     </group>
 
-    <item android:title="Comunicate">
+    <item android:title="@string/account_options">
         <menu>
-            <!--<item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Contact us" />-->
             <item
                 android:id="@+id/logout"
                 android:icon="@mipmap/ic_logout"
