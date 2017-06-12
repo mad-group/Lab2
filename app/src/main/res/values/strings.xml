@@ -305,5 +305,9 @@
 
     <string name="delete_purchase">Delete Expense</string>
     <string name="create_group">Create Group</string>
+    <string name="automatic_splitting">Automatic Splitting</string>
+    <string name="manual_splitting">Manual Splitting</string>
+    <string name="least_one_pay">At least one member must pay!</string>
+    <string name="sum_partial">The sum of partial are wrong</string>
 
 </resources>
