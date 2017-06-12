@@ -112,7 +112,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                     for (int i=0; i < group.getGroupMembers().size(); i++){
                         final String key = group.getGroupMembers().get(i).getUser_id();
 
-                        FirebaseStorage.getInstance().getReference("UsersImage").child(key)
+                        FirebaseStorage.getInstance().getReference(Constant.REFERENCEUSERIMAGE).child(key)
                                 .getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {
@@ -290,8 +290,6 @@ public class GroupActivityExpense extends AppCompatActivity {
         if (id == R.id.group_Stats_GAE) {
 
             if (group.getPurchases().size() == 0){
-                //drawLeavingDialogBox(getString(R.string.stats_no_pruchases),
-                //        getString(R.string.stats_no_pruchases_text));
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(GroupActivityExpense.this);
                 builder1.setMessage(R.string.stats_no_pruchases);
@@ -313,9 +311,6 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
             else if(group.getGroupMembers() == null || group.getGroupMembers().size()<2){
 
-                //drawLeavingDialogBox(getString(R.string.stats_no_members),
-                //        getString(R.string.stats_no_members_text));
-
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(GroupActivityExpense.this);
                 builder1.setMessage(R.string.stats_no_members);
                 builder1.setCancelable(true);
@@ -335,7 +330,6 @@ public class GroupActivityExpense extends AppCompatActivity {
             }
             else {
                 group.resetPaymentProportion();
-                //group.computePaymentProportion(user);
                 group.computePaymentProportionContributors(user);
                 Intent i = new Intent(GroupActivityExpense.this, GroupStats.class);
                 i.putExtra(Constant.ACTIVITYGROUP, group);
@@ -390,13 +384,13 @@ public class GroupActivityExpense extends AppCompatActivity {
         }
         if (id == R.id.generate_QR_GAE){
 
-            DatabaseReference group = FirebaseDatabase.getInstance().getReference("Groups")
+            DatabaseReference group = FirebaseDatabase.getInstance().getReference(Constant.REFERENCEGROUPS)
                     .child(gid);
             group.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange (DataSnapshot dataSnapshot){
-                    final String QRpath = dataSnapshot.child("QRpath").getValue(String.class);
-                    final String groupName = dataSnapshot.child("name").getValue(String.class);
+                    final String QRpath = dataSnapshot.child(Constant.REFERENCEGROUPSQR).getValue(String.class);
+                    final String groupName = dataSnapshot.child(Constant.REFERENCEGROUPSNAME).getValue(String.class);
                     Bitmap QR = util.downloadImage(QRpath);
                     drawQRDialogBox(QR,groupName);
                 }
@@ -458,21 +452,11 @@ public class GroupActivityExpense extends AppCompatActivity {
 
         if (requestCode == Constant.MODIFY_GROUP) {
             if (resultCode == RESULT_OK) {
-                //Intent intent = getIntent();
-                /*HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("map");
-                if (hashMap == null){
-                    Log.d("DEBUG", "aaaaaaaaaaaaa");
-                }
-
-                Log.d("DOPOMODIFY", hashMap.keySet().toString());*/
 
                 //String newName = intent.getStringExtra("newName");
                 String newName = data.getStringExtra("newName");
                 getSupportActionBar().setTitle(newName);
 
-/*                for(String k: hashMap.keySet()){
-                    Log.d("DEBUG", hashMap.get("key"));
-                }*/
             }
         }
 
@@ -518,7 +502,7 @@ public class GroupActivityExpense extends AppCompatActivity {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (util.userHasDebits(group, user)==false){
-                        util.deleteUserFromGroup(group, user, Integer.parseInt(getIntent().getStringExtra("position")));
+                        util.deleteUserFromGroup(group, user, Integer.parseInt(getIntent().getStringExtra(Constant.ACTIVITYPOSITION)));
                         Intent i = new Intent();
                         i.putExtra(Constant.ACTIVITYUSERMODIFIED, user);
                         setResult(RESULT_OK, i);
