@@ -42,6 +42,7 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -554,18 +555,23 @@ public class ExpenseInput extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                float newAmount;
+/*                float newAmount;
                 if (editable.toString().equals(""))
                     newAmount = 0;
                 else
                     newAmount = Float.parseFloat(editable.toString());
 
-/*                membersAdapter2.setTotAmount(newAmount);
-                membersAdapter2.notifyDataSetChanged();*/
+*//*                membersAdapter2.setTotAmount(newAmount);
+                membersAdapter2.notifyDataSetChanged();*//*
 
                 //membersAdapter2.updateNewAmount(newAmount);
-/*                for (int i =0; i<lv.getCount(); i++){
+                View v;
+                TextView tv;
+                float fraction;
+                for (int i =0; i<lv.getCount(); i++){
                     v = lv.getChildAt(i);
+                    if (v == null)
+                        LayoutInflater.from(getApplicationContext()).inflate(R.layout.lv_ei_item, null, false);
                     tv = (TextView) v.findViewById(R.id.item_amount);
                     if(editable.toString().isEmpty()){
                         membersAdapter.setTotAmount((float)0);

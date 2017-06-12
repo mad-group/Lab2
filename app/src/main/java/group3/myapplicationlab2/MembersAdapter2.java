@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,6 +23,7 @@ import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.flags.impl.FlagProviderImpl;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.zxing.client.result.EmailDoCoMoResultParser;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ import java.util.List;
  * Created by mc on 21/05/17.
  */
 
-class MembersAdapter2 extends ArrayAdapter<PurchaseContributor>{
+class MembersAdapter2 extends BaseAdapter {
     private float totAmount;
     private int[] arrayParts;
     private double[] arrayFractions;
@@ -40,13 +43,14 @@ class MembersAdapter2 extends ArrayAdapter<PurchaseContributor>{
     private ArrayList<PurchaseContributor> pcList;
     private int totParts;
     private HashMap<String, Integer> map = new HashMap<>();
+    private Context c;
 
 
     public MembersAdapter2(Context context,
                            ArrayList<PurchaseContributor> purchaseContributors,
                            float ta) {
-        super(context,0,purchaseContributors);
-        totAmount = 100;
+        c = context;
+        totAmount = ta;
         pcList = purchaseContributors;
         arrayFractions = new double[purchaseContributors.size()];
         arrayParts = new int[purchaseContributors.size()];
@@ -55,35 +59,65 @@ class MembersAdapter2 extends ArrayAdapter<PurchaseContributor>{
     }
 
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
-        final PurchaseContributor pc = getItem(position);
-        /*final PurchaseContributor pc = pcList.get(position);*/
+    public int getCount() {
+        return pcList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return pcList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.lv_ei_item, parent, false);
+            LayoutInflater li=(LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView =li.inflate(R.layout.lv_ei_item, null);
+            //convertView = LayoutInflater.from(c).inflate(R.layout.lv_ei_item, parent, false);
+            holder = new ViewHolder(convertView, position);
+            holder.pcAmount.addTextChangedListener (new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
+                    list.get(getPosition).setSelected(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
+                }
+            });
+            convertView.setTag(holder);
+        }
+        else{
+            holder = (ViewHolder)convertView.getTag();
         }
 
-        final View finalConvertView = convertView;
+        PurchaseContributor pc = (PurchaseContributor) getItem(position);
+        holder.pcUserName.setText(pc.getUser_name());
 
-        final TextView member = (TextView) convertView.findViewById(R.id.item_member);
-        member.setText(pc.getUser_name());
+/*
+        TextView member = (TextView) convertView.findViewById(R.id.item_member);
+        holder..setText(pc.getUser_name());
+*/
 
-        final EditText amount = (EditText) convertView.findViewById(R.id.item_amount);
-        amount.setText(df.format(pc.getAmount()));
+        /*EditText amount = (EditText) convertView.findViewById(R.id.item_amount);*/
+        holder.pcAmount.setText(df.format(pc.getAmount()));
 
-        TextView user_id_tv = (TextView) convertView.findViewById(R.id.item_user_id);
-        user_id_tv.setText(pc.getUser_id());
+/*        TextView user_id_tv = (TextView) convertView.findViewById(R.id.item_user_id);
+        holder.pcAmount.setText(pc.getUser_id());*/
 
-        final EditText part = (EditText)convertView.findViewById(R.id.item_part);
-        //part.setText(Integer.toString(arrayParts[position]));
-        part.setText(Integer.toString(pc.getParts()));
-
-        map.put(pc.getUser_name(), pc.getParts());
-
+        /*EditText part = (EditText)convertView.findViewById(R.id.item_part);*/
+        holder.pcPart.setText(Integer.toString(pc.getParts()));
 
         ImageView up = (ImageView) convertView.findViewById(R.id.item_up_part);
+
         ImageView down = (ImageView) convertView.findViewById(R.id.item_down_part);
 
 
+/*        final ViewHolder finalHolder = holder;
         amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -97,16 +131,11 @@ class MembersAdapter2 extends ArrayAdapter<PurchaseContributor>{
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String amountStr = editable.toString();
-                if (amountStr.equals("")){
-                    pc.setAmount(0);
-                }
-                else{
-                    pc.setAmount(Double.parseDouble(amountStr));
-                }
+                String amountStr = finalHolder.pcAmount.getText().toString();
+                Log.d("Debug", "String: " + amountStr);
 
-        }
-    });
+            }
+        });*/
 
         /*up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,12 +146,12 @@ class MembersAdapter2 extends ArrayAdapter<PurchaseContributor>{
                 pc.setParts(parts);
                 //totParts = getsumParts();
                 part.setText(Integer.toString(parts));*//*
-*//*                int parts = pcList.get(position).getParts();
+               int parts = pcList.get(position).getParts();
                 parts++;
                 pcList.get(position).setParts(parts);
                 //totParts = getsumParts();
                 part.setText(Integer.toString(parts));*//*
-*//*                int parts = map.get(pc.getUser_id());
+                int parts = map.get(pc.getUser_id());
                 parts++;
                 map.put(pc.getUser_id(), parts);
                 //totParts = getsumParts();
@@ -199,10 +228,10 @@ class MembersAdapter2 extends ArrayAdapter<PurchaseContributor>{
                 }
                 else{
                     float fraction;
-*//*                    fraction = totAmount*pc.getParts()/allParts;
+                  fraction = totAmount*pc.getParts()/allParts;
                     localAmount.setText(Float.toString(fraction));*//*
                     Log.d("Debug","--------------------------------");
-*//*                    for (int i =0; i<pcList.size(); i++){
+                 for (int i =0; i<pcList.size(); i++){
                         fraction = totAmount*pcList.get(i).getParts()/getSumPartsInArray();
                         Log.d("Debug", "i: " + i + "p: " +pcList.get(i).getParts());
                         pcList.get(i).setAmount(fraction);
@@ -258,4 +287,26 @@ class MembersAdapter2 extends ArrayAdapter<PurchaseContributor>{
     }
 
     public ArrayList<PurchaseContributor> getPcList(){return this.getPcList();}
+
+    private class ViewHolder {
+        TextView pcUserName;
+        EditText pcAmount;
+        EditText pcPart;
+        ImageView upArrow;
+        ImageView downArrow;
+        int position;
+
+        public ViewHolder(View view, int p) {
+            pcUserName = (TextView)view.findViewById(R.id.item_member);
+            pcAmount = (EditText) view.findViewById(R.id.item_amount);
+            pcPart = (EditText) view.findViewById(R.id.item_part);
+            upArrow = (ImageView) view.findViewById(R.id.item_up_part);
+            downArrow = (ImageView) view.findViewById(R.id.item_down_part);
+            position = p;
+
+
+        }
+    }
 }
+
+
