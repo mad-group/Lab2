@@ -199,6 +199,7 @@ public class ExpenseInput extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
+                        membersAdapter3.recomputeAmounts();
                         lv.setAdapter(membersAdapter3);
                         mySwitch.setText(R.string.automatic_splitting);
                     }else{
@@ -214,7 +215,7 @@ public class ExpenseInput extends AppCompatActivity {
             setTitle(recPurch.getCausal()+ " - " + getResources().getString(R.string.new_expense));
             dateField.setText(recPurch.getDate());
             expenseField.setText(recPurch.getCausal());
-            String amountString = Double.toString(recPurch.getTotalAmount());
+            final String amountString = Double.toString(recPurch.getTotalAmount());
 
             amountField.setText(amountString);
 
@@ -229,6 +230,7 @@ public class ExpenseInput extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
+                        membersAdapter3.recomputeAmounts();
                         lv.setAdapter(membersAdapter3);
                         mySwitch.setText(R.string.automatic_splitting);
                     }else{
