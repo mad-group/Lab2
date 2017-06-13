@@ -169,7 +169,8 @@ public class MainActivity extends AppCompatActivity
 
                 Bitmap image = util.downloadImage(user.getUserPathImage());
                 if (image != null)
-                    personalPhoto.setImageBitmap(util.getCroppedBitmap(image,200,200));
+                    //personalPhoto.setImageBitmap(util.getCroppedBitmap(image,200,200));
+                    personalPhoto.setImageBitmap(image);
                 final TextView userNameTv = (TextView) findViewById(R.id.username);
                 userNameTv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -553,7 +554,8 @@ public class MainActivity extends AppCompatActivity
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.flush();
                 out.close();
-                personalPhoto.setImageBitmap(util.getCroppedBitmap(bitmap,200,200));
+                //personalPhoto.setImageBitmap(util.getCroppedBitmap(bitmap,200,200));
+                personalPhoto.setImageBitmap(bitmap);
 
                 /*saving photo for for uploading*/
                 byte[] byteArrayImage = util.bitmap2byte(bitmap);
