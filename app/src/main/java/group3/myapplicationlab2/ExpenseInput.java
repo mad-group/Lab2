@@ -587,8 +587,10 @@ public class ExpenseInput extends AppCompatActivity {
                 float newAmount;
 
                 if (mySwitch.isChecked()){
-                    if (editable.toString().equals(""))
+                    if (editable.toString().equals("")){
                         newAmount = 0;
+                        membersAdapter3.setTotalAmount(newAmount);
+                    }
                     else{
                         if (Locale.getDefault().getLanguage().equals("en")) {
                             newAmount = Float.parseFloat(editable.toString());
