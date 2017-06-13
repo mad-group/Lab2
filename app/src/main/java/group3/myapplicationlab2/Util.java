@@ -124,8 +124,8 @@ public class Util {
 
     public Bitmap squareBitmap(Bitmap srcBmp){
         Bitmap dstBmp;
-        if (srcBmp.getWidth() >= srcBmp.getHeight()){
-
+/*        if (srcBmp.getWidth() >= srcBmp.getHeight()){
+            //orizzontale
             dstBmp = Bitmap.createBitmap(
                     srcBmp,
                     srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
@@ -136,7 +136,7 @@ public class Util {
 
         }
         else{
-
+            //verticale
             dstBmp = Bitmap.createBitmap(
                     srcBmp,
                     0,
@@ -144,7 +144,13 @@ public class Util {
                     srcBmp.getWidth(),
                     srcBmp.getWidth()
             );
-        }
+        }*/
+        dstBmp = Bitmap.createBitmap(
+                srcBmp,
+                0,
+                srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+                srcBmp.getWidth(),
+                srcBmp.getWidth());
         return dstBmp;
     }
 

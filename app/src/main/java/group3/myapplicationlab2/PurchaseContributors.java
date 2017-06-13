@@ -180,7 +180,7 @@ public class PurchaseContributors extends AppCompatActivity {
                 startActivityForResult(i,1);
             }
             else{
-                onlyAuthorDialogBox();
+                onlyAuthorDialogBox(getString(R.string.purch_mod_err_title), getString(R.string.purch_mod_err_text));
             }
 
             return true;
@@ -245,7 +245,7 @@ public class PurchaseContributors extends AppCompatActivity {
                 }
             }
             else{
-                onlyAuthorDialogBox();
+                onlyAuthorDialogBox(getString(R.string.purch_del_err_title), getString(R.string.purch_del_err_text));
             }
 
             return true;
@@ -263,9 +263,9 @@ public class PurchaseContributors extends AppCompatActivity {
         }
     }
 
-    public void onlyAuthorDialogBox(){
+    public void onlyAuthorDialogBox(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseContributors.this);
-        builder.setMessage(getString(R.string.purch_mod_err_text)).setTitle(getString(R.string.purch_mod_err_title));
+        builder.setMessage(message).setTitle(title);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 return;
