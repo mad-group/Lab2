@@ -48,6 +48,7 @@ public class Constant {
     public static final String PUSHNEWEXPENSE = "expenseInput";
     public static final String PUSHMODIFYEXPENSE = "expenseModify";
     public static final String PUSHDELETEEXPENSE = "expenseDelete";
+    public static final String PUSHNEWUSER = "userJoin";
 
     // PARAMETERS ACTIVITY RESPONSE //
     public static final String ACTIVITYUSERMODIFIED = "modified_user";

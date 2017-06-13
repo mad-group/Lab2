@@ -66,6 +66,9 @@ public class GroupPreviewService extends Service{
                         if (lastEvent.equals(Constant.PUSHMODIFYEXPENSE)){
                             message = getResources().getString(R.string.modified_expense_notification) + " ";
                         }
+                        if (lastEvent.equals(Constant.PUSHNEWUSER)){
+                            message = getString(R.string.user_joined_message) + " ";
+                        }
 
                         NotificationCompat.Builder mBuilder =
                                 new NotificationCompat.Builder(GroupPreviewService.this)

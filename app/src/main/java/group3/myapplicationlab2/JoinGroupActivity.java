@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -133,6 +134,29 @@ public class JoinGroupActivity extends AppCompatActivity {
 
 
                                         dataBaseProxy.insertGroupPreview(groupPreviewResult, user.getUid(), groupID.getText().toString());
+
+                                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                        DatabaseReference usersRef = database.getReference(Constant.REFERENCEUSERS);
+
+                                        Notification notification = new Notification();
+                                        notification.setAuthorName(user.getName());
+                                        notification.setAuthorId(user.getUid());
+                                        notification.setEventType(Constant.PUSHNEWUSER);
+                                        notification.setGroupName(group.getName());
+                                        notification.setGroupId(group.getId());
+                                        notification.setId(group.getNumeric_id());
+
+                                        // SEND NOTIFICATION
+                                        for (GroupMember groupMemberN: group.getGroupMembers()){
+                                            if (!groupMember.getUser_id().equals(user.getUid())){
+                                                usersRef.child(groupMember.getUser_id())
+                                                        .child(Constant.PUSH)
+                                                        .push()
+                                                        .setValue(notification);
+                                                SystemClock.sleep(20);
+                                            }
+                                        }
+                                        // END NOTIFICATION
                                     }
 
                                     Intent i = new Intent();
