@@ -163,7 +163,7 @@
             android:padding="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Automatic Splitting"
+            android:text="@string/automatic_splitting"
             android:theme="@style/SCBSwitch" />
 
         <ListView
