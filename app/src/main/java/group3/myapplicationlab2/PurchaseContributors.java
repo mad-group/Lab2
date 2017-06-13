@@ -191,17 +191,18 @@ public class PurchaseContributors extends AppCompatActivity {
 
             if(purchase.getAuthor_id().equals(user.getUid())){
 
-                HashMap<String, String> owers = new HashMap<>();
+                HashMap<String, Double> owers = new HashMap<>();
                 for (PurchaseContributor pc : purchase.getContributors()){
                     if (!pc.getPayed()){
-                        owers.put(pc.getUser_name(),Double.toString(pc.getAmount()));
+                        owers.put(pc.getUser_name(),pc.getAmount());
                     }
                 }
 
                 if(owers.size()>0){
+                    DecimalFormat df = new DecimalFormat("##.##");
                     String mex = getResources().getString(R.string.delete_expense);
                     for (String key : owers.keySet()){
-                        mex += key + " " + getResources().getString(R.string.owes_you_small) + " " + owers.get(key) + "€\n";
+                        mex += key + " " + getResources().getString(R.string.owes_you_small) + " " + df.format(owers.get(key)) + "€\n";
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseContributors.this);
                     builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
