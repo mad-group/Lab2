@@ -307,7 +307,7 @@
 
     <string name="create_group">Crea un gruppo</string>
     <string name="automatic_splitting">Divisione equa</string>
-    <string name="manual_splitting">Divisione per parti</string>
+    <string name="manual_splitting">Divisione manuale</string>
     <string name="least_one_pay">Almeno un membro deve pagare!</string>
     <string name="sum_partial">La somma dei contributi è diversa dal totale!</string>
     <string name="account_options">Impostazioni account</string>
