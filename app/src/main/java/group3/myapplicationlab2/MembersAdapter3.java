@@ -77,17 +77,19 @@ public class MembersAdapter3 extends ArrayAdapter<PurchaseContributor> {
             public void onClick(View view) {
                 TextView part = (TextView) finalConvertView.findViewById(R.id.item_part);
                 int parts = Integer.parseInt(part.getText().toString());
-                if (parts == 0){
-                    part.setText(Integer.toString(0));
-                    totalParts = 0;
-                    purchaseContributor.setParts(parts);
-                    recomputeAmounts();
-                }else{
-                    parts = parts -1;
-                    purchaseContributor.setParts(parts);
-                    totalParts = totalParts - 1;
-                    part.setText(Integer.toString(parts));
-                    recomputeAmounts();
+
+                if (totalParts > 1){
+                    if (parts == 0){
+                        part.setText(Integer.toString(0));
+                        purchaseContributor.setParts(parts);
+                        recomputeAmounts();
+                    }else{
+                        parts = parts -1;
+                        purchaseContributor.setParts(parts);
+                        totalParts = totalParts - 1;
+                        part.setText(Integer.toString(parts));
+                        recomputeAmounts();
+                    }
                 }
             }
         });
