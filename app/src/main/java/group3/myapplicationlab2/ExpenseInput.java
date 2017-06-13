@@ -132,9 +132,9 @@ public class ExpenseInput extends AppCompatActivity {
         group = (Group)getIntent().getSerializableExtra(Constant.ACTIVITYGROUP);
         util = new Util(getApplicationContext());
 
-        View parentRoot = findViewById(R.id.expense_input_parent);
-        View logo = findViewById(R.id.fab_save);
-        util.desappearViewOnSoftKeyboard(parentRoot, logo);
+        //View parentRoot = findViewById(R.id.expense_input_parent);
+        //View logo = findViewById(R.id.fab_save);
+        //util.desappearViewOnSoftKeyboard(parentRoot, logo);
 
         setTitle(group.getName() + " - " + getResources().getString(R.string.new_expense));
 
