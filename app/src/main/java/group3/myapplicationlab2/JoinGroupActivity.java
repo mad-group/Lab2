@@ -148,8 +148,8 @@ public class JoinGroupActivity extends AppCompatActivity {
 
                                         // SEND NOTIFICATION
                                         for (GroupMember groupMemberN: group.getGroupMembers()){
-                                            if (!groupMember.getUser_id().equals(user.getUid())){
-                                                usersRef.child(groupMember.getUser_id())
+                                            if (!groupMemberN.getUser_id().equals(user.getUid())){
+                                                usersRef.child(groupMemberN.getUser_id())
                                                         .child(Constant.PUSH)
                                                         .push()
                                                         .setValue(notification);
