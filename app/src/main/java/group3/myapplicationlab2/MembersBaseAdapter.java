@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -73,6 +74,7 @@ public class MembersBaseAdapter extends BaseAdapter{
 
         holder.member.setText(purchaseContributors.get(position).getUser_name());
         holder.amount.setText(df.format(purchaseContributors.get(position).getAmount()));
+        holder.amount.setSelection(holder.amount.getText().length());
         holder.amount.addTextChangedListener(new TextWatcher() {
 
             @Override
