@@ -315,5 +315,6 @@
     <string name="amountExpense">Amount</string>
     <string name="dateExpense">Date</string>
     <string name="total_debts">Total Debts</string>
+    <string name="user_joined_message">A new user joined group</string>
 
 </resources>
