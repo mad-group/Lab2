@@ -82,8 +82,8 @@
     <string name="group_description">Descrizione</string>
     <string name="radiogroup_title_expense">Scegli un criterio di suddivisione delle spese</string>
     <string name="groupName">Nome del gruppo</string>
-    <string name="groupNameHint">Scrivi il nome del gruppo qui...</string>
-    <string name="groupNameHintModify">Scrivi il nome del gruppo qui...</string>
+    <string name="groupNameHint">Scrivi qui il nome del gruppo...</string>
+    <string name="groupNameHintModify">Scrivi qui il nome del gruppo...</string>
     <string name="groupSubject">Oggetto del gruppo</string>
     <string name="groupSubjectHint">Scrivi l\'oggetto del gruppo qui...</string>
     <string name="groupSubjectHintModify">Inserisci un nuovo oggetto qui...</string>
@@ -114,7 +114,7 @@
     <string name="invitation_email_subject">Sei invitato a partecipare in un gruppo</string>
 
     <string name="groupPin">Password del gruppo</string>
-    <string name="groupPinHint">Scrivi qui una password per il gruppo...</string>
+    <string name="groupPinHint">Scrivi qui una password...</string>
     <string name="groupPinHintModify">Scrivi qui una nuova password...</string>
 
     <string name="wrong_group_pin">La password deve essere di almeno 6 caratteri</string>
