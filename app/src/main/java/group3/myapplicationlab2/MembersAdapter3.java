@@ -52,7 +52,7 @@ public class MembersAdapter3 extends ArrayAdapter<PurchaseContributor> {
         final TextView amount = (TextView) convertView.findViewById(R.id.item_amount);
         amount.setText(df.format(purchaseContributor.getAmount()));
 
-        EditText part = (EditText)convertView.findViewById(R.id.item_part);
+        TextView part = (TextView) convertView.findViewById(R.id.item_part);
         part.setText(Integer.toString(purchaseContributor.getParts()));
 
         final View finalConvertView = convertView;
@@ -62,7 +62,7 @@ public class MembersAdapter3 extends ArrayAdapter<PurchaseContributor> {
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText part = (EditText) finalConvertView.findViewById(R.id.item_part);
+                TextView part = (TextView) finalConvertView.findViewById(R.id.item_part);
                 int parts = Integer.parseInt(part.getText().toString());
                 parts = parts +1;
                 totalParts = totalParts +1;
@@ -75,7 +75,7 @@ public class MembersAdapter3 extends ArrayAdapter<PurchaseContributor> {
         down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText part = (EditText) finalConvertView.findViewById(R.id.item_part);
+                TextView part = (TextView) finalConvertView.findViewById(R.id.item_part);
                 int parts = Integer.parseInt(part.getText().toString());
                 if (parts == 0){
                     part.setText(Integer.toString(0));
