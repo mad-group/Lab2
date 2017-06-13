@@ -83,7 +83,7 @@ public class SignupActivity2 extends AppCompatActivity {
                 name = inputName.getText().toString().trim();
 
                 if (TextUtils.isEmpty(name)) {
-                    Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_name, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -93,7 +93,7 @@ public class SignupActivity2 extends AppCompatActivity {
                         .addOnCompleteListener(SignupActivity2.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(SignupActivity2.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(SignupActivity2.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the

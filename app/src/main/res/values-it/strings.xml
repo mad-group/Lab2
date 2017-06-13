@@ -322,4 +322,7 @@
     <string name="cant_modify_paid">Non puoi più modificare la spesa</string>
     <string name="you_get_payment">La modifica della spesa è stata disabilitata poiché sei stato pagato da almeno una persona</string>
 
+    <string name="enter_name">Inserisci il tuo nome!</string>
+
+
 </resources>

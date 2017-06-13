@@ -322,4 +322,6 @@
     <string name="cant_modify_paid">You can not change the expense anymore</string>
     <string name="you_get_payment">The modification of the expense is disabled since you have been paid</string>
 
+    <string name="enter_name">Enter your name!</string>
+
 </resources>
