@@ -578,7 +578,7 @@ public class GroupActivityExpense extends AppCompatActivity {
                         startActivityForResult(i,1);
                     }
                     else {
-                        getPaid("Can't modify", "You get payment");
+                        getPaid(getString(R.string.cant_modify_paid), getString(R.string.you_get_payment));
                     }
 
 

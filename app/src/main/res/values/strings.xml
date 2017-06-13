@@ -319,5 +319,7 @@
     <string name="total_debts">Total Debts</string>
     <string name="user_joined_message">A new user joined group</string>
     <string name="please_insert_your_name_and_optional_an_avatar">Please insert your name and (optional) an avatar</string>
+    <string name="cant_modify_paid">You can not change the expense anymore</string>
+    <string name="you_get_payment">The modification of the expense is disabled since you have been paid</string>
 
 </resources>
