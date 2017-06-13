@@ -620,10 +620,10 @@ public class ExpenseInput extends AppCompatActivity {
     }
 
     public List<PurchaseContributor> createPurchaseContributorsList2(){
-
         return membersAdapter3.getPurchaseContributorsList();
-
     }
+
+
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);

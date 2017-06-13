@@ -172,12 +172,29 @@ public class PurchaseContributors extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.modify_purchase) {
 
+
             if(purchase.getAuthor_id().equals(user.getUid())){
-                Intent i = new Intent(this, ExpenseInput.class);
-                i.putExtra(Constant.ACTIVITYGROUP, group);
-                i.putExtra(Constant.ACTIVITYUSER, user);
-                i.putExtra(Constant.ACTIVITYPURCHASE, purchase);
-                startActivityForResult(i,1);
+
+                boolean paid=false;
+                for (int i=0; i<purchase.getContributors().size();i++){
+                    if (!user.getUid().equals(purchase.getContributors().get(i).getUser_id())){
+                        if (purchase.getContributors().get(i).getPayed()){
+                            paid = true;
+                        }
+                    }
+                }
+
+                if (!paid){
+                    Intent i = new Intent(this, ExpenseInput.class);
+                    i.putExtra(Constant.ACTIVITYGROUP, group);
+                    i.putExtra(Constant.ACTIVITYUSER, user);
+                    i.putExtra(Constant.ACTIVITYPURCHASE, purchase);
+                    startActivityForResult(i,1);
+                }
+                else {
+                    getPaid("Can't modify", "You get payment");
+                }
+
             }
             else{
                 onlyAuthorDialogBox(getString(R.string.purch_mod_err_title), getString(R.string.purch_mod_err_text));
@@ -264,6 +281,19 @@ public class PurchaseContributors extends AppCompatActivity {
     }
 
     public void onlyAuthorDialogBox(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseContributors.this);
+        builder.setMessage(message).setTitle(title);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    public void getPaid(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseContributors.this);
         builder.setMessage(message).setTitle(title);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

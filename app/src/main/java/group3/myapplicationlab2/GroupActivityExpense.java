@@ -557,16 +557,38 @@ public class GroupActivityExpense extends AppCompatActivity {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.modify_purchase:
+
+
                 if(group.getPurchases().get(info.position).getAuthor_id().equals(user.getUid())){
-                    Intent i = new Intent(this, ExpenseInput.class);
-                    i.putExtra(Constant.ACTIVITYGROUP, group);
-                    i.putExtra(Constant.ACTIVITYUSER, user);
-                    i.putExtra(Constant.ACTIVITYPURCHASE, group.getPurchases().get(info.position));
-                    startActivityForResult(i,1);
+
+                    boolean paid=false;
+                    for (int i=0; i<group.getPurchases().get(info.position).getContributors().size();i++){
+                        if (!user.getUid().equals(group.getPurchases().get(info.position).getContributors().get(i).getUser_id())){
+                            if (group.getPurchases().get(info.position).getContributors().get(i).getPayed()){
+                                paid = true;
+                            }
+                        }
+                    }
+
+                    if (!paid){
+                        Intent i = new Intent(this, ExpenseInput.class);
+                        i.putExtra(Constant.ACTIVITYGROUP, group);
+                        i.putExtra(Constant.ACTIVITYUSER, user);
+                        i.putExtra(Constant.ACTIVITYPURCHASE, group.getPurchases().get(info.position));
+                        startActivityForResult(i,1);
+                    }
+                    else {
+                        getPaid("Can't modify", "You get payment");
+                    }
+
+
+
                 }
                 else{
                     onlyAuthorDialogBox(getString(R.string.purch_mod_err_title),getString(R.string.purch_mod_err_text));
             }
+
+
 
                 return true;
             case R.id.delete_purchase:
@@ -634,6 +656,19 @@ public class GroupActivityExpense extends AppCompatActivity {
     }
 
     public void onlyAuthorDialogBox(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
+        builder.setMessage(message).setTitle(title);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    public void getPaid(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
         builder.setMessage(message).setTitle(title);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
