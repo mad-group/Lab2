@@ -23,6 +23,7 @@
         android:textSize="20sp"
         android:textColor="@color/black" />
 
+
     <TextView
         android:id="@+id/item_amount"
         android:layout_width="0dp"
@@ -33,6 +34,7 @@
         android:text="0"
         android:lines = "1"
         android:inputType="numberDecimal"
+        android:textAlignment="textEnd"
         android:textSize="20sp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:theme="@style/WhiteActivated"
@@ -42,8 +44,8 @@
     <TextView
         android:id="@+id/item_currency"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:layout_weight="0.5"
         android:text="€"
         android:textColor="@color/black" />
 
@@ -79,5 +81,7 @@
         android:clickable="true"
         android:textColor="@color/black"
         />
+
+
 
 </LinearLayout>
