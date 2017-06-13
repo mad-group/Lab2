@@ -41,6 +41,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -566,17 +567,18 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 if(group.getPurchases().get(info.position).getAuthor_id().equals(user.getUid())){
 
-                    HashMap<String, String> owers = new HashMap<>();
+                    HashMap<String, Double> owers = new HashMap<>();
                     for (PurchaseContributor pc : group.getPurchases().get(info.position).getContributors()){
                         if (!pc.getPayed()){
-                            owers.put(pc.getUser_name(),Double.toString(pc.getAmount()));
+                            owers.put(pc.getUser_name(),pc.getAmount());
                         }
                     }
 
                     if(owers.size()>0){
+                        DecimalFormat df = new DecimalFormat("##.##");
                         String mex = getResources().getString(R.string.delete_expense);
                         for (String key : owers.keySet()){
-                            mex += key + " " + getResources().getString(R.string.owes_you_small) + " " + owers.get(key) + "€\n";
+                            mex += key + " " + getResources().getString(R.string.owes_you_small) + " " + df.format(owers.get(key)) + "€\n";
                         }
                         AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivityExpense.this);
                         builder.setMessage(mex).setTitle(getString(R.string.purch_mod_del_title));
