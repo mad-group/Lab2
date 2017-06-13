@@ -192,6 +192,12 @@ public class GroupActivityExpense extends AppCompatActivity {
 
                 expenseList.add(0, purchase);
                 group.setPurchases(expenseList);
+
+                if (group.getPurchases().size()!=0){
+                    findViewById(R.id.content_with_purchases).setVisibility(View.VISIBLE);
+                    findViewById(R.id.content_without_purchases).setVisibility(View.GONE);
+                }
+
                 expenseAdapter.notifyDataSetChanged();
 
             }
