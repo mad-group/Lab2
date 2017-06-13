@@ -24,7 +24,7 @@
             android:layout_marginBottom="0dp"
             android:src="@mipmap/ic_logo_app"/>
 
-        <android.support.design.widget.TextInputLayout
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -38,7 +38,7 @@
                 android:textColor="@android:color/white"
                 android:cursorVisible="true"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>-->
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -77,7 +77,7 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <Button
+        <!--<Button
             android:id="@+id/sign_up_button"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
@@ -86,7 +86,7 @@
             android:background="@color/colorIcon"
             android:text="@string/action_sign_in_short"
             android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:textStyle="bold" />-->
 
         <Button
             android:id="@+id/btn_reset_password"
@@ -119,5 +119,18 @@
         android:visibility="gone"
         android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progress_white"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_part_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@mipmap/ic_arrow_dx"
+        app:backgroundTint="@color/colorFabCustom"
+        android:tint="@color/colorIcon">
+    </android.support.design.widget.FloatingActionButton>
 
 </android.support.design.widget.CoordinatorLayout>

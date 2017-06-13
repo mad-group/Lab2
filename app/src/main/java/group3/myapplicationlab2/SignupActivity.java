@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -42,10 +43,10 @@ public class SignupActivity extends AppCompatActivity {
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         setLostFocus(btnSignIn);
-        btnSignUp = (Button) findViewById(R.id.sign_up_button);
-        setLostFocus(btnSignUp);
-        inputName = (EditText) findViewById(R.id.name);
-        setLostFocus(inputName);
+        //btnSignUp = (Button) findViewById(R.id.sign_up_button);
+        //setLostFocus(btnSignUp);
+        //inputName = (EditText) findViewById(R.id.name);
+        //setLostFocus(inputName);
         inputEmail = (EditText) findViewById(R.id.email);
         setLostFocus(inputEmail);
         inputPassword = (EditText) findViewById(R.id.password);
@@ -59,7 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         View logo = findViewById(R.id.sign_up_logo);
         util.desappearViewOnSoftKeyboard(rootParent, logo);
 
-       btnResetPassword.setOnClickListener(new View.OnClickListener() {
+        btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignupActivity.this, ResetPasswordActivity.class));
@@ -73,7 +74,44 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_part_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
+
+                String email = inputEmail.getText().toString().trim();
+                String password = inputPassword.getText().toString().trim();
+
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() ) {
+                    Toast.makeText(getApplicationContext(), R.string.enter_valid_email, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(getApplicationContext(), R.string.enter_password, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (password.length() < 6) {
+                    Toast.makeText(getApplicationContext(), R.string.minimum_password, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Intent i = new Intent(SignupActivity.this, SignupActivity2.class);
+                i.putExtra("email", email);
+                i.putExtra("password", password);
+                startActivity(i);
+
+            }
+        });
+
+        /*btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -136,7 +174,7 @@ public class SignupActivity extends AppCompatActivity {
                         });
 
             }
-        });
+        });*/
 
 
     }

@@ -318,5 +318,6 @@
     <string name="dateExpense">Date</string>
     <string name="total_debts">Total Debts</string>
     <string name="user_joined_message">A new user joined group</string>
+    <string name="please_insert_your_name_and_optional_an_avatar">Please insert your name and (optional) an avatar</string>
 
 </resources>
