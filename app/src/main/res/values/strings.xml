@@ -310,7 +310,7 @@
     <string name="automatic_splitting">Automatic Splitting</string>
     <string name="manual_splitting">Manual Splitting</string>
     <string name="least_one_pay">At least one member must pay!</string>
-    <string name="sum_partial">The sum of partial are wrong</string>
+    <string name="sum_partial">The sum of partials is wrong</string>
     <string name="account_options">Account Options</string>
     <string name="groupname">GroupName</string>
     <string name="authorExpense">Author</string>

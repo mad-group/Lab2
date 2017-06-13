@@ -305,4 +305,19 @@
     <string name="modify_purchase">Modifica Spesa</string>
     <string name="delete_purchase">Elimina Spesa</string>
 
+    <string name="create_group">Crea un gruppo</string>
+    <string name="automatic_splitting">Divisione equa</string>
+    <string name="manual_splitting">Divisione per parti</string>
+    <string name="least_one_pay">Almeno un membro deve pagare!</string>
+    <string name="sum_partial">La somma dei contributi è diversa dal totale!</string>
+    <string name="account_options">Impostazioni account</string>
+    <string name="groupname">NomeGruppo</string>
+    <string name="authorExpense">Autore</string>
+    <string name="amountExpense">Importo</string>
+    <string name="dateExpense">Data</string>
+    <string name="total_debts">Debiti totali</string>
+    <string name="user_joined_message">Un nuovo utente si è unito al gruppo</string>
+    <string name="please_insert_your_name_and_optional_an_avatar">Inserisci un nome e, se lo preferisci, una foto</string>
+
+
 </resources>
