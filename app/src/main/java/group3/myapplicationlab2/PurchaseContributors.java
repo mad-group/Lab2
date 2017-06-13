@@ -349,7 +349,9 @@ public class PurchaseContributors extends AppCompatActivity {
                     if (user.getUid().equals(purchase.getAuthor_id()) &&
                             tv.getText().toString().contains(getResources().getString(R.string.owes_to))) {
                         //Log.d("Debug","dialog p_author_id" +  purchase.getAuthorName());
-                        String text = pc.getUser_name() + getResources().getString(R.string.ispaying_you) + pc.getAmount() + "€?";
+                        DecimalFormat df = new DecimalFormat("##.##");
+                        String text = pc.getUser_name() + getResources().getString(R.string.ispaying_you) +
+                                df.format(pc.getAmount()) + "€?";
                         drawLeavingDialogBox(getResources().getString(R.string.extinguish_debt), text, pc);
 
                     }
