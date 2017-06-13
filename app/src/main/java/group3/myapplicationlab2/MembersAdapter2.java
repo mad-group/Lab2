@@ -81,14 +81,8 @@ class MembersAdapter2 extends BaseAdapter {
             convertView =li.inflate(R.layout.lv_ei_item, null);
             //convertView = LayoutInflater.from(c).inflate(R.layout.lv_ei_item, parent, false);
             holder = new ViewHolder(convertView, position);
-            holder.pcAmount.addTextChangedListener (new CompoundButton.OnCheckedChangeListener() {
 
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int getPosition = (Integer) buttonView.getTag();  // Here we get the position that we have set for the checkbox using setTag.
-                    list.get(getPosition).setSelected(buttonView.isChecked()); // Set the value of checkbox to maintain its state.
-                }
-            });
+
             convertView.setTag(holder);
         }
         else{

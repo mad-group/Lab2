@@ -128,7 +128,7 @@ public class ExpenseInput extends AppCompatActivity {
         util = new Util(getApplicationContext());
 
         /*hides fab whem kb is open*/
-        View parentRoot = findViewById(R.id.expense_input_parent);
+        View parentRoot = findViewById(R.id.expense_input_parent_l2);
         View logo = findViewById(R.id.fab_save);
         util.desappearViewOnSoftKeyboard(parentRoot, logo);
 
